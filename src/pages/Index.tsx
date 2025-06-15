@@ -118,7 +118,7 @@ const Index = () => {
 
         {/* Footer */}
         <footer className="py-8 text-center text-gray-500 text-sm border-t border-white/10">
-          <p>© {new Date().getFullYear()} Sunny MF Money. Unlock your cosmic potential.</p>
+          <p>© {new Date().getFullYear()} Dangelo Ali Ministry All Rights Reserved and Retained.</p>
         </footer>
       </div>
     </div>
