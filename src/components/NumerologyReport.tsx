@@ -10,7 +10,6 @@ import {
   Lightbulb, 
   Target,
   Download,
-  Share2,
   ArrowLeft
 } from 'lucide-react';
 
@@ -92,13 +91,49 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
   const expressionMeaning = numberMeanings[data.expressionNumber as keyof typeof numberMeanings];
 
   const handleDownload = () => {
-    // In a real app, this would generate a PDF
-    console.log('Downloading report...');
-  };
+    // Create a comprehensive text report
+    const reportContent = `
+Your Personal Cosmic Blueprint
+Generated for ${data.name}
+Date: ${new Date().toLocaleDateString()}
 
-  const handleShare = () => {
-    // In a real app, this would open share dialog
-    console.log('Sharing report...');
+CORE NUMBERS:
+- Life Path Number: ${data.lifePathNumber}
+- Expression Number: ${data.expressionNumber}
+- Soul Urge Number: ${data.soulUrgeNumber}
+- Personality Number: ${data.personalityNumber}
+- Birthday Number: ${data.birthdayNumber}
+
+LIFE PATH ANALYSIS - ${lifePathMeaning.title}:
+${lifePathMeaning.description}
+
+Strengths: ${lifePathMeaning.strengths.join(', ')}
+Growth Areas: ${lifePathMeaning.challenges.join(', ')}
+
+EXPRESSION NUMBER ANALYSIS - ${expressionMeaning.title}:
+Your Expression Number reveals your life's work and the talents you're meant to develop. ${expressionMeaning.description}
+
+SOUL-ALIGNED BUSINESS INSIGHTS:
+• Leverage your natural ${lifePathMeaning.strengths[0].toLowerCase()} abilities in your marketing
+• Build systems that support your ${expressionMeaning.strengths[1]?.toLowerCase() || 'core strength'} nature
+• Partner with others who complement your ${lifePathMeaning.challenges[0]?.toLowerCase() || 'growth areas'}
+• Focus on serving clients who value ${expressionMeaning.strengths[0].toLowerCase()}
+
+© ${new Date().getFullYear()} Dangelo Ali Ministry All Rights Reserved and Retained.
+    `.trim();
+
+    // Create and download the text file
+    const blob = new Blob([reportContent], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${data.name.replace(/\s+/g, '_')}_Cosmic_Blueprint_Report.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    
+    console.log('Report downloaded successfully');
   };
 
   return (
@@ -126,14 +161,10 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
           Generated for <span className="text-amber-400 font-semibold">{data.name}</span>
         </p>
         
-        <div className="flex justify-center gap-4 mt-6">
+        <div className="flex justify-center mt-6">
           <Button onClick={handleDownload} className="cosmic-button">
             <Download className="w-4 h-4 mr-2" />
             Download PDF
-          </Button>
-          <Button onClick={handleShare} variant="outline" className="border-amber-400 text-amber-400 hover:bg-amber-400 hover:text-slate-900">
-            <Share2 className="w-4 h-4 mr-2" />
-            Share Report
           </Button>
         </div>
       </div>
