@@ -74,15 +74,15 @@ const Index = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <div className="flex items-center gap-2 text-amber-400">
+              <button className="cosmic-button flex items-center gap-2">
                 <Heart className="w-5 h-5" />
-                <span className="text-sm font-medium">Free • Instant • Personalized</span>
-              </div>
+                <span className="font-medium">Get Your Free Report Now</span>
+              </button>
             </div>
           </div>
         </header>
 
-        {/* Main Content */}
+        {/* Main Content - Newsletter Signup Section */}
         <main className="pb-16 px-4">
           <div className="max-w-7xl mx-auto">
             {showForm && (
