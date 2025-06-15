@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import CosmicBackground from '@/components/CosmicBackground';
 import NumerologyForm from '@/components/NumerologyForm';
@@ -32,6 +31,16 @@ const Index = () => {
   const handleBack = () => {
     setShowForm(true);
     setReportData(null);
+  };
+
+  const scrollToSignup = () => {
+    const signupSection = document.getElementById('newsletter-signup');
+    if (signupSection) {
+      signupSection.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'center'
+      });
+    }
   };
 
   return (
@@ -74,7 +83,7 @@ const Index = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button className="cosmic-button flex items-center gap-2">
+              <button onClick={scrollToSignup} className="cosmic-button flex items-center gap-2">
                 <Heart className="w-5 h-5" />
                 <span className="font-medium">Get Your Free Report Now</span>
               </button>
@@ -86,7 +95,7 @@ const Index = () => {
         <main className="pb-16 px-4">
           <div className="max-w-7xl mx-auto">
             {showForm && (
-              <div className="space-y-12">
+              <div id="newsletter-signup" className="space-y-12">
                 <div className="text-center">
                   <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4 cosmic-text">
                     Get Your <span className="gold-text">Free</span> Cosmic Blueprint Instantly
