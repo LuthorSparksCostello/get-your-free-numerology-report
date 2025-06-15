@@ -1,4 +1,5 @@
 
+
 import { useState } from 'react';
 import CosmicBackground from '@/components/CosmicBackground';
 import NumerologyForm from '@/components/NumerologyForm';
@@ -60,7 +61,7 @@ const Index = () => {
             <div className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500/20 to-orange-500/20 backdrop-blur-sm rounded-full px-6 py-2 mb-6 border border-amber-500/30">
               <Sparkles className="w-4 h-4 text-amber-400" />
               <span className="text-amber-300 font-medium text-sm">
-                5-DAY LIVE CHALLENGE FOR SPIRITUAL ENTREPRENEURS
+                2-DAY LIVE CHALLENGE FOR SPIRITUAL ENTREPRENEURS
               </span>
             </div>
             
@@ -136,3 +137,4 @@ const Index = () => {
 };
 
 export default Index;
+
