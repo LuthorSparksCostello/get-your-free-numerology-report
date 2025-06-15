@@ -19,13 +19,26 @@ export const calculateNameNumber = (name: string): number => {
 };
 
 export const calculateLifePathNumber = (birthDate: string): number => {
-  const date = new Date(birthDate);
-  const day = date.getDate();
-  const month = date.getMonth() + 1;
-  const year = date.getFullYear();
+  // Parse the date string directly to avoid timezone issues
+  const dateParts = birthDate.split('-');
+  const year = parseInt(dateParts[0], 10);
+  const month = parseInt(dateParts[1], 10);
+  const day = parseInt(dateParts[2], 10);
   
-  const sum = reduceToSingleDigit(day) + reduceToSingleDigit(month) + reduceToSingleDigit(year);
-  return reduceToSingleDigit(sum);
+  console.log('Life Path Calculation:', { birthDate, year, month, day });
+  
+  const daySum = reduceToSingleDigit(day);
+  const monthSum = reduceToSingleDigit(month);
+  const yearSum = reduceToSingleDigit(year);
+  
+  console.log('Individual sums:', { daySum, monthSum, yearSum });
+  
+  const totalSum = daySum + monthSum + yearSum;
+  const result = reduceToSingleDigit(totalSum);
+  
+  console.log('Final Life Path Number:', result);
+  
+  return result;
 };
 
 export const calculateExpressionNumber = (fullName: string): number => {
@@ -43,8 +56,13 @@ export const calculatePersonalityNumber = (fullName: string): number => {
 };
 
 export const calculateBirthdayNumber = (birthDate: string): number => {
-  const date = new Date(birthDate);
-  return reduceToSingleDigit(date.getDate());
+  // Parse the date string directly to avoid timezone issues
+  const dateParts = birthDate.split('-');
+  const day = parseInt(dateParts[2], 10);
+  
+  console.log('Birthday Number Calculation:', { birthDate, day });
+  
+  return reduceToSingleDigit(day);
 };
 
 const reduceToSingleDigit = (num: number): number => {
@@ -55,6 +73,8 @@ const reduceToSingleDigit = (num: number): number => {
 };
 
 export const generateNumerologyReport = (name: string, email: string, birthDate: string) => {
+  console.log('Generating report for:', { name, email, birthDate });
+  
   return {
     name,
     email,
