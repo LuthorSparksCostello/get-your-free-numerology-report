@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import CosmicBackground from '@/components/CosmicBackground';
 import NumerologyForm from '@/components/NumerologyForm';
@@ -79,7 +80,7 @@ const Index = () => {
             
             <p className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto mb-8 leading-relaxed">
               Without the self-sabotage, imposter syndrome, plateaus, or overwhelm. Discover your cosmic blueprint 
-              and build a <span className="text-amber-400 font-semibold">soul-aligned business</span> that flows with your natural energy.
+              and build a <span className="text-amber-400 font-semibold">soul urge business</span> that flows with your natural energy.
             </p>
             
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
