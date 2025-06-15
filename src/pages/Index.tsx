@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import CosmicBackground from '@/components/CosmicBackground';
 import NumerologyForm from '@/components/NumerologyForm';
@@ -127,7 +128,7 @@ const Index = () => {
 
         {/* Footer */}
         <footer className="py-8 text-center text-gray-500 text-sm border-t border-white/10">
-          <p>© {new Date().getFullYear()} Dangelo Ali Ministry All Rights Reserved and Retained.</p>
+          <p>© {new Date().getFullYear()} Dangelo Ali Ministry Science Temple 508C1A Church All Rights Reserved.</p>
         </footer>
       </div>
     </div>
