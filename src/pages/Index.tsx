@@ -1,5 +1,3 @@
-
-
 import { useState } from 'react';
 import CosmicBackground from '@/components/CosmicBackground';
 import NumerologyForm from '@/components/NumerologyForm';
@@ -66,7 +64,7 @@ const Index = () => {
             </div>
             
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 cosmic-text leading-tight">
-              Turn Your{' '}
+              Transform Your{' '}
               <span className="gold-text relative">
                 Birth Chart
                 <div className="absolute -inset-2 bg-gradient-to-r from-amber-500/20 to-transparent blur-xl rounded-lg -z-10" />
@@ -137,4 +135,3 @@ const Index = () => {
 };
 
 export default Index;
-
