@@ -1,4 +1,3 @@
-
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -114,14 +113,11 @@ const numberMeanings = {
 const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
   const lifePathMeaning = numberMeanings[data.lifePathNumber as keyof typeof numberMeanings];
   const expressionMeaning = numberMeanings[data.expressionNumber as keyof typeof numberMeanings];
+  const soulUrgeMeaning = numberMeanings[data.soulUrgeNumber as keyof typeof numberMeanings];
+  const personalityMeaning = numberMeanings[data.personalityNumber as keyof typeof numberMeanings];
+  const birthdayMeaning = numberMeanings[data.birthdayNumber as keyof typeof numberMeanings];
 
   const handleDownload = () => {
-    const lifePathMeaning = numberMeanings[data.lifePathNumber as keyof typeof numberMeanings];
-    const expressionMeaning = numberMeanings[data.expressionNumber as keyof typeof numberMeanings];
-    const soulUrgeMeaning = numberMeanings[data.soulUrgeNumber as keyof typeof numberMeanings];
-    const personalityMeaning = numberMeanings[data.personalityNumber as keyof typeof numberMeanings];
-    const birthdayMeaning = numberMeanings[data.birthdayNumber as keyof typeof numberMeanings];
-
     // Create a comprehensive text report
     const reportContent = `
 Your Complete Cosmic Blueprint
@@ -197,12 +193,6 @@ SOUL-ALIGNED BUSINESS INSIGHTS
     
     console.log('Complete numerology report downloaded successfully');
   };
-
-  const lifePathMeaning = numberMeanings[data.lifePathNumber as keyof typeof numberMeanings];
-  const expressionMeaning = numberMeanings[data.expressionNumber as keyof typeof numberMeanings];
-  const soulUrgeMeaning = numberMeanings[data.soulUrgeNumber as keyof typeof numberMeanings];
-  const personalityMeaning = numberMeanings[data.personalityNumber as keyof typeof numberMeanings];
-  const birthdayMeaning = numberMeanings[data.birthdayNumber as keyof typeof numberMeanings];
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
