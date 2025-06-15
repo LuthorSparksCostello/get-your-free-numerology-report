@@ -5,6 +5,33 @@ const chaldeanValues: { [key: string]: number } = {
   N: 5, O: 7, P: 8, Q: 1, R: 2, S: 3, T: 4, U: 6, V: 6, W: 6, X: 5, Y: 1, Z: 7
 };
 
+// Helper function to reduce to single digit while preserving master numbers
+const reduceWithMasterNumbers = (num: number): number => {
+  while (num > 22) {
+    num = num.toString().split('').reduce((sum, digit) => sum + parseInt(digit), 0);
+  }
+  
+  // Preserve master numbers 11 and 22
+  if (num === 11 || num === 22) {
+    return num;
+  }
+  
+  // Continue reducing if it's not a master number but still > 9
+  while (num > 9) {
+    num = num.toString().split('').reduce((sum, digit) => sum + parseInt(digit), 0);
+  }
+  
+  return num;
+};
+
+// Standard reduction to single digit (for non-master number calculations)
+const reduceToSingleDigit = (num: number): number => {
+  while (num > 9) {
+    num = num.toString().split('').reduce((sum, digit) => sum + parseInt(digit), 0);
+  }
+  return num;
+};
+
 export const calculateNameNumber = (name: string): number => {
   const cleanName = name.toUpperCase().replace(/[^A-Z]/g, '');
   let sum = 0;
@@ -15,7 +42,7 @@ export const calculateNameNumber = (name: string): number => {
     }
   }
   
-  return reduceToSingleDigit(sum);
+  return reduceWithMasterNumbers(sum);
 };
 
 export const calculateLifePathNumber = (birthDate: string): number => {
@@ -27,15 +54,11 @@ export const calculateLifePathNumber = (birthDate: string): number => {
   
   console.log('Life Path Calculation:', { birthDate, year, month, day });
   
-  const daySum = reduceToSingleDigit(day);
-  const monthSum = reduceToSingleDigit(month);
-  const yearSum = reduceToSingleDigit(year);
+  // Add the full numbers first (month + day + year), then reduce the total
+  const totalSum = month + day + year;
+  console.log('Total sum before reduction:', totalSum);
   
-  console.log('Individual sums:', { daySum, monthSum, yearSum });
-  
-  const totalSum = daySum + monthSum + yearSum;
-  const result = reduceToSingleDigit(totalSum);
-  
+  const result = reduceWithMasterNumbers(totalSum);
   console.log('Final Life Path Number:', result);
   
   return result;
@@ -63,13 +86,6 @@ export const calculateBirthdayNumber = (birthDate: string): number => {
   console.log('Birthday Number Calculation:', { birthDate, day });
   
   return reduceToSingleDigit(day);
-};
-
-const reduceToSingleDigit = (num: number): number => {
-  while (num > 9) {
-    num = num.toString().split('').reduce((sum, digit) => sum + parseInt(digit), 0);
-  }
-  return num;
 };
 
 export const generateNumerologyReport = (name: string, email: string, birthDate: string) => {
