@@ -227,7 +227,7 @@ SOUL-ALIGNED BUSINESS INSIGHTS
         </div>
       </div>
 
-      {/* Core Numbers Overview */}
+      {/* Core Numbers Overview - Updated Order */}
       <Card className="report-card">
         <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
           <Target className="w-6 h-6 text-amber-400" />
@@ -235,11 +235,22 @@ SOUL-ALIGNED BUSINESS INSIGHTS
         </h2>
         
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-          <div className="text-center p-4 rounded-xl bg-gradient-to-b from-amber-500/10 to-transparent border border-amber-500/20">
-            <div className="text-3xl font-bold text-amber-400 mb-2">{data.lifePathNumber}</div>
-            <div className="text-sm text-gray-300">Life Path</div>
-            {(data.lifePathNumber === 11 || data.lifePathNumber === 22) && (
-              <div className="text-xs text-amber-300 mt-1">Master Number</div>
+          <div className="text-center p-4 rounded-xl bg-gradient-to-b from-green-500/10 to-transparent border border-green-500/20">
+            <div className="text-3xl font-bold text-green-400 mb-2">{data.birthdayNumber}</div>
+            <div className="text-sm text-gray-300">Birthday</div>
+          </div>
+          <div className="text-center p-4 rounded-xl bg-gradient-to-b from-blue-500/10 to-transparent border border-blue-500/20">
+            <div className="text-3xl font-bold text-blue-400 mb-2">{data.personalityNumber}</div>
+            <div className="text-sm text-gray-300">Personality</div>
+            {(data.personalityNumber === 11 || data.personalityNumber === 22) && (
+              <div className="text-xs text-blue-300 mt-1">Master Number</div>
+            )}
+          </div>
+          <div className="text-center p-4 rounded-xl bg-gradient-to-b from-pink-500/10 to-transparent border border-pink-500/20">
+            <div className="text-3xl font-bold text-pink-400 mb-2">{data.soulUrgeNumber}</div>
+            <div className="text-sm text-gray-300">Heart's Desire</div>
+            {(data.soulUrgeNumber === 11 || data.soulUrgeNumber === 22) && (
+              <div className="text-xs text-pink-300 mt-1">Master Number</div>
             )}
           </div>
           <div className="text-center p-4 rounded-xl bg-gradient-to-b from-purple-500/10 to-transparent border border-purple-500/20">
@@ -249,28 +260,113 @@ SOUL-ALIGNED BUSINESS INSIGHTS
               <div className="text-xs text-purple-300 mt-1">Master Number</div>
             )}
           </div>
-          <div className="text-center p-4 rounded-xl bg-gradient-to-b from-pink-500/10 to-transparent border border-pink-500/20">
-            <div className="text-3xl font-bold text-pink-400 mb-2">{data.soulUrgeNumber}</div>
-            <div className="text-sm text-gray-300">Soul Urge</div>
-            {(data.soulUrgeNumber === 11 || data.soulUrgeNumber === 22) && (
-              <div className="text-xs text-pink-300 mt-1">Master Number</div>
+          <div className="text-center p-4 rounded-xl bg-gradient-to-b from-amber-500/10 to-transparent border border-amber-500/20">
+            <div className="text-3xl font-bold text-amber-400 mb-2">{data.lifePathNumber}</div>
+            <div className="text-sm text-gray-300">Life Path</div>
+            {(data.lifePathNumber === 11 || data.lifePathNumber === 22) && (
+              <div className="text-xs text-amber-300 mt-1">Master Number</div>
             )}
-          </div>
-          <div className="text-center p-4 rounded-xl bg-gradient-to-b from-blue-500/10 to-transparent border border-blue-500/20">
-            <div className="text-3xl font-bold text-blue-400 mb-2">{data.personalityNumber}</div>
-            <div className="text-sm text-gray-300">Personality</div>
-            {(data.personalityNumber === 11 || data.personalityNumber === 22) && (
-              <div className="text-xs text-blue-300 mt-1">Master Number</div>
-            )}
-          </div>
-          <div className="text-center p-4 rounded-xl bg-gradient-to-b from-green-500/10 to-transparent border border-green-500/20">
-            <div className="text-3xl font-bold text-green-400 mb-2">{data.birthdayNumber}</div>
-            <div className="text-sm text-gray-300">Birthday</div>
           </div>
         </div>
       </Card>
 
-      {/* Life Path Analysis */}
+      {/* Birthday Number Analysis - First */}
+      <Card className="report-card">
+        <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+          <Calendar className="w-6 h-6 text-emerald-400" />
+          Birthday Number {data.birthdayNumber}: {birthdayMeaning.title}
+        </h2>
+        
+        <div className="space-y-4">
+          <p className="text-gray-300 text-lg leading-relaxed">
+            Special talents and abilities you were born with. {birthdayMeaning.description}
+          </p>
+        </div>
+      </Card>
+
+      {/* Personality Number - Second */}
+      <Card className="report-card">
+        <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+          <User className="w-6 h-6 text-cyan-400" />
+          Personality Number {data.personalityNumber}: {personalityMeaning.title}
+          {(data.personalityNumber === 11 || data.personalityNumber === 22) && (
+            <Badge className="bg-cyan-500/20 text-cyan-300 border-cyan-500/30 ml-2">
+              Master Number
+            </Badge>
+          )}
+        </h2>
+        
+        <div className="space-y-4">
+          <p className="text-gray-300 text-lg leading-relaxed">
+            How others perceive you and your outer personality. {personalityMeaning.description}
+          </p>
+        </div>
+      </Card>
+
+      {/* Heart's Desire Number - Third */}
+      <Card className="report-card">
+        <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+          <Heart className="w-6 h-6 text-rose-400" />
+          Heart's Desire Number {data.soulUrgeNumber}: {soulUrgeMeaning.title}
+          {(data.soulUrgeNumber === 11 || data.soulUrgeNumber === 22) && (
+            <Badge className="bg-rose-500/20 text-rose-300 border-rose-500/30 ml-2">
+              Master Number
+            </Badge>
+          )}
+        </h2>
+        
+        <div className="space-y-4">
+          <p className="text-gray-300 text-lg leading-relaxed">
+            Your Heart's Desire - what motivates you at the deepest level. {soulUrgeMeaning.description}
+          </p>
+        </div>
+      </Card>
+
+      {/* Expression Number Analysis - Fourth */}
+      <Card className="report-card">
+        <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+          <Users className="w-6 h-6 text-purple-400" />
+          Expression Number {data.expressionNumber}: {expressionMeaning.title}
+          {(data.expressionNumber === 11 || data.expressionNumber === 22) && (
+            <Badge className="bg-purple-500/20 text-purple-300 border-purple-500/30 ml-2">
+              Master Number
+            </Badge>
+          )}
+        </h2>
+        
+        <div className="space-y-4">
+          <p className="text-gray-300 text-lg leading-relaxed">
+            Your Expression Number reveals your life's work and the talents you're meant to develop. 
+            {expressionMeaning.description}
+          </p>
+          
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="p-4 rounded-xl bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20">
+              <h3 className="text-lg font-semibold text-purple-400 mb-3">Natural Talents</h3>
+              <div className="flex flex-wrap gap-2">
+                {expressionMeaning.strengths.map((strength, index) => (
+                  <Badge key={index} className="bg-purple-500/20 text-purple-300 border-purple-500/30">
+                    {strength}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+            
+            <div className="p-4 rounded-xl bg-gradient-to-r from-pink-500/10 to-red-500/10 border border-pink-500/20">
+              <h3 className="text-lg font-semibold text-pink-400 mb-3">Areas to Develop</h3>
+              <div className="flex flex-wrap gap-2">
+                {expressionMeaning.challenges.map((challenge, index) => (
+                  <Badge key={index} className="bg-pink-500/20 text-pink-300 border-pink-500/30">
+                    {challenge}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </Card>
+
+      {/* Life Path Analysis - Fifth */}
       <Card className="report-card">
         <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
           <Heart className="w-6 h-6 text-pink-400" />
@@ -346,102 +442,6 @@ SOUL-ALIGNED BUSINESS INSIGHTS
         </div>
       </Card>
 
-      {/* Expression Number Analysis */}
-      <Card className="report-card">
-        <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
-          <Users className="w-6 h-6 text-purple-400" />
-          Expression Number {data.expressionNumber}: {expressionMeaning.title}
-          {(data.expressionNumber === 11 || data.expressionNumber === 22) && (
-            <Badge className="bg-purple-500/20 text-purple-300 border-purple-500/30 ml-2">
-              Master Number
-            </Badge>
-          )}
-        </h2>
-        
-        <div className="space-y-4">
-          <p className="text-gray-300 text-lg leading-relaxed">
-            Your Expression Number reveals your life's work and the talents you're meant to develop. 
-            {expressionMeaning.description}
-          </p>
-          
-          <div className="grid md:grid-cols-2 gap-4">
-            <div className="p-4 rounded-xl bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20">
-              <h3 className="text-lg font-semibold text-purple-400 mb-3">Natural Talents</h3>
-              <div className="flex flex-wrap gap-2">
-                {expressionMeaning.strengths.map((strength, index) => (
-                  <Badge key={index} className="bg-purple-500/20 text-purple-300 border-purple-500/30">
-                    {strength}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-            
-            <div className="p-4 rounded-xl bg-gradient-to-r from-pink-500/10 to-red-500/10 border border-pink-500/20">
-              <h3 className="text-lg font-semibold text-pink-400 mb-3">Areas to Develop</h3>
-              <div className="flex flex-wrap gap-2">
-                {expressionMeaning.challenges.map((challenge, index) => (
-                  <Badge key={index} className="bg-pink-500/20 text-pink-300 border-pink-500/30">
-                    {challenge}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </Card>
-
-      {/* Soul Urge Number */}
-      <Card className="report-card">
-        <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
-          <Heart className="w-6 h-6 text-rose-400" />
-          Soul Urge Number {data.soulUrgeNumber}: {soulUrgeMeaning.title}
-          {(data.soulUrgeNumber === 11 || data.soulUrgeNumber === 22) && (
-            <Badge className="bg-rose-500/20 text-rose-300 border-rose-500/30 ml-2">
-              Master Number
-            </Badge>
-          )}
-        </h2>
-        
-        <div className="space-y-4">
-          <p className="text-gray-300 text-lg leading-relaxed">
-            Your Heart's Desire - what motivates you at the deepest level. {soulUrgeMeaning.description}
-          </p>
-        </div>
-      </Card>
-
-      {/* Personality Number */}
-      <Card className="report-card">
-        <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
-          <User className="w-6 h-6 text-cyan-400" />
-          Personality Number {data.personalityNumber}: {personalityMeaning.title}
-          {(data.personalityNumber === 11 || data.personalityNumber === 22) && (
-            <Badge className="bg-cyan-500/20 text-cyan-300 border-cyan-500/30 ml-2">
-              Master Number
-            </Badge>
-          )}
-        </h2>
-        
-        <div className="space-y-4">
-          <p className="text-gray-300 text-lg leading-relaxed">
-            How others perceive you and your outer personality. {personalityMeaning.description}
-          </p>
-        </div>
-      </Card>
-
-      {/* Birthday Number */}
-      <Card className="report-card">
-        <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
-          <Calendar className="w-6 h-6 text-emerald-400" />
-          Birthday Number {data.birthdayNumber}: {birthdayMeaning.title}
-        </h2>
-        
-        <div className="space-y-4">
-          <p className="text-gray-300 text-lg leading-relaxed">
-            Special talents and abilities you were born with. {birthdayMeaning.description}
-          </p>
-        </div>
-      </Card>
-
       {/* Business & Money Insights */}
       <Card className="report-card">
         <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
@@ -453,11 +453,11 @@ SOUL-ALIGNED BUSINESS INSIGHTS
           <div className="p-6 rounded-xl bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-500/20">
             <h3 className="text-lg font-semibold text-purple-400 mb-3">🌟 Your Cosmic Business Blueprint</h3>
             <ul className="space-y-2 text-gray-300">
-              <li>• Leverage your Life Path {lifePathMeaning.strengths[0].toLowerCase()} abilities in your marketing</li>
-              <li>• Express your natural {expressionMeaning.strengths[0].toLowerCase()} through your business model</li>
-              <li>• Follow your Soul Urge for {soulUrgeMeaning.strengths[0].toLowerCase()} as your core mission</li>
-              <li>• Let your {personalityMeaning.strengths[0].toLowerCase()} personality attract ideal clients</li>
               <li>• Use your Birthday gift of {birthdayMeaning.strengths[0].toLowerCase()} as a unique selling point</li>
+              <li>• Let your {personalityMeaning.strengths[0].toLowerCase()} personality attract ideal clients</li>
+              <li>• Follow your Heart's Desire for {soulUrgeMeaning.strengths[0].toLowerCase()} as your core mission</li>
+              <li>• Express your natural {expressionMeaning.strengths[0].toLowerCase()} through your business model</li>
+              <li>• Leverage your Life Path {lifePathMeaning.strengths[0].toLowerCase()} abilities in your marketing</li>
             </ul>
           </div>
         </div>
