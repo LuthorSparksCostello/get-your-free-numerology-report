@@ -78,7 +78,7 @@ const Index = () => {
             </h1>
             
             <p className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto mb-8 leading-relaxed">
-              Without the self-sabotage, plateaus, or overwhelm. Discover your cosmic blueprint 
+              Without the self-sabotage, imposter syndrome, plateaus, or overwhelm. Discover your cosmic blueprint 
               and build a <span className="text-amber-400 font-semibold">soul-aligned business</span> that flows with your natural energy.
             </p>
             
