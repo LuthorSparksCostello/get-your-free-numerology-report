@@ -6,56 +6,75 @@ const chaldeanValues: { [key: string]: number } = {
 };
 
 // Helper function to reduce to single digit while preserving master numbers
-const reduceWithMasterNumbers = (num: number): number => {
+const reduceWithMasterNumbers = (num: number): { final: number, steps: string[] } => {
+  const steps: string[] = [];
+  
   // First, reduce very large numbers by breaking them down
   while (num > 99) {
-    num = num.toString().split('').reduce((sum, digit) => sum + parseInt(digit), 0);
+    const digits = num.toString().split('');
+    const sum = digits.reduce((acc, digit) => acc + parseInt(digit), 0);
+    steps.push(`${num} → ${digits.join(' + ')} = ${sum}`);
+    num = sum;
   }
   
   // Preserve master numbers 11 and 22
   if (num === 11 || num === 22) {
-    return num;
+    steps.push(`${num} is a Master Number - not reduced further`);
+    return { final: num, steps };
   }
   
   // Continue reducing if it's not a master number but still > 9
   while (num > 9) {
-    num = num.toString().split('').reduce((sum, digit) => sum + parseInt(digit), 0);
+    const digits = num.toString().split('');
+    const sum = digits.reduce((acc, digit) => acc + parseInt(digit), 0);
+    steps.push(`${num} → ${digits.join(' + ')} = ${sum}`);
+    num = sum;
+    
     // Check again for master numbers after reduction
     if (num === 11 || num === 22) {
-      return num;
+      steps.push(`${num} is a Master Number - not reduced further`);
+      return { final: num, steps };
     }
   }
   
-  return num;
+  return { final: num, steps };
 };
 
 // Standard reduction to single digit (for non-master number calculations)
-const reduceToSingleDigit = (num: number): number => {
+const reduceToSingleDigit = (num: number): { final: number, steps: string[] } => {
+  const steps: string[] = [];
+  
   while (num > 9) {
-    num = num.toString().split('').reduce((sum, digit) => sum + parseInt(digit), 0);
+    const digits = num.toString().split('');
+    const sum = digits.reduce((acc, digit) => acc + parseInt(digit), 0);
+    steps.push(`${num} → ${digits.join(' + ')} = ${sum}`);
+    num = sum;
   }
-  return num;
+  
+  return { final: num, steps };
 };
 
-// Helper function to calculate name-based numbers
-const calculateNameValue = (name: string): number => {
+// Helper function to calculate name-based numbers with breakdown
+const calculateNameValue = (name: string): { sum: number, breakdown: string[] } => {
   const cleanName = name.toUpperCase().replace(/[^A-Z]/g, '');
   let sum = 0;
+  const breakdown: string[] = [];
   
   console.log('Calculating name value for:', cleanName);
   
   for (const char of cleanName) {
     if (chaldeanValues[char]) {
       sum += chaldeanValues[char];
+      breakdown.push(`${char} = ${chaldeanValues[char]}`);
       console.log(`${char} = ${chaldeanValues[char]}, running sum: ${sum}`);
     }
   }
   
   console.log('Total sum before reduction:', sum);
-  return sum;
+  return { sum, breakdown };
 };
 
-export const calculateLifePathNumber = (birthDate: string): number => {
+export const calculateLifePathNumber = (birthDate: string): { number: number, breakdown: string[] } => {
   // Parse the date string directly to avoid timezone issues
   const dateParts = birthDate.split('-');
   const year = parseInt(dateParts[0], 10);
@@ -66,71 +85,102 @@ export const calculateLifePathNumber = (birthDate: string): number => {
   
   // Chaldean method: Add the full numbers first (month + day + year), then reduce the total
   const totalSum = month + day + year;
+  const breakdown = [`Month: ${month}`, `Day: ${day}`, `Year: ${year}`, `Total: ${month} + ${day} + ${year} = ${totalSum}`];
+  
   console.log('Total sum before reduction:', totalSum);
   
-  const result = reduceWithMasterNumbers(totalSum);
-  console.log('Final Life Path Number:', result);
+  const reduction = reduceWithMasterNumbers(totalSum);
+  breakdown.push(...reduction.steps);
   
-  return result;
+  console.log('Final Life Path Number:', reduction.final);
+  
+  return { number: reduction.final, breakdown };
 };
 
-export const calculateExpressionNumber = (fullName: string): number => {
+export const calculateExpressionNumber = (fullName: string): { number: number, breakdown: string[] } => {
   console.log('Expression Number Calculation for:', fullName);
-  const sum = calculateNameValue(fullName);
-  const result = reduceWithMasterNumbers(sum);
-  console.log('Expression Number result:', result);
-  return result;
+  const nameCalc = calculateNameValue(fullName);
+  const breakdown = [`Letters: ${nameCalc.breakdown.join(', ')}`, `Sum: ${nameCalc.sum}`];
+  
+  const reduction = reduceWithMasterNumbers(nameCalc.sum);
+  breakdown.push(...reduction.steps);
+  
+  console.log('Expression Number result:', reduction.final);
+  return { number: reduction.final, breakdown };
 };
 
-export const calculateSoulUrgeNumber = (fullName: string): number => {
+export const calculateSoulUrgeNumber = (fullName: string): { number: number, breakdown: string[] } => {
   console.log('Soul Urge (Heart\'s Desire) Number Calculation for:', fullName);
   // Extract only vowels
   const vowels = fullName.toUpperCase().replace(/[^AEIOU]/g, '');
   console.log('Vowels extracted:', vowels);
   
-  const sum = calculateNameValue(vowels);
-  const result = reduceWithMasterNumbers(sum);
-  console.log('Soul Urge Number result:', result);
-  return result;
+  const nameCalc = calculateNameValue(vowels);
+  const breakdown = [`Vowels: ${vowels}`, `Values: ${nameCalc.breakdown.join(', ')}`, `Sum: ${nameCalc.sum}`];
+  
+  const reduction = reduceWithMasterNumbers(nameCalc.sum);
+  breakdown.push(...reduction.steps);
+  
+  console.log('Soul Urge Number result:', reduction.final);
+  return { number: reduction.final, breakdown };
 };
 
-export const calculatePersonalityNumber = (fullName: string): number => {
+export const calculatePersonalityNumber = (fullName: string): { number: number, breakdown: string[] } => {
   console.log('Personality Number Calculation for:', fullName);
   // Extract only consonants (remove vowels and spaces)
   const consonants = fullName.toUpperCase().replace(/[AEIOU\s]/g, '');
   console.log('Consonants extracted:', consonants);
   
-  const sum = calculateNameValue(consonants);
-  const result = reduceWithMasterNumbers(sum);
-  console.log('Personality Number result:', result);
-  return result;
+  const nameCalc = calculateNameValue(consonants);
+  const breakdown = [`Consonants: ${consonants}`, `Values: ${nameCalc.breakdown.join(', ')}`, `Sum: ${nameCalc.sum}`];
+  
+  const reduction = reduceWithMasterNumbers(nameCalc.sum);
+  breakdown.push(...reduction.steps);
+  
+  console.log('Personality Number result:', reduction.final);
+  return { number: reduction.final, breakdown };
 };
 
-export const calculateBirthdayNumber = (birthDate: string): number => {
+export const calculateBirthdayNumber = (birthDate: string): { number: number, breakdown: string[] } => {
   // Parse the date string directly to avoid timezone issues
   const dateParts = birthDate.split('-');
   const day = parseInt(dateParts[2], 10);
   
   console.log('Birthday Number Calculation:', { birthDate, day });
   
+  const breakdown = [`Birth Day: ${day}`];
+  
   // Birthday number is typically reduced to single digit (no master numbers for birthday)
-  const result = reduceToSingleDigit(day);
-  console.log('Birthday Number result:', result);
-  return result;
+  const reduction = reduceToSingleDigit(day);
+  breakdown.push(...reduction.steps);
+  
+  console.log('Birthday Number result:', reduction.final);
+  return { number: reduction.final, breakdown };
 };
 
 export const generateNumerologyReport = (name: string, email: string, birthDate: string) => {
   console.log('Generating comprehensive numerology report for:', { name, email, birthDate });
   
+  const lifePathCalc = calculateLifePathNumber(birthDate);
+  const expressionCalc = calculateExpressionNumber(name);
+  const soulUrgeCalc = calculateSoulUrgeNumber(name);
+  const personalityCalc = calculatePersonalityNumber(name);
+  const birthdayCalc = calculateBirthdayNumber(birthDate);
+  
   const report = {
     name,
     email,
     birthDate,
-    lifePathNumber: calculateLifePathNumber(birthDate),
-    expressionNumber: calculateExpressionNumber(name),
-    soulUrgeNumber: calculateSoulUrgeNumber(name),
-    personalityNumber: calculatePersonalityNumber(name),
-    birthdayNumber: calculateBirthdayNumber(birthDate)
+    lifePathNumber: lifePathCalc.number,
+    lifePathBreakdown: lifePathCalc.breakdown,
+    expressionNumber: expressionCalc.number,
+    expressionBreakdown: expressionCalc.breakdown,
+    soulUrgeNumber: soulUrgeCalc.number,
+    soulUrgeBreakdown: soulUrgeCalc.breakdown,
+    personalityNumber: personalityCalc.number,
+    personalityBreakdown: personalityCalc.breakdown,
+    birthdayNumber: birthdayCalc.number,
+    birthdayBreakdown: birthdayCalc.breakdown
   };
   
   console.log('Complete numerology report:', report);
