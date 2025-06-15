@@ -102,7 +102,7 @@ const Index = () => {
                   </h2>
                   <p className="text-gray-400 max-w-2xl mx-auto">
                     Unlock your personalized Chaldean numerology report and discover the cosmic forces 
-                    that shape your entrepreneurial journey.
+                    that manifest your entrepreneurial journey.
                   </p>
                 </div>
                 
