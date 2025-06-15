@@ -7,7 +7,8 @@ const chaldeanValues: { [key: string]: number } = {
 
 // Helper function to reduce to single digit while preserving master numbers
 const reduceWithMasterNumbers = (num: number): number => {
-  while (num > 22) {
+  // First, reduce very large numbers by breaking them down
+  while (num > 99) {
     num = num.toString().split('').reduce((sum, digit) => sum + parseInt(digit), 0);
   }
   
@@ -19,6 +20,10 @@ const reduceWithMasterNumbers = (num: number): number => {
   // Continue reducing if it's not a master number but still > 9
   while (num > 9) {
     num = num.toString().split('').reduce((sum, digit) => sum + parseInt(digit), 0);
+    // Check again for master numbers after reduction
+    if (num === 11 || num === 22) {
+      return num;
+    }
   }
   
   return num;
@@ -32,17 +37,22 @@ const reduceToSingleDigit = (num: number): number => {
   return num;
 };
 
-export const calculateNameNumber = (name: string): number => {
+// Helper function to calculate name-based numbers
+const calculateNameValue = (name: string): number => {
   const cleanName = name.toUpperCase().replace(/[^A-Z]/g, '');
   let sum = 0;
+  
+  console.log('Calculating name value for:', cleanName);
   
   for (const char of cleanName) {
     if (chaldeanValues[char]) {
       sum += chaldeanValues[char];
+      console.log(`${char} = ${chaldeanValues[char]}, running sum: ${sum}`);
     }
   }
   
-  return reduceWithMasterNumbers(sum);
+  console.log('Total sum before reduction:', sum);
+  return sum;
 };
 
 export const calculateLifePathNumber = (birthDate: string): number => {
@@ -54,7 +64,7 @@ export const calculateLifePathNumber = (birthDate: string): number => {
   
   console.log('Life Path Calculation:', { birthDate, year, month, day });
   
-  // Add the full numbers first (month + day + year), then reduce the total
+  // Chaldean method: Add the full numbers first (month + day + year), then reduce the total
   const totalSum = month + day + year;
   console.log('Total sum before reduction:', totalSum);
   
@@ -65,17 +75,35 @@ export const calculateLifePathNumber = (birthDate: string): number => {
 };
 
 export const calculateExpressionNumber = (fullName: string): number => {
-  return calculateNameNumber(fullName);
+  console.log('Expression Number Calculation for:', fullName);
+  const sum = calculateNameValue(fullName);
+  const result = reduceWithMasterNumbers(sum);
+  console.log('Expression Number result:', result);
+  return result;
 };
 
 export const calculateSoulUrgeNumber = (fullName: string): number => {
+  console.log('Soul Urge (Heart\'s Desire) Number Calculation for:', fullName);
+  // Extract only vowels
   const vowels = fullName.toUpperCase().replace(/[^AEIOU]/g, '');
-  return calculateNameNumber(vowels);
+  console.log('Vowels extracted:', vowels);
+  
+  const sum = calculateNameValue(vowels);
+  const result = reduceWithMasterNumbers(sum);
+  console.log('Soul Urge Number result:', result);
+  return result;
 };
 
 export const calculatePersonalityNumber = (fullName: string): number => {
+  console.log('Personality Number Calculation for:', fullName);
+  // Extract only consonants (remove vowels and spaces)
   const consonants = fullName.toUpperCase().replace(/[AEIOU\s]/g, '');
-  return calculateNameNumber(consonants);
+  console.log('Consonants extracted:', consonants);
+  
+  const sum = calculateNameValue(consonants);
+  const result = reduceWithMasterNumbers(sum);
+  console.log('Personality Number result:', result);
+  return result;
 };
 
 export const calculateBirthdayNumber = (birthDate: string): number => {
@@ -85,13 +113,16 @@ export const calculateBirthdayNumber = (birthDate: string): number => {
   
   console.log('Birthday Number Calculation:', { birthDate, day });
   
-  return reduceToSingleDigit(day);
+  // Birthday number is typically reduced to single digit (no master numbers for birthday)
+  const result = reduceToSingleDigit(day);
+  console.log('Birthday Number result:', result);
+  return result;
 };
 
 export const generateNumerologyReport = (name: string, email: string, birthDate: string) => {
-  console.log('Generating report for:', { name, email, birthDate });
+  console.log('Generating comprehensive numerology report for:', { name, email, birthDate });
   
-  return {
+  const report = {
     name,
     email,
     birthDate,
@@ -101,4 +132,7 @@ export const generateNumerologyReport = (name: string, email: string, birthDate:
     personalityNumber: calculatePersonalityNumber(name),
     birthdayNumber: calculateBirthdayNumber(birthDate)
   };
+  
+  console.log('Complete numerology report:', report);
+  return report;
 };

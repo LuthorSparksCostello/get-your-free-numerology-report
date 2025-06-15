@@ -10,7 +10,9 @@ import {
   Lightbulb, 
   Target,
   Download,
-  ArrowLeft
+  ArrowLeft,
+  Calendar,
+  User
 } from 'lucide-react';
 
 interface ReportData {
@@ -34,67 +36,78 @@ const numberMeanings = {
     title: "The Leader",
     description: "Independent, pioneering, and ambitious. Natural born leaders who create their own path.",
     strengths: ["Leadership", "Innovation", "Independence", "Determination"],
-    challenges: ["Impatience", "Stubbornness", "Self-centeredness"]
+    challenges: ["Impatience", "Stubbornness", "Self-centeredness"],
+    careers: ["CEO/Executive", "Entrepreneur", "Sales Leader", "Military Officer", "Politician", "Director", "Consultant", "Team Leader", "Project Manager", "Department Head", "Business Owner", "Marketing Director", "Operations Manager", "Creative Director", "Branch Manager"]
   },
   2: {
     title: "The Diplomat",
     description: "Cooperative, sensitive, and peace-loving. Excel at bringing people together.",
     strengths: ["Cooperation", "Sensitivity", "Diplomacy", "Intuition"],
-    challenges: ["Indecisiveness", "Over-sensitivity", "Dependency"]
+    challenges: ["Indecisiveness", "Over-sensitivity", "Dependency"],
+    careers: ["Mediator", "Counselor", "Therapist", "HR Specialist", "Social Worker", "Teacher", "Nurse", "Customer Service", "Administrative Assistant", "Event Coordinator", "Relationship Coach", "Support Staff", "Community Organizer", "Diplomat", "Receptionist"]
   },
   3: {
     title: "The Creative",
     description: "Artistic, expressive, and optimistic. Natural entertainers and communicators.",
     strengths: ["Creativity", "Communication", "Optimism", "Inspiration"],
-    challenges: ["Scattered energy", "Superficiality", "Mood swings"]
+    challenges: ["Scattered energy", "Superficiality", "Mood swings"],
+    careers: ["Artist", "Writer", "Actor", "Designer", "Marketing Specialist", "Public Speaker", "Entertainer", "Journalist", "Creative Director", "Social Media Manager", "Content Creator", "Photographer", "Musician", "Event Planner", "Communications Manager"]
   },
   4: {
     title: "The Builder",
     description: "Practical, hardworking, and reliable. Excel at creating stable foundations.",
     strengths: ["Organization", "Reliability", "Hard work", "Practicality"],
-    challenges: ["Rigidity", "Pessimism", "Resistance to change"]
+    challenges: ["Rigidity", "Pessimism", "Resistance to change"],
+    careers: ["Engineer", "Accountant", "Project Manager", "Construction Manager", "Financial Planner", "Systems Analyst", "Quality Controller", "Operations Manager", "Architect", "Contractor", "Database Administrator", "Process Improvement Specialist", "Logistics Coordinator", "Technical Specialist", "Administrative Manager"]
   },
   5: {
     title: "The Adventurer",
     description: "Freedom-loving, versatile, and progressive. Thrive on change and variety.",
     strengths: ["Adaptability", "Freedom", "Curiosity", "Progressive thinking"],
-    challenges: ["Restlessness", "Irresponsibility", "Inconsistency"]
+    challenges: ["Restlessness", "Irresponsibility", "Inconsistency"],
+    careers: ["Travel Agent", "Sales Representative", "Journalist", "Marketing Manager", "Event Coordinator", "Freelancer", "Consultant", "Tour Guide", "Flight Attendant", "Real Estate Agent", "Public Relations", "Social Media Influencer", "Adventure Guide", "Import/Export Specialist", "Change Management Consultant"]
   },
   6: {
     title: "The Nurturer",
     description: "Caring, responsible, and community-minded. Natural healers and teachers.",
     strengths: ["Nurturing", "Responsibility", "Healing", "Service"],
-    challenges: ["Interference", "Worry", "Self-sacrifice"]
+    challenges: ["Interference", "Worry", "Self-sacrifice"],
+    careers: ["Teacher", "Healthcare Worker", "Social Worker", "Counselor", "Childcare Provider", "Veterinarian", "Non-profit Director", "Community Leader", "Family Therapist", "Nutritionist", "Elder Care Specialist", "School Administrator", "Mental Health Professional", "Charity Worker", "Home Designer"]
   },
   7: {
     title: "The Seeker",
     description: "Analytical, spiritual, and introspective. Deep thinkers who seek truth.",
     strengths: ["Analysis", "Spirituality", "Intuition", "Research"],
-    challenges: ["Aloofness", "Perfectionism", "Skepticism"]
+    challenges: ["Aloofness", "Perfectionism", "Skepticism"],
+    careers: ["Researcher", "Scientist", "Analyst", "Spiritual Advisor", "Writer", "Professor", "Investigator", "Philosopher", "Psychologist", "Data Scientist", "Librarian", "Technical Writer", "Quality Assurance", "Strategic Planner", "Market Research Analyst"]
   },
   8: {
     title: "The Achiever",
     description: "Ambitious, material-focused, and authoritative. Natural business leaders.",
     strengths: ["Business acumen", "Organization", "Material success", "Authority"],
-    challenges: ["Materialism", "Workaholism", "Impatience"]
+    challenges: ["Materialism", "Workaholism", "Impatience"],
+    careers: ["Business Executive", "Financial Advisor", "Investment Banker", "Real Estate Developer", "Corporate Lawyer", "Management Consultant", "Business Owner", "Sales Director", "Banking Executive", "Wealth Manager", "Commercial Real Estate", "Venture Capitalist", "Business Analyst", "Corporate Strategist", "Mergers & Acquisitions"]
   },
   9: {
     title: "The Humanitarian",
     description: "Compassionate, generous, and globally-minded. Serve the greater good.",
     strengths: ["Compassion", "Generosity", "Universal love", "Wisdom"],
-    challenges: ["Idealism", "Emotional volatility", "Impracticality"]
+    challenges: ["Idealism", "Emotional volatility", "Impracticality"],
+    careers: ["Non-profit Leader", "International Aid Worker", "Environmental Activist", "Human Rights Advocate", "Global Health Worker", "Peace Corps Volunteer", "Charity Director", "Social Justice Lawyer", "Community Organizer", "Philanthropist", "Cultural Ambassador", "Humanitarian Coordinator", "Policy Advocate", "Global Development Specialist", "Environmental Consultant"]
   },
   11: {
     title: "The Master Intuitive",
     description: "Highly intuitive, spiritual, and inspirational. Master number with extraordinary potential for enlightenment and leadership.",
     strengths: ["Intuition", "Inspiration", "Spiritual insight", "Visionary leadership"],
-    challenges: ["Nervous tension", "Impracticality", "Emotional extremes"]
+    challenges: ["Nervous tension", "Impracticality", "Emotional extremes"],
+    careers: ["Spiritual Teacher", "Inspirational Speaker", "Healer", "Psychic Advisor", "Life Coach", "Motivational Speaker", "Spiritual Counselor", "Energy Healer", "Meditation Instructor", "Wellness Coach", "Intuitive Consultant", "Transformational Leader", "Consciousness Coach", "Spiritual Writer", "Enlightenment Teacher"]
   },
   22: {
     title: "The Master Builder",
     description: "Combines vision with practical skills to create lasting impact. Master number with potential to build something of great significance.",
     strengths: ["Visionary building", "Practical idealism", "Large-scale thinking", "Material mastery"],
-    challenges: ["Overwhelming pressure", "Self-doubt", "Scattered focus"]
+    challenges: ["Overwhelming pressure", "Self-doubt", "Scattered focus"],
+    careers: ["Visionary CEO", "Social Entrepreneur", "Global Organization Leader", "Large Project Director", "Systems Architect", "International Business Leader", "Social Impact Investor", "Transformational Change Agent", "Global Initiative Director", "Master Builder", "Social Innovation Leader", "International Development Director", "Large-Scale Consultant", "Global Strategy Director", "World-Changing Entrepreneur"]
   }
 };
 
@@ -103,33 +116,70 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
   const expressionMeaning = numberMeanings[data.expressionNumber as keyof typeof numberMeanings];
 
   const handleDownload = () => {
+    const lifePathMeaning = numberMeanings[data.lifePathNumber as keyof typeof numberMeanings];
+    const expressionMeaning = numberMeanings[data.expressionNumber as keyof typeof numberMeanings];
+    const soulUrgeMeaning = numberMeanings[data.soulUrgeNumber as keyof typeof numberMeanings];
+    const personalityMeaning = numberMeanings[data.personalityNumber as keyof typeof numberMeanings];
+    const birthdayMeaning = numberMeanings[data.birthdayNumber as keyof typeof numberMeanings];
+
     // Create a comprehensive text report
     const reportContent = `
-Your Personal Cosmic Blueprint
+Your Complete Cosmic Blueprint
 Generated for ${data.name}
 Date: ${new Date().toLocaleDateString()}
 
-CORE NUMBERS:
-- Life Path Number: ${data.lifePathNumber}
-- Expression Number: ${data.expressionNumber}
-- Soul Urge Number: ${data.soulUrgeNumber}
-- Personality Number: ${data.personalityNumber}
-- Birthday Number: ${data.birthdayNumber}
+=====================================
+CORE NUMEROLOGY NUMBERS
+=====================================
+- Life Path Number: ${data.lifePathNumber} (${lifePathMeaning.title})
+- Expression Number: ${data.expressionNumber} (${expressionMeaning.title})
+- Soul Urge Number: ${data.soulUrgeNumber} (${soulUrgeMeaning.title})
+- Personality Number: ${data.personalityNumber} (${personalityMeaning.title})
+- Birthday Number: ${data.birthdayNumber} (${birthdayMeaning.title})
 
-LIFE PATH ANALYSIS - ${lifePathMeaning.title}:
+=====================================
+LIFE PATH ANALYSIS - ${lifePathMeaning.title}
+=====================================
 ${lifePathMeaning.description}
 
 Strengths: ${lifePathMeaning.strengths.join(', ')}
 Growth Areas: ${lifePathMeaning.challenges.join(', ')}
 
-EXPRESSION NUMBER ANALYSIS - ${expressionMeaning.title}:
-Your Expression Number reveals your life's work and the talents you're meant to develop. ${expressionMeaning.description}
+Ideal Career Paths:
+${lifePathMeaning.careers.slice(0, 10).map(career => `• ${career}`).join('\n')}
 
-SOUL-ALIGNED BUSINESS INSIGHTS:
+=====================================
+EXPRESSION NUMBER - ${expressionMeaning.title}
+=====================================
+Your Expression Number reveals your life's work and natural talents.
+${expressionMeaning.description}
+
+=====================================
+SOUL URGE NUMBER - ${soulUrgeMeaning.title}
+=====================================
+Your Heart's Desire - what motivates you at the deepest level.
+${soulUrgeMeaning.description}
+
+=====================================
+PERSONALITY NUMBER - ${personalityMeaning.title}
+=====================================
+How others perceive you and your outer personality.
+${personalityMeaning.description}
+
+=====================================
+BIRTHDAY NUMBER - ${birthdayMeaning.title}
+=====================================
+Special talents and abilities you were born with.
+${birthdayMeaning.description}
+
+=====================================
+SOUL-ALIGNED BUSINESS INSIGHTS
+=====================================
 • Leverage your natural ${lifePathMeaning.strengths[0].toLowerCase()} abilities in your marketing
 • Build systems that support your ${expressionMeaning.strengths[1]?.toLowerCase() || 'core strength'} nature
 • Partner with others who complement your ${lifePathMeaning.challenges[0]?.toLowerCase() || 'growth areas'}
 • Focus on serving clients who value ${expressionMeaning.strengths[0].toLowerCase()}
+• Your soul urge for ${soulUrgeMeaning.strengths[0].toLowerCase()} should guide your business purpose
 
 © ${new Date().getFullYear()} Dangelo Ali Ministry All Rights Reserved and Retained.
     `.trim();
@@ -139,14 +189,20 @@ SOUL-ALIGNED BUSINESS INSIGHTS:
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `${data.name.replace(/\s+/g, '_')}_Cosmic_Blueprint_Report.txt`;
+    link.download = `${data.name.replace(/\s+/g, '_')}_Complete_Cosmic_Blueprint_Report.txt`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
     
-    console.log('Report downloaded successfully');
+    console.log('Complete numerology report downloaded successfully');
   };
+
+  const lifePathMeaning = numberMeanings[data.lifePathNumber as keyof typeof numberMeanings];
+  const expressionMeaning = numberMeanings[data.expressionNumber as keyof typeof numberMeanings];
+  const soulUrgeMeaning = numberMeanings[data.soulUrgeNumber as keyof typeof numberMeanings];
+  const personalityMeaning = numberMeanings[data.personalityNumber as keyof typeof numberMeanings];
+  const birthdayMeaning = numberMeanings[data.birthdayNumber as keyof typeof numberMeanings];
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
@@ -166,7 +222,7 @@ SOUL-ALIGNED BUSINESS INSIGHTS:
         </div>
         
         <h1 className="text-4xl font-bold text-white cosmic-text">
-          Your Personal <span className="gold-text">Cosmic Blueprint</span>
+          Your Complete <span className="gold-text">Cosmic Blueprint</span>
         </h1>
         
         <p className="text-xl text-gray-300">
@@ -176,7 +232,7 @@ SOUL-ALIGNED BUSINESS INSIGHTS:
         <div className="flex justify-center mt-6">
           <Button onClick={handleDownload} className="cosmic-button">
             <Download className="w-4 h-4 mr-2" />
-            Download PDF
+            Download Complete Report
           </Button>
         </div>
       </div>
@@ -185,7 +241,7 @@ SOUL-ALIGNED BUSINESS INSIGHTS:
       <Card className="report-card">
         <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
           <Target className="w-6 h-6 text-amber-400" />
-          Your Core Numbers
+          Your Five Core Numbers
         </h2>
         
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
@@ -282,6 +338,21 @@ SOUL-ALIGNED BUSINESS INSIGHTS:
               </div>
             </div>
           </div>
+
+          {/* Career Paths */}
+          <div className="p-6 rounded-xl bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/20">
+            <h3 className="text-lg font-semibold text-green-400 mb-3 flex items-center gap-2">
+              <DollarSign className="w-5 h-5" />
+              Ideal Career Paths
+            </h3>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+              {lifePathMeaning.careers.slice(0, 12).map((career, index) => (
+                <div key={index} className="text-sm text-gray-300 bg-green-500/10 rounded px-2 py-1">
+                  {career}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </Card>
 
@@ -303,14 +374,81 @@ SOUL-ALIGNED BUSINESS INSIGHTS:
             {expressionMeaning.description}
           </p>
           
-          <div className="p-6 rounded-xl bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20">
-            <h3 className="text-lg font-semibold text-purple-400 mb-3">Career & Life Purpose</h3>
-            <p className="text-gray-300">
-              As a {expressionMeaning.title}, you're naturally suited for roles that allow you to express your 
-              {expressionMeaning.strengths.slice(0, 2).join(' and ').toLowerCase()} abilities. 
-              Focus on developing your {expressionMeaning.strengths[0].toLowerCase()} skills for maximum success.
-            </p>
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="p-4 rounded-xl bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20">
+              <h3 className="text-lg font-semibold text-purple-400 mb-3">Natural Talents</h3>
+              <div className="flex flex-wrap gap-2">
+                {expressionMeaning.strengths.map((strength, index) => (
+                  <Badge key={index} className="bg-purple-500/20 text-purple-300 border-purple-500/30">
+                    {strength}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+            
+            <div className="p-4 rounded-xl bg-gradient-to-r from-pink-500/10 to-red-500/10 border border-pink-500/20">
+              <h3 className="text-lg font-semibold text-pink-400 mb-3">Areas to Develop</h3>
+              <div className="flex flex-wrap gap-2">
+                {expressionMeaning.challenges.map((challenge, index) => (
+                  <Badge key={index} className="bg-pink-500/20 text-pink-300 border-pink-500/30">
+                    {challenge}
+                  </Badge>
+                ))}
+              </div>
+            </div>
           </div>
+        </div>
+      </Card>
+
+      {/* Soul Urge Number */}
+      <Card className="report-card">
+        <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+          <Heart className="w-6 h-6 text-rose-400" />
+          Soul Urge Number {data.soulUrgeNumber}: {soulUrgeMeaning.title}
+          {(data.soulUrgeNumber === 11 || data.soulUrgeNumber === 22) && (
+            <Badge className="bg-rose-500/20 text-rose-300 border-rose-500/30 ml-2">
+              Master Number
+            </Badge>
+          )}
+        </h2>
+        
+        <div className="space-y-4">
+          <p className="text-gray-300 text-lg leading-relaxed">
+            Your Heart's Desire - what motivates you at the deepest level. {soulUrgeMeaning.description}
+          </p>
+        </div>
+      </Card>
+
+      {/* Personality Number */}
+      <Card className="report-card">
+        <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+          <User className="w-6 h-6 text-cyan-400" />
+          Personality Number {data.personalityNumber}: {personalityMeaning.title}
+          {(data.personalityNumber === 11 || data.personalityNumber === 22) && (
+            <Badge className="bg-cyan-500/20 text-cyan-300 border-cyan-500/30 ml-2">
+              Master Number
+            </Badge>
+          )}
+        </h2>
+        
+        <div className="space-y-4">
+          <p className="text-gray-300 text-lg leading-relaxed">
+            How others perceive you and your outer personality. {personalityMeaning.description}
+          </p>
+        </div>
+      </Card>
+
+      {/* Birthday Number */}
+      <Card className="report-card">
+        <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+          <Calendar className="w-6 h-6 text-emerald-400" />
+          Birthday Number {data.birthdayNumber}: {birthdayMeaning.title}
+        </h2>
+        
+        <div className="space-y-4">
+          <p className="text-gray-300 text-lg leading-relaxed">
+            Special talents and abilities you were born with. {birthdayMeaning.description}
+          </p>
         </div>
       </Card>
 
@@ -322,31 +460,14 @@ SOUL-ALIGNED BUSINESS INSIGHTS:
         </h2>
         
         <div className="space-y-6">
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="p-6 rounded-xl bg-gradient-to-br from-green-500/10 to-emerald-500/10 border border-green-500/20">
-              <h3 className="text-lg font-semibold text-green-400 mb-3">Money Magnetism</h3>
-              <p className="text-gray-300">
-                Your {data.lifePathNumber} Life Path suggests you attract abundance through {lifePathMeaning.strengths[0].toLowerCase()}. 
-                Focus on building systems that align with your natural {lifePathMeaning.strengths[1].toLowerCase()} abilities.
-              </p>
-            </div>
-            
-            <div className="p-6 rounded-xl bg-gradient-to-br from-amber-500/10 to-yellow-500/10 border border-amber-500/20">
-              <h3 className="text-lg font-semibold text-amber-400 mb-3">Ideal Business Model</h3>
-              <p className="text-gray-300">
-                As {expressionMeaning.title}, consider business models that emphasize {expressionMeaning.strengths[0].toLowerCase()} 
-                and allow for {expressionMeaning.strengths[2]?.toLowerCase() || 'growth'}. Avoid ventures that conflict with your core values.
-              </p>
-            </div>
-          </div>
-          
           <div className="p-6 rounded-xl bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-500/20">
             <h3 className="text-lg font-semibold text-purple-400 mb-3">🌟 Your Cosmic Business Blueprint</h3>
             <ul className="space-y-2 text-gray-300">
-              <li>• Leverage your natural {lifePathMeaning.strengths[0].toLowerCase()} abilities in your marketing</li>
-              <li>• Build systems that support your {expressionMeaning.strengths[1]?.toLowerCase() || 'core strength'} nature</li>
-              <li>• Partner with others who complement your {lifePathMeaning.challenges[0]?.toLowerCase() || 'growth areas'}</li>
-              <li>• Focus on serving clients who value {expressionMeaning.strengths[0].toLowerCase()}</li>
+              <li>• Leverage your Life Path {lifePathMeaning.strengths[0].toLowerCase()} abilities in your marketing</li>
+              <li>• Express your natural {expressionMeaning.strengths[0].toLowerCase()} through your business model</li>
+              <li>• Follow your Soul Urge for {soulUrgeMeaning.strengths[0].toLowerCase()} as your core mission</li>
+              <li>• Let your {personalityMeaning.strengths[0].toLowerCase()} personality attract ideal clients</li>
+              <li>• Use your Birthday gift of {birthdayMeaning.strengths[0].toLowerCase()} as a unique selling point</li>
             </ul>
           </div>
         </div>
@@ -358,8 +479,8 @@ SOUL-ALIGNED BUSINESS INSIGHTS:
           Ready to Build Your <span className="gold-text">Soul-Aligned Business</span>?
         </h2>
         <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
-          This is just the beginning of your cosmic journey. Join our 5-day live challenge to turn 
-          your numerology insights into a thriving, soul-aligned business.
+          This complete cosmic blueprint reveals all five of your core numbers. Join our challenge to transform 
+          these insights into a thriving, soul-aligned business that flows with your natural energy.
         </p>
         <Button className="cosmic-button text-lg px-8 py-3">
           Join the Challenge Now
