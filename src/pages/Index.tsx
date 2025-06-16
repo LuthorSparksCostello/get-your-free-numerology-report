@@ -1,5 +1,3 @@
-
-
 import { useState } from 'react';
 import CosmicBackground from '@/components/CosmicBackground';
 import NumerologyForm from '@/components/NumerologyForm';
@@ -96,7 +94,7 @@ const Index = () => {
                     Get Your <span className="gold-text">Free</span> Cosmic Blueprint Instantly
                   </h2>
                   <p className="text-gray-400 max-w-2xl mx-auto">
-                    Unlock your personalized Chaldean numerology report and discover the cosmic forces 
+                    Enter your details to receive a personalized Chaldean numerology report and discover the cosmic forces 
                     that manifest your entrepreneurial journey.
                   </p>
                 </div>
@@ -122,7 +120,7 @@ const Index = () => {
 
         {/* Footer */}
         <footer className="py-8 text-center text-gray-500 text-sm border-t border-white/10">
-          <p>© {new Date().getFullYear()} Dangelo Ali Ministry Science Temple 508C1A Church ® All Rights Reserved and Retained.</p>
+          <p>© {new Date().getFullYear()} Dangelo Ali Ministry Science Temple 508C1A Church ® ™ All Rights Reserved and Retained.</p>
         </footer>
       </div>
     </div>
@@ -130,4 +128,3 @@ const Index = () => {
 };
 
 export default Index;
-
