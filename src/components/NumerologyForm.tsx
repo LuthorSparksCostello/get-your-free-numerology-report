@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -107,9 +106,6 @@ const NumerologyForm = ({ onSubmit, isLoading = false }: NumerologyFormProps) =>
         <h2 className="text-4xl font-bold text-white mb-3 cosmic-text glow-text">
           Unlock Your <span className="gold-text">Cosmic Blueprint</span>
         </h2>
-        <p className="text-gray-300 text-lg">
-          Enter your details to receive your personalized Chaldean numerology report
-        </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-8">
