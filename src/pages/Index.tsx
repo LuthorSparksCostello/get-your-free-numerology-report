@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import CosmicBackground from '@/components/CosmicBackground';
 import NumerologyForm from '@/components/NumerologyForm';
@@ -93,6 +94,9 @@ const Index = () => {
                   <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4 cosmic-text">
                     Get Your <span className="gold-text">Free</span> Cosmic Blueprint Instantly
                   </h2>
+                  <p className="text-gray-300 text-lg">
+                    Unlock your personalized Chaldean numerology report and discover the cosmic forces that manifest your entrepreneurial journey.
+                  </p>
                 </div>
                 
                 <NumerologyForm onSubmit={handleFormSubmit} isLoading={isLoading} />
