@@ -1,4 +1,5 @@
 
+
 import { useState } from 'react';
 import CosmicBackground from '@/components/CosmicBackground';
 import NumerologyForm from '@/components/NumerologyForm';
@@ -56,14 +57,7 @@ const Index = () => {
       <div className="relative z-10">
         {/* Header */}
         <header className="py-16 sm:py-24 text-center px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500/20 to-orange-500/20 backdrop-blur-sm rounded-full px-6 py-2 mb-6 border border-amber-500/30">
-              <Sparkles className="w-4 h-4 text-amber-400" />
-              <span className="text-amber-300 font-medium text-sm">
-                2-DAY LIVE CHALLENGE FOR SPIRITUAL ENTREPRENEURS
-              </span>
-            </div>
-            
+          <div className="max-w-6xl mx-auto">            
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 cosmic-text leading-tight">
               Transform Your{' '}
               <span className="gold-text relative">
@@ -128,7 +122,7 @@ const Index = () => {
 
         {/* Footer */}
         <footer className="py-8 text-center text-gray-500 text-sm border-t border-white/10">
-          <p>© {new Date().getFullYear()} Dangelo Ali Ministry Science Temple 508C1A Church All Rights Reserved.</p>
+          <p>© {new Date().getFullYear()} Dangelo Ali Ministry Science Temple 508C1A Church ® All Rights Reserved and Retained.</p>
         </footer>
       </div>
     </div>
@@ -136,3 +130,4 @@ const Index = () => {
 };
 
 export default Index;
+
