@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import CosmicBackground from '@/components/CosmicBackground';
 import NumerologyForm from '@/components/NumerologyForm';
@@ -34,14 +33,8 @@ const Index = () => {
     setReportData(null);
   };
 
-  const scrollToSignup = () => {
-    const signupSection = document.getElementById('newsletter-signup');
-    if (signupSection) {
-      signupSection.scrollIntoView({ 
-        behavior: 'smooth',
-        block: 'center'
-      });
-    }
+  const handleBookConsultation = () => {
+    window.open('https://cal.com/dangeloali/45-min-meeting', '_blank');
   };
 
   return (
@@ -77,9 +70,9 @@ const Index = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button onClick={scrollToSignup} className="cosmic-button flex items-center gap-2">
+              <button onClick={handleBookConsultation} className="cosmic-button flex items-center gap-2">
                 <Heart className="w-5 h-5" />
-                <span className="font-medium">Get Your Free Report Now</span>
+                <span className="font-medium">Book a Consultation</span>
               </button>
             </div>
           </div>
