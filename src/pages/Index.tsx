@@ -4,7 +4,7 @@ import CosmicBackground from '@/components/CosmicBackground';
 import NumerologyForm from '@/components/NumerologyForm';
 import NumerologyReport from '@/components/NumerologyReport';
 import { generateNumerologyReport } from '@/utils/numerology';
-import { Sparkles, Stars, Heart } from 'lucide-react';
+import { Heart } from 'lucide-react';
 
 interface FormData {
   fullName: string;
@@ -66,7 +66,7 @@ const Index = () => {
               into a{' '}
               <span className="relative">
                 Magnetic Offer
-                <Stars className="absolute -top-2 -right-8 w-6 h-6 text-amber-400 animate-pulse" />
+                <div className="absolute -top-2 -right-8 w-6 h-6 text-amber-400 animate-pulse" />
               </span>{' '}
               That Sells
             </h1>
@@ -109,51 +109,11 @@ const Index = () => {
                     <span>🛡️ Privacy Protected</span>
                   </div>
                 </div>
-
-                {/* Ready to Build Section */}
-                <div className="text-center mt-16 pt-16 border-t border-white/10">
-                  <h3 className="text-2xl sm:text-3xl font-bold text-white mb-6 cosmic-text">
-                    Ready to Build Your <span className="gold-text">Soul-Aligned Business</span>?
-                  </h3>
-                  <p className="text-gray-300 text-lg mb-8 max-w-2xl mx-auto">
-                    Take the next step in your entrepreneurial journey with personalized guidance tailored to your cosmic blueprint.
-                  </p>
-                  <a 
-                    href="https://cal.com/dangeloali/45-min-meeting" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="cosmic-button inline-flex items-center gap-2"
-                  >
-                    <Sparkles className="w-5 h-5" />
-                    <span className="font-medium">Book a Consultation Today</span>
-                  </a>
-                </div>
               </div>
             )}
             
             {reportData && !showForm && (
-              <div className="space-y-12">
-                <NumerologyReport data={reportData} onBack={handleBack} />
-                
-                {/* Ready to Build Section - After Report */}
-                <div className="text-center mt-16 pt-16 border-t border-white/10">
-                  <h3 className="text-2xl sm:text-3xl font-bold text-white mb-6 cosmic-text">
-                    Ready to Build Your <span className="gold-text">Soul-Aligned Business</span>?
-                  </h3>
-                  <p className="text-gray-300 text-lg mb-8 max-w-2xl mx-auto">
-                    Take the next step in your entrepreneurial journey with personalized guidance tailored to your cosmic blueprint.
-                  </p>
-                  <a 
-                    href="https://cal.com/dangeloali/45-min-meeting" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="cosmic-button inline-flex items-center gap-2"
-                  >
-                    <Sparkles className="w-5 h-5" />
-                    <span className="font-medium">Book a Consultation Today</span>
-                  </a>
-                </div>
-              </div>
+              <NumerologyReport data={reportData} onBack={handleBack} />
             )}
           </div>
         </main>
