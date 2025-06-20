@@ -1,4 +1,3 @@
-
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -15,6 +14,7 @@ import {
   User,
   Calculator
 } from 'lucide-react';
+import jsPDF from 'jspdf';
 
 interface ReportData {
   name: string;
@@ -125,103 +125,139 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
   const birthdayMeaning = numberMeanings[data.birthdayNumber as keyof typeof numberMeanings];
 
   const handleDownload = () => {
-    // Create a comprehensive text report
-    const reportContent = `
-Your Complete Cosmic Blueprint
-Generated for ${data.name}
-Date: ${new Date().toLocaleDateString()}
+    const pdf = new jsPDF();
+    const pageWidth = pdf.internal.pageSize.width;
+    const margin = 20;
+    const lineHeight = 6;
+    let yPosition = 30;
 
-=====================================
-CORE NUMEROLOGY NUMBERS
-=====================================
-- Birthday Number: ${data.birthdayNumber} (${birthdayMeaning.title})
-- Personality Number: ${data.personalityNumber} (${personalityMeaning.title})
-- Heart's Desire Number: ${data.soulUrgeNumber} (${soulUrgeMeaning.title})
-- Expression Number: ${data.expressionNumber} (${expressionMeaning.title})
-- Life Path Number: ${data.lifePathNumber} (${lifePathMeaning.title})
+    // Helper function to add text with word wrapping
+    const addText = (text: string, fontSize = 10, isBold = false) => {
+      pdf.setFontSize(fontSize);
+      if (isBold) {
+        pdf.setFont(undefined, 'bold');
+      } else {
+        pdf.setFont(undefined, 'normal');
+      }
+      
+      const lines = pdf.splitTextToSize(text, pageWidth - 2 * margin);
+      
+      // Check if we need a new page
+      if (yPosition + (lines.length * lineHeight) > pdf.internal.pageSize.height - margin) {
+        pdf.addPage();
+        yPosition = 30;
+      }
+      
+      pdf.text(lines, margin, yPosition);
+      yPosition += lines.length * lineHeight + 3;
+    };
 
-=====================================
-CALCULATION BREAKDOWNS
-=====================================
+    // Title
+    addText('Your Complete Cosmic Blueprint', 20, true);
+    addText(`Generated for ${data.name}`, 14, true);
+    addText(`Date: ${new Date().toLocaleDateString()}`, 12);
+    yPosition += 10;
 
-Birthday Number Calculation:
-${data.birthdayBreakdown.join('\n')}
+    // Core Numbers
+    addText('CORE NUMEROLOGY NUMBERS', 16, true);
+    addText(`• Birthday Number: ${data.birthdayNumber} (${birthdayMeaning.title})`);
+    addText(`• Personality Number: ${data.personalityNumber} (${personalityMeaning.title})`);
+    addText(`• Heart's Desire Number: ${data.soulUrgeNumber} (${soulUrgeMeaning.title})`);
+    addText(`• Expression Number: ${data.expressionNumber} (${expressionMeaning.title})`);
+    addText(`• Life Path Number: ${data.lifePathNumber} (${lifePathMeaning.title})`);
+    yPosition += 10;
 
-Personality Number Calculation:
-${data.personalityBreakdown.join('\n')}
-
-Heart's Desire Number Calculation:
-${data.soulUrgeBreakdown.join('\n')}
-
-Expression Number Calculation:
-${data.expressionBreakdown.join('\n')}
-
-Life Path Number Calculation:
-${data.lifePathBreakdown.join('\n')}
-
-=====================================
-DETAILED ANALYSIS
-=====================================
-
-BIRTHDAY NUMBER - ${birthdayMeaning.title}
-${birthdayMeaning.description}
-Natural Talents: ${birthdayMeaning.strengths.join(', ')}
-Areas to Develop: ${birthdayMeaning.challenges.join(', ')}
-
-PERSONALITY NUMBER - ${personalityMeaning.title}
-${personalityMeaning.description}
-Natural Talents: ${personalityMeaning.strengths.join(', ')}
-Areas to Develop: ${personalityMeaning.challenges.join(', ')}
-
-HEART'S DESIRE NUMBER - ${soulUrgeMeaning.title}
-${soulUrgeMeaning.description}
-Natural Talents: ${soulUrgeMeaning.strengths.join(', ')}
-Areas to Develop: ${soulUrgeMeaning.challenges.join(', ')}
-
-EXPRESSION NUMBER - ${expressionMeaning.title}
-${expressionMeaning.description}
-Natural Talents: ${expressionMeaning.strengths.join(', ')}
-Areas to Develop: ${expressionMeaning.challenges.join(', ')}
-
-LIFE PATH NUMBER - ${lifePathMeaning.title}
-${lifePathMeaning.description}
-Natural Talents: ${lifePathMeaning.strengths.join(', ')}
-Areas to Develop: ${lifePathMeaning.challenges.join(', ')}
-
-=====================================
-IDEAL CAREER PATHS
-=====================================
-
-Birthday Number ${data.birthdayNumber} Careers:
-${birthdayMeaning.careers.map(career => `• ${career}`).join('\n')}
-
-Personality Number ${data.personalityNumber} Careers:
-${personalityMeaning.careers.map(career => `• ${career}`).join('\n')}
-
-Heart's Desire Number ${data.soulUrgeNumber} Careers:
-${soulUrgeMeaning.careers.map(career => `• ${career}`).join('\n')}
-
-Expression Number ${data.expressionNumber} Careers:
-${expressionMeaning.careers.map(career => `• ${career}`).join('\n')}
-
-Life Path Number ${data.lifePathNumber} Careers:
-${lifePathMeaning.careers.map(career => `• ${career}`).join('\n')}
-
-© ${new Date().getFullYear()} Dangelo Ali Ministry All Rights Reserved and Retained.
-    `.trim();
-
-    // Create and download the text file
-    const blob = new Blob([reportContent], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `${data.name.replace(/\s+/g, '_')}_Complete_Cosmic_Blueprint_Report.txt`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    // Calculation Breakdowns
+    addText('CALCULATION BREAKDOWNS', 16, true);
     
-    console.log('Complete numerology report downloaded successfully');
+    addText('Birthday Number Calculation:', 12, true);
+    data.birthdayBreakdown.forEach(step => addText(step));
+    yPosition += 5;
+
+    addText('Personality Number Calculation:', 12, true);
+    data.personalityBreakdown.forEach(step => addText(step));
+    yPosition += 5;
+
+    addText("Heart's Desire Number Calculation:", 12, true);
+    data.soulUrgeBreakdown.forEach(step => addText(step));
+    yPosition += 5;
+
+    addText('Expression Number Calculation:', 12, true);
+    data.expressionBreakdown.forEach(step => addText(step));
+    yPosition += 5;
+
+    addText('Life Path Number Calculation:', 12, true);
+    data.lifePathBreakdown.forEach(step => addText(step));
+    yPosition += 10;
+
+    // Detailed Analysis
+    addText('DETAILED ANALYSIS', 16, true);
+
+    // Birthday Number Analysis
+    addText(`BIRTHDAY NUMBER - ${birthdayMeaning.title}`, 14, true);
+    addText(birthdayMeaning.description);
+    addText(`Natural Talents: ${birthdayMeaning.strengths.join(', ')}`);
+    addText(`Areas to Develop: ${birthdayMeaning.challenges.join(', ')}`);
+    yPosition += 5;
+
+    // Personality Number Analysis
+    addText(`PERSONALITY NUMBER - ${personalityMeaning.title}`, 14, true);
+    addText(personalityMeaning.description);
+    addText(`Natural Talents: ${personalityMeaning.strengths.join(', ')}`);
+    addText(`Areas to Develop: ${personalityMeaning.challenges.join(', ')}`);
+    yPosition += 5;
+
+    // Heart's Desire Number Analysis
+    addText(`HEART'S DESIRE NUMBER - ${soulUrgeMeaning.title}`, 14, true);
+    addText(soulUrgeMeaning.description);
+    addText(`Natural Talents: ${soulUrgeMeaning.strengths.join(', ')}`);
+    addText(`Areas to Develop: ${soulUrgeMeaning.challenges.join(', ')}`);
+    yPosition += 5;
+
+    // Expression Number Analysis
+    addText(`EXPRESSION NUMBER - ${expressionMeaning.title}`, 14, true);
+    addText(expressionMeaning.description);
+    addText(`Natural Talents: ${expressionMeaning.strengths.join(', ')}`);
+    addText(`Areas to Develop: ${expressionMeaning.challenges.join(', ')}`);
+    yPosition += 5;
+
+    // Life Path Number Analysis
+    addText(`LIFE PATH NUMBER - ${lifePathMeaning.title}`, 14, true);
+    addText(lifePathMeaning.description);
+    addText(`Natural Talents: ${lifePathMeaning.strengths.join(', ')}`);
+    addText(`Areas to Develop: ${lifePathMeaning.challenges.join(', ')}`);
+    yPosition += 10;
+
+    // Career Paths
+    addText('IDEAL CAREER PATHS', 16, true);
+
+    addText(`Birthday Number ${data.birthdayNumber} Careers:`, 12, true);
+    birthdayMeaning.careers.forEach(career => addText(`• ${career}`));
+    yPosition += 5;
+
+    addText(`Personality Number ${data.personalityNumber} Careers:`, 12, true);
+    personalityMeaning.careers.forEach(career => addText(`• ${career}`));
+    yPosition += 5;
+
+    addText(`Heart's Desire Number ${data.soulUrgeNumber} Careers:`, 12, true);
+    soulUrgeMeaning.careers.forEach(career => addText(`• ${career}`));
+    yPosition += 5;
+
+    addText(`Expression Number ${data.expressionNumber} Careers:`, 12, true);
+    expressionMeaning.careers.forEach(career => addText(`• ${career}`));
+    yPosition += 5;
+
+    addText(`Life Path Number ${data.lifePathNumber} Careers:`, 12, true);
+    lifePathMeaning.careers.forEach(career => addText(`• ${career}`));
+    yPosition += 10;
+
+    // Footer
+    addText(`© ${new Date().getFullYear()} Dangelo Ali Ministry All Rights Reserved and Retained.`, 8);
+
+    // Save the PDF
+    pdf.save(`${data.name.replace(/\s+/g, '_')}_Complete_Cosmic_Blueprint_Report.pdf`);
+    
+    console.log('Complete numerology report downloaded as PDF successfully');
   };
 
   return (
