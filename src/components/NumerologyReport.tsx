@@ -704,9 +704,16 @@ ${lifePathMeaning.careers.map(career => `• ${career}`).join('\n')}
           natural talents, and 15 career paths for each number. Join our challenge to transform 
           these insights into a thriving, soul-aligned business that flows with your natural energy.
         </p>
-        <Button className="cosmic-button text-lg px-8 py-3">
-          Join the Challenge Now
-        </Button>
+        <a 
+          href="https://cal.com/dangeloali/45-min-meeting" 
+          target="_blank" 
+          rel="noopener noreferrer"
+        >
+          <Button className="cosmic-button text-lg px-8 py-3">
+            <Calendar className="w-5 h-5 mr-2" />
+            Book a Consultation
+          </Button>
+        </a>
       </Card>
     </div>
   );
