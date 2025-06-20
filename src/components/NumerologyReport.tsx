@@ -701,8 +701,8 @@ ${lifePathMeaning.careers.map(career => `• ${career}`).join('\n')}
         </h2>
         <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
           This complete cosmic blueprint reveals all five of your core numbers with detailed calculations, 
-          natural talents, and 15 career paths for each number. Join our challenge to transform 
-          these insights into a thriving, soul-aligned business that flows with your natural energy.
+          natural talents, and 15 career paths for each number. Book a consultation today to transform 
+          these insights into a thriving, soul urged business that flows with your natural energy.
         </p>
         <a 
           href="https://cal.com/dangeloali/45-min-meeting" 
