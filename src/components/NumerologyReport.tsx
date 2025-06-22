@@ -91,7 +91,7 @@ const numberMeanings = {
     title: "The Achiever",
     description: "Ambitious, material-focused, and authoritative. Natural business leaders.",
     strengths: ["Business acumen", "Organization", "Material success", "Authority", "Ambition", "Management"],
-    challenges: ["Materialism", "Workaholism", "Impatience", "Ruthlessness", "Power struggles"],
+    challenges: ["Materialism", "Workaholism", "Impatience", "Ruthahlessness", "Power struggles"],
     careers: ["Business Executive", "Financial Advisor", "Investment Banker", "Real Estate Developer", "Corporate Lawyer", "Management Consultant", "Business Owner", "Sales Director", "Banking Executive", "Wealth Manager", "Commercial Real Estate", "Venture Capitalist", "Business Analyst", "Corporate Strategist", "Mergers & Acquisitions"]
   },
   9: {
@@ -741,7 +741,7 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
           these insights into a thriving, soul urged business that flows with your natural energy.
         </p>
         <a 
-          href="https://cal.com/dangeloali/45-min-meeting" 
+          href="https://cal.com/dangeloali/unlock-abundance-with-ai-intuition-a-soul-urged-business-strategy-call" 
           target="_blank" 
           rel="noopener noreferrer"
         >
