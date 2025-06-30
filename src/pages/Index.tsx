@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import CosmicBackground from '@/components/CosmicBackground';
 import NumerologyForm from '@/components/NumerologyForm';
@@ -8,7 +7,6 @@ import { Heart } from 'lucide-react';
 
 interface FormData {
   fullName: string;
-  email: string;
   birthDate: string;
 }
 
@@ -23,7 +21,7 @@ const Index = () => {
     // Simulate API call delay for better UX
     await new Promise(resolve => setTimeout(resolve, 2000));
     
-    const report = generateNumerologyReport(data.fullName, data.email, data.birthDate);
+    const report = generateNumerologyReport(data.fullName, '', data.birthDate);
     setReportData(report);
     setShowForm(false);
     setIsLoading(false);

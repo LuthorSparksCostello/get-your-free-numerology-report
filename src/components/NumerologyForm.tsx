@@ -1,13 +1,13 @@
+
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
-import { Calendar, User, Mail, Sparkles, CheckCircle, AlertCircle } from 'lucide-react';
+import { Calendar, User, Sparkles, CheckCircle, AlertCircle } from 'lucide-react';
 
 interface FormData {
   fullName: string;
-  email: string;
   birthDate: string;
 }
 
@@ -19,7 +19,6 @@ interface NumerologyFormProps {
 const NumerologyForm = ({ onSubmit, isLoading = false }: NumerologyFormProps) => {
   const [formData, setFormData] = useState<FormData>({
     fullName: '',
-    email: '',
     birthDate: ''
   });
   const [errors, setErrors] = useState<Partial<FormData>>({});
@@ -32,10 +31,6 @@ const NumerologyForm = ({ onSubmit, isLoading = false }: NumerologyFormProps) =>
         if (!value.trim()) return 'Full name is required';
         if (value.trim().length < 2) return 'Name must be at least 2 characters';
         if (!/^[a-zA-Z\s]+$/.test(value.trim())) return 'Name can only contain letters and spaces';
-        return undefined;
-      case 'email':
-        if (!value.trim()) return 'Email is required';
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return 'Please enter a valid email';
         return undefined;
       case 'birthDate':
         if (!value) return 'Birth date is required';
@@ -135,36 +130,6 @@ const NumerologyForm = ({ onSubmit, isLoading = false }: NumerologyFormProps) =>
             <p className="text-red-400 text-sm flex items-center gap-2 animate-pulse">
               <AlertCircle className="w-4 h-4" />
               {errors.fullName}
-            </p>
-          )}
-        </div>
-
-        <div className="space-y-3 fade-in-stagger">
-          <Label htmlFor="email" className="flex items-center gap-2 text-amber-400 font-semibold text-base">
-            <Mail className="w-5 h-5" />
-            Email Address
-          </Label>
-          <div className="relative">
-            <Input
-              id="email"
-              type="email"
-              placeholder="your@email.com"
-              value={formData.email}
-              onChange={(e) => handleChange('email', e.target.value)}
-              className={`bg-white/5 border-white/20 text-white placeholder:text-gray-400 focus:border-amber-400 focus:ring-amber-400/20 h-14 text-lg transition-all duration-300 ${
-                errors.email ? 'border-red-400 bg-red-500/10' : validFields.email ? 'border-green-400 bg-green-500/10' : ''
-              }`}
-            />
-            {getFieldIcon('email') && (
-              <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                {getFieldIcon('email')}
-              </div>
-            )}
-          </div>
-          {errors.email && (
-            <p className="text-red-400 text-sm flex items-center gap-2 animate-pulse">
-              <AlertCircle className="w-4 h-4" />
-              {errors.email}
             </p>
           )}
         </div>
