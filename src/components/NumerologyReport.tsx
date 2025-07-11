@@ -34,10 +34,6 @@ interface ReportData {
   maturityBreakdown: string[];
   achievementNumber: number;
   achievementBreakdown: string[];
-  hiddenPassionNumbers: number[];
-  hiddenPassionBreakdown: string[];
-  karmicLessonNumbers: number[];
-  karmicLessonBreakdown: string[];
 }
 
 interface NumerologyReportProps {
@@ -177,8 +173,6 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
     addText(`• Life Path Number: ${data.lifePathNumber} (${lifePathMeaning.title})`);
     addText(`• Maturity Number: ${data.maturityNumber} (${maturityMeaning.title})`);
     addText(`• Achievement Number: ${data.achievementNumber} (${achievementMeaning.title})`);
-    addText(`• Hidden Passion Number(s): ${data.hiddenPassionNumbers.join(', ')}`);
-    addText(`• Karmic Lesson Number(s): ${data.karmicLessonNumbers.length === 0 ? 'None' : data.karmicLessonNumbers.join(', ')}`);
     yPosition += 10;
 
     // Calculation Breakdowns
@@ -210,14 +204,6 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
 
     addText('Achievement Number Calculation:', 12, true);
     data.achievementBreakdown.forEach(step => addText(step));
-    yPosition += 5;
-
-    addText('Hidden Passion Number Calculation:', 12, true);
-    data.hiddenPassionBreakdown.forEach(step => addText(step));
-    yPosition += 5;
-
-    addText('Karmic Lesson Numbers Calculation:', 12, true);
-    data.karmicLessonBreakdown.forEach(step => addText(step));
     yPosition += 10;
 
     // Detailed Analysis
@@ -270,32 +256,6 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
     addText(achievementMeaning.description);
     addText(`Natural Talents: ${achievementMeaning.strengths.join(', ')}`);
     addText(`Areas to Develop: ${achievementMeaning.challenges.join(', ')}`);
-    yPosition += 5;
-
-    // Hidden Passion Number Analysis
-    data.hiddenPassionNumbers.forEach((num, index) => {
-      const meaning = numberMeanings[num as keyof typeof numberMeanings];
-      addText(`HIDDEN PASSION NUMBER ${num} - ${meaning.title}`, 14, true);
-      addText(meaning.description);
-      addText(`Natural Talents: ${meaning.strengths.join(', ')}`);
-      addText(`Areas to Develop: ${meaning.challenges.join(', ')}`);
-      yPosition += 5;
-    });
-
-    // Karmic Lesson Numbers Analysis
-    if (data.karmicLessonNumbers.length > 0) {
-      addText('KARMIC LESSON NUMBERS', 14, true);
-      data.karmicLessonNumbers.forEach((num, index) => {
-        const meaning = numberMeanings[num as keyof typeof numberMeanings];
-        addText(`Lesson ${num} - Develop ${meaning.title} Qualities:`, 12, true);
-        addText(meaning.description);
-        addText(`Qualities to Develop: ${meaning.strengths.join(', ')}`);
-        yPosition += 3;
-      });
-    } else {
-      addText('KARMIC LESSON NUMBERS', 14, true);
-      addText('You have no Karmic Lesson Numbers - all numbers 1-9 are represented in your name, indicating a well-rounded spiritual foundation.');
-    }
     yPosition += 10;
 
     // Career Paths
@@ -926,109 +886,6 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
               ))}
             </div>
           </div>
-        </div>
-      </Card>
-
-      {/* Hidden Passion Number Analysis */}
-      <Card className="report-card">
-        <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
-          <Heart className="w-6 h-6 text-pink-400" />
-          Hidden Passion Number{data.hiddenPassionNumbers.length > 1 ? 's' : ''}: {data.hiddenPassionNumbers.join(' & ')}
-        </h2>
-        
-        <div className="space-y-6">
-          <p className="text-gray-300 text-lg leading-relaxed">
-            Your Hidden Passion Number{data.hiddenPassionNumbers.length > 1 ? 's reveal' : ' reveals'} your dominant talent{data.hiddenPassionNumbers.length > 1 ? 's' : ''} based on the most frequent number{data.hiddenPassionNumbers.length > 1 ? 's' : ''} in your name.
-          </p>
-
-          {/* Calculation Breakdown */}
-          <div className="p-4 rounded-xl bg-gradient-to-r from-pink-500/10 to-rose-500/10 border border-pink-500/20">
-            <h3 className="text-lg font-semibold text-pink-400 mb-3 flex items-center gap-2">
-              <Calculator className="w-5 h-5" />
-              How We Calculated Your Hidden Passion Number{data.hiddenPassionNumbers.length > 1 ? 's' : ''}
-            </h3>
-            <div className="space-y-1 text-gray-300 font-mono text-sm">
-              {data.hiddenPassionBreakdown.map((step, index) => (
-                <div key={index}>{step}</div>
-              ))}
-            </div>
-          </div>
-
-          {/* Display meanings for each Hidden Passion Number */}
-          {data.hiddenPassionNumbers.map((number, index) => {
-            const meaning = numberMeanings[number as keyof typeof numberMeanings];
-            return (
-              <div key={index} className="p-4 rounded-xl bg-gradient-to-r from-pink-500/10 to-rose-500/10 border border-pink-500/20">
-                <h3 className="text-lg font-semibold text-pink-400 mb-3">
-                  Hidden Passion {number}: {meaning.title}
-                </h3>
-                <p className="text-gray-300 mb-3">{meaning.description}</p>
-                <div className="flex flex-wrap gap-2">
-                  {meaning.strengths.slice(0, 3).map((strength, strengthIndex) => (
-                    <Badge key={strengthIndex} className="bg-pink-500/20 text-pink-300 border-pink-500/30">
-                      {strength}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </Card>
-
-      {/* Karmic Lesson Numbers Analysis */}
-      <Card className="report-card">
-        <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
-          <Lightbulb className="w-6 h-6 text-orange-400" />
-          Karmic Lesson Numbers: {data.karmicLessonNumbers.length === 0 ? 'None' : data.karmicLessonNumbers.join(', ')}
-        </h2>
-        
-        <div className="space-y-6">
-          <p className="text-gray-300 text-lg leading-relaxed">
-            {data.karmicLessonNumbers.length === 0 
-              ? "You have no Karmic Lesson Numbers - all numbers 1-9 are represented in your name, indicating a well-rounded spiritual foundation."
-              : "Your Karmic Lesson Numbers reveal areas where you may face challenges or need to develop certain qualities for spiritual growth."
-            }
-          </p>
-
-          {/* Calculation Breakdown */}
-          <div className="p-4 rounded-xl bg-gradient-to-r from-orange-500/10 to-red-500/10 border border-orange-500/20">
-            <h3 className="text-lg font-semibold text-orange-400 mb-3 flex items-center gap-2">
-              <Calculator className="w-5 h-5" />
-              How We Calculated Your Karmic Lesson Numbers
-            </h3>
-            <div className="space-y-1 text-gray-300 font-mono text-sm">
-              {data.karmicLessonBreakdown.map((step, index) => (
-                <div key={index}>{step}</div>
-              ))}
-            </div>
-          </div>
-
-          {/* Display lessons for each missing number */}
-          {data.karmicLessonNumbers.length > 0 && (
-            <div className="space-y-4">
-              {data.karmicLessonNumbers.map((number, index) => {
-                const meaning = numberMeanings[number as keyof typeof numberMeanings];
-                return (
-                  <div key={index} className="p-4 rounded-xl bg-gradient-to-r from-orange-500/10 to-red-500/10 border border-orange-500/20">
-                    <h3 className="text-lg font-semibold text-orange-400 mb-3">
-                      Karmic Lesson {number}: Develop {meaning.title} Qualities
-                    </h3>
-                    <p className="text-gray-300 mb-3">
-                      You may need to consciously develop: {meaning.description}
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {meaning.strengths.slice(0, 3).map((strength, strengthIndex) => (
-                        <Badge key={strengthIndex} className="bg-orange-500/20 text-orange-300 border-orange-500/30">
-                          {strength}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
         </div>
       </Card>
 

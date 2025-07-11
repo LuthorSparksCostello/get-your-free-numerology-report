@@ -189,70 +189,6 @@ export const calculateAchievementNumber = (birthDate: string): { number: number,
   return { number: reduction.final, breakdown };
 };
 
-export const calculateHiddenPassionNumber = (fullName: string): { numbers: number[], breakdown: string[] } => {
-  console.log('Hidden Passion Number Calculation for:', fullName);
-  
-  const cleanName = fullName.toUpperCase().replace(/[^A-Z]/g, '');
-  const frequency: { [key: number]: number } = {};
-  const letterBreakdown: string[] = [];
-  
-  // Count frequency of each number
-  for (const char of cleanName) {
-    if (chaldeanValues[char]) {
-      const value = chaldeanValues[char];
-      frequency[value] = (frequency[value] || 0) + 1;
-      letterBreakdown.push(`${char} = ${value}`);
-    }
-  }
-  
-  // Find the highest frequency
-  const maxFrequency = Math.max(...Object.values(frequency));
-  const hiddenPassionNumbers = Object.keys(frequency)
-    .filter(num => frequency[parseInt(num)] === maxFrequency)
-    .map(num => parseInt(num));
-  
-  const breakdown = [
-    `Letters: ${cleanName}`,
-    `Values: ${letterBreakdown.join(', ')}`,
-    `Frequency count: ${Object.entries(frequency).map(([num, freq]) => `${num} appears ${freq} time(s)`).join(', ')}`,
-    `Most frequent number(s): ${hiddenPassionNumbers.join(', ')} (appears ${maxFrequency} time(s))`
-  ];
-  
-  console.log('Hidden Passion Number result:', hiddenPassionNumbers);
-  return { numbers: hiddenPassionNumbers, breakdown };
-};
-
-export const calculateKarmicLessonNumbers = (fullName: string): { numbers: number[], breakdown: string[] } => {
-  console.log('Karmic Lesson Numbers Calculation for:', fullName);
-  
-  const cleanName = fullName.toUpperCase().replace(/[^A-Z]/g, '');
-  const presentNumbers = new Set<number>();
-  const letterBreakdown: string[] = [];
-  
-  // Find which numbers are present
-  for (const char of cleanName) {
-    if (chaldeanValues[char]) {
-      const value = chaldeanValues[char];
-      presentNumbers.add(value);
-      letterBreakdown.push(`${char} = ${value}`);
-    }
-  }
-  
-  // Find missing numbers (1-9)
-  const allNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-  const missingNumbers = allNumbers.filter(num => !presentNumbers.has(num));
-  
-  const breakdown = [
-    `Letters: ${cleanName}`,
-    `Values: ${letterBreakdown.join(', ')}`,
-    `Numbers present: ${Array.from(presentNumbers).sort().join(', ')}`,
-    `Missing numbers (Karmic Lessons): ${missingNumbers.length > 0 ? missingNumbers.join(', ') : 'None - all numbers are present'}`
-  ];
-  
-  console.log('Karmic Lesson Numbers result:', missingNumbers);
-  return { numbers: missingNumbers, breakdown };
-};
-
 export const generateNumerologyReport = (name: string, email: string, birthDate: string) => {
   console.log('Generating comprehensive numerology report for:', { name, email, birthDate });
   
@@ -263,8 +199,6 @@ export const generateNumerologyReport = (name: string, email: string, birthDate:
   const birthdayCalc = calculateBirthdayNumber(birthDate);
   const maturityCalc = calculateMaturityNumber(lifePathCalc.number, expressionCalc.number);
   const achievementCalc = calculateAchievementNumber(birthDate);
-  const hiddenPassionCalc = calculateHiddenPassionNumber(name);
-  const karmicLessonCalc = calculateKarmicLessonNumbers(name);
   
   const report = {
     name,
@@ -283,11 +217,7 @@ export const generateNumerologyReport = (name: string, email: string, birthDate:
     maturityNumber: maturityCalc.number,
     maturityBreakdown: maturityCalc.breakdown,
     achievementNumber: achievementCalc.number,
-    achievementBreakdown: achievementCalc.breakdown,
-    hiddenPassionNumbers: hiddenPassionCalc.numbers,
-    hiddenPassionBreakdown: hiddenPassionCalc.breakdown,
-    karmicLessonNumbers: karmicLessonCalc.numbers,
-    karmicLessonBreakdown: karmicLessonCalc.breakdown
+    achievementBreakdown: achievementCalc.breakdown
   };
   
   console.log('Complete numerology report:', report);
