@@ -158,6 +158,37 @@ export const calculateBirthdayNumber = (birthDate: string): { number: number, br
   return { number: reduction.final, breakdown };
 };
 
+export const calculateMaturityNumber = (lifePathNumber: number, expressionNumber: number): { number: number, breakdown: string[] } => {
+  console.log('Maturity Number Calculation:', { lifePathNumber, expressionNumber });
+  
+  const sum = lifePathNumber + expressionNumber;
+  const breakdown = [`Life Path (${lifePathNumber}) + Expression (${expressionNumber}) = ${sum}`];
+  
+  const reduction = reduceToSingleDigit(sum);
+  breakdown.push(...reduction.steps);
+  
+  console.log('Maturity Number result:', reduction.final);
+  return { number: reduction.final, breakdown };
+};
+
+export const calculateAchievementNumber = (birthDate: string): { number: number, breakdown: string[] } => {
+  // Parse the date string directly to avoid timezone issues
+  const dateParts = birthDate.split('-');
+  const month = parseInt(dateParts[1], 10);
+  const day = parseInt(dateParts[2], 10);
+  
+  console.log('Achievement Number Calculation:', { birthDate, month, day });
+  
+  const sum = month + day;
+  const breakdown = [`Month (${month}) + Day (${day}) = ${sum}`];
+  
+  const reduction = reduceToSingleDigit(sum);
+  breakdown.push(...reduction.steps);
+  
+  console.log('Achievement Number result:', reduction.final);
+  return { number: reduction.final, breakdown };
+};
+
 export const generateNumerologyReport = (name: string, email: string, birthDate: string) => {
   console.log('Generating comprehensive numerology report for:', { name, email, birthDate });
   
@@ -166,6 +197,8 @@ export const generateNumerologyReport = (name: string, email: string, birthDate:
   const soulUrgeCalc = calculateSoulUrgeNumber(name);
   const personalityCalc = calculatePersonalityNumber(name);
   const birthdayCalc = calculateBirthdayNumber(birthDate);
+  const maturityCalc = calculateMaturityNumber(lifePathCalc.number, expressionCalc.number);
+  const achievementCalc = calculateAchievementNumber(birthDate);
   
   const report = {
     name,
@@ -180,7 +213,11 @@ export const generateNumerologyReport = (name: string, email: string, birthDate:
     personalityNumber: personalityCalc.number,
     personalityBreakdown: personalityCalc.breakdown,
     birthdayNumber: birthdayCalc.number,
-    birthdayBreakdown: birthdayCalc.breakdown
+    birthdayBreakdown: birthdayCalc.breakdown,
+    maturityNumber: maturityCalc.number,
+    maturityBreakdown: maturityCalc.breakdown,
+    achievementNumber: achievementCalc.number,
+    achievementBreakdown: achievementCalc.breakdown
   };
   
   console.log('Complete numerology report:', report);

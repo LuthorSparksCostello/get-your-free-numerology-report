@@ -30,6 +30,10 @@ interface ReportData {
   personalityBreakdown: string[];
   birthdayNumber: number;
   birthdayBreakdown: string[];
+  maturityNumber: number;
+  maturityBreakdown: string[];
+  achievementNumber: number;
+  achievementBreakdown: string[];
 }
 
 interface NumerologyReportProps {
@@ -123,6 +127,8 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
   const soulUrgeMeaning = numberMeanings[data.soulUrgeNumber as keyof typeof numberMeanings];
   const personalityMeaning = numberMeanings[data.personalityNumber as keyof typeof numberMeanings];
   const birthdayMeaning = numberMeanings[data.birthdayNumber as keyof typeof numberMeanings];
+  const maturityMeaning = numberMeanings[data.maturityNumber as keyof typeof numberMeanings];
+  const achievementMeaning = numberMeanings[data.achievementNumber as keyof typeof numberMeanings];
 
   const handleDownload = () => {
     const pdf = new jsPDF();
@@ -165,6 +171,8 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
     addText(`• Heart's Desire Number: ${data.soulUrgeNumber} (${soulUrgeMeaning.title})`);
     addText(`• Expression Number: ${data.expressionNumber} (${expressionMeaning.title})`);
     addText(`• Life Path Number: ${data.lifePathNumber} (${lifePathMeaning.title})`);
+    addText(`• Maturity Number: ${data.maturityNumber} (${maturityMeaning.title})`);
+    addText(`• Achievement Number: ${data.achievementNumber} (${achievementMeaning.title})`);
     yPosition += 10;
 
     // Calculation Breakdowns
@@ -188,6 +196,14 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
 
     addText('Life Path Number Calculation:', 12, true);
     data.lifePathBreakdown.forEach(step => addText(step));
+    yPosition += 5;
+
+    addText('Maturity Number Calculation:', 12, true);
+    data.maturityBreakdown.forEach(step => addText(step));
+    yPosition += 5;
+
+    addText('Achievement Number Calculation:', 12, true);
+    data.achievementBreakdown.forEach(step => addText(step));
     yPosition += 10;
 
     // Detailed Analysis
@@ -226,6 +242,20 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
     addText(lifePathMeaning.description);
     addText(`Natural Talents: ${lifePathMeaning.strengths.join(', ')}`);
     addText(`Areas to Develop: ${lifePathMeaning.challenges.join(', ')}`);
+    yPosition += 5;
+
+    // Maturity Number Analysis
+    addText(`MATURITY NUMBER - ${maturityMeaning.title}`, 14, true);
+    addText(maturityMeaning.description);
+    addText(`Natural Talents: ${maturityMeaning.strengths.join(', ')}`);
+    addText(`Areas to Develop: ${maturityMeaning.challenges.join(', ')}`);
+    yPosition += 5;
+
+    // Achievement Number Analysis
+    addText(`ACHIEVEMENT NUMBER - ${achievementMeaning.title}`, 14, true);
+    addText(achievementMeaning.description);
+    addText(`Natural Talents: ${achievementMeaning.strengths.join(', ')}`);
+    addText(`Areas to Develop: ${achievementMeaning.challenges.join(', ')}`);
     yPosition += 10;
 
     // Career Paths
@@ -249,6 +279,14 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
 
     addText(`Life Path Number ${data.lifePathNumber} Careers:`, 12, true);
     lifePathMeaning.careers.forEach(career => addText(`• ${career}`));
+    yPosition += 5;
+
+    addText(`Maturity Number ${data.maturityNumber} Careers:`, 12, true);
+    maturityMeaning.careers.forEach(career => addText(`• ${career}`));
+    yPosition += 5;
+
+    addText(`Achievement Number ${data.achievementNumber} Careers:`, 12, true);
+    achievementMeaning.careers.forEach(career => addText(`• ${career}`));
     yPosition += 10;
 
     // Footer
@@ -297,10 +335,10 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
       <Card className="report-card">
         <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
           <Target className="w-6 h-6 text-amber-400" />
-          Your Five Core Numbers
+          Your Seven Core Numbers
         </h2>
         
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
           <div className="text-center p-4 rounded-xl bg-gradient-to-b from-green-500/10 to-transparent border border-green-500/20">
             <div className="text-3xl font-bold text-green-400 mb-2">{data.birthdayNumber}</div>
             <div className="text-sm text-gray-300">Birthday</div>
@@ -332,6 +370,14 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
             {(data.lifePathNumber === 11 || data.lifePathNumber === 22) && (
               <div className="text-xs text-amber-300 mt-1">Master Number</div>
             )}
+          </div>
+          <div className="text-center p-4 rounded-xl bg-gradient-to-b from-indigo-500/10 to-transparent border border-indigo-500/20">
+            <div className="text-3xl font-bold text-indigo-400 mb-2">{data.maturityNumber}</div>
+            <div className="text-sm text-gray-300">Maturity</div>
+          </div>
+          <div className="text-center p-4 rounded-xl bg-gradient-to-b from-yellow-500/10 to-transparent border border-yellow-500/20">
+            <div className="text-3xl font-bold text-yellow-400 mb-2">{data.achievementNumber}</div>
+            <div className="text-sm text-gray-300">Achievement</div>
           </div>
         </div>
       </Card>
@@ -701,6 +747,140 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
               {lifePathMeaning.careers.map((career, index) => (
                 <div key={index} className="text-sm text-gray-300 bg-amber-500/10 rounded px-2 py-1">
+                  {career}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </Card>
+
+      {/* Maturity Number Analysis */}
+      <Card className="report-card">
+        <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+          <Target className="w-6 h-6 text-indigo-400" />
+          Maturity Number {data.maturityNumber}: {maturityMeaning.title}
+        </h2>
+        
+        <div className="space-y-6">
+          <p className="text-gray-300 text-lg leading-relaxed">
+            Your Maturity Number reveals what you're growing toward in later life and represents your spiritual mission. {maturityMeaning.description}
+          </p>
+
+          {/* Calculation Breakdown */}
+          <div className="p-4 rounded-xl bg-gradient-to-r from-indigo-500/10 to-violet-500/10 border border-indigo-500/20">
+            <h3 className="text-lg font-semibold text-indigo-400 mb-3 flex items-center gap-2">
+              <Calculator className="w-5 h-5" />
+              How We Calculated Your Maturity Number
+            </h3>
+            <div className="space-y-1 text-gray-300 font-mono text-sm">
+              {data.maturityBreakdown.map((step, index) => (
+                <div key={index}>{step}</div>
+              ))}
+            </div>
+          </div>
+
+          {/* Natural Talents and Development Areas */}
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="p-4 rounded-xl bg-gradient-to-r from-indigo-500/10 to-violet-500/10 border border-indigo-500/20">
+              <h3 className="text-lg font-semibold text-indigo-400 mb-3">Natural Talents</h3>
+              <div className="flex flex-wrap gap-2">
+                {maturityMeaning.strengths.map((strength, index) => (
+                  <Badge key={index} className="bg-indigo-500/20 text-indigo-300 border-indigo-500/30">
+                    {strength}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+            
+            <div className="p-4 rounded-xl bg-gradient-to-r from-orange-500/10 to-red-500/10 border border-orange-500/20">
+              <h3 className="text-lg font-semibold text-orange-400 mb-3">Areas to Develop</h3>
+              <div className="flex flex-wrap gap-2">
+                {maturityMeaning.challenges.map((challenge, index) => (
+                  <Badge key={index} className="bg-orange-500/20 text-orange-300 border-orange-500/30">
+                    {challenge}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Career Paths */}
+          <div className="p-4 rounded-xl bg-gradient-to-r from-indigo-500/10 to-violet-500/10 border border-indigo-500/20">
+            <h3 className="text-lg font-semibold text-indigo-400 mb-3 flex items-center gap-2">
+              <DollarSign className="w-5 h-5" />
+              15 Ideal Career Paths
+            </h3>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+              {maturityMeaning.careers.map((career, index) => (
+                <div key={index} className="text-sm text-gray-300 bg-indigo-500/10 rounded px-2 py-1">
+                  {career}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </Card>
+
+      {/* Achievement Number Analysis */}
+      <Card className="report-card">
+        <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+          <Star className="w-6 h-6 text-yellow-400" />
+          Achievement Number {data.achievementNumber}: {achievementMeaning.title}
+        </h2>
+        
+        <div className="space-y-6">
+          <p className="text-gray-300 text-lg leading-relaxed">
+            Your Achievement Number shows what you can accomplish when you combine your month and day energies. {achievementMeaning.description}
+          </p>
+
+          {/* Calculation Breakdown */}
+          <div className="p-4 rounded-xl bg-gradient-to-r from-yellow-500/10 to-amber-500/10 border border-yellow-500/20">
+            <h3 className="text-lg font-semibold text-yellow-400 mb-3 flex items-center gap-2">
+              <Calculator className="w-5 h-5" />
+              How We Calculated Your Achievement Number
+            </h3>
+            <div className="space-y-1 text-gray-300 font-mono text-sm">
+              {data.achievementBreakdown.map((step, index) => (
+                <div key={index}>{step}</div>
+              ))}
+            </div>
+          </div>
+
+          {/* Natural Talents and Development Areas */}
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="p-4 rounded-xl bg-gradient-to-r from-yellow-500/10 to-amber-500/10 border border-yellow-500/20">
+              <h3 className="text-lg font-semibold text-yellow-400 mb-3">Natural Talents</h3>
+              <div className="flex flex-wrap gap-2">
+                {achievementMeaning.strengths.map((strength, index) => (
+                  <Badge key={index} className="bg-yellow-500/20 text-yellow-300 border-yellow-500/30">
+                    {strength}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+            
+            <div className="p-4 rounded-xl bg-gradient-to-r from-orange-500/10 to-red-500/10 border border-orange-500/20">
+              <h3 className="text-lg font-semibold text-orange-400 mb-3">Areas to Develop</h3>
+              <div className="flex flex-wrap gap-2">
+                {achievementMeaning.challenges.map((challenge, index) => (
+                  <Badge key={index} className="bg-orange-500/20 text-orange-300 border-orange-500/30">
+                    {challenge}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Career Paths */}
+          <div className="p-4 rounded-xl bg-gradient-to-r from-yellow-500/10 to-amber-500/10 border border-yellow-500/20">
+            <h3 className="text-lg font-semibold text-yellow-400 mb-3 flex items-center gap-2">
+              <DollarSign className="w-5 h-5" />
+              15 Ideal Career Paths
+            </h3>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+              {achievementMeaning.careers.map((career, index) => (
+                <div key={index} className="text-sm text-gray-300 bg-yellow-500/10 rounded px-2 py-1">
                   {career}
                 </div>
               ))}
