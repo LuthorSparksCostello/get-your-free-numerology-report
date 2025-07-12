@@ -38,6 +38,7 @@ interface ReportData {
   achievementBreakdown: string[];
   hiddenPassionNumbers: number[];
   hiddenPassionBreakdown: string[];
+  hiddenPassionCareers: string[];
   karmicLessonNumbers: number[];
   karmicLessonBreakdown: string[];
 }
@@ -330,6 +331,10 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
 
     addText(`Achievement Number ${data.achievementNumber} Careers:`, 12, true);
     achievementMeaning.careers.forEach(career => addText(`• ${career}`));
+    yPosition += 5;
+
+    addText(`Hidden Passion Number${data.hiddenPassionNumbers.length > 1 ? 's' : ''} ${data.hiddenPassionNumbers.join(', ')} Specialized Careers:`, 12, true);
+    data.hiddenPassionCareers.slice(0, 15).forEach(career => addText(`• ${career}`));
     yPosition += 10;
 
     // Footer
@@ -994,6 +999,30 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
                 </div>
               );
             })}
+          </div>
+
+          {/* Comprehensive Career Paths for Hidden Passion */}
+          <div className="p-6 rounded-xl bg-gradient-to-r from-amber-500/10 to-yellow-500/10 border border-amber-500/20">
+            <h3 className="text-xl font-semibold text-amber-400 mb-4 flex items-center gap-2">
+              <DollarSign className="w-6 h-6" />
+              15 Specialized Career Paths for Your Hidden Passion
+            </h3>
+            <p className="text-gray-300 mb-4">
+              These career paths are specifically aligned with your dominant number{data.hiddenPassionNumbers.length > 1 ? 's' : ''}, 
+              representing areas where your natural talents and passions can flourish most powerfully.
+            </p>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              {data.hiddenPassionCareers.slice(0, 15).map((career, index) => (
+                <div key={index} className="text-sm text-gray-300 bg-amber-500/20 rounded-lg px-3 py-2 border border-amber-500/30">
+                  {career}
+                </div>
+              ))}
+            </div>
+            {data.hiddenPassionCareers.length > 15 && (
+              <p className="text-amber-400 text-sm mt-3 italic">
+                + {data.hiddenPassionCareers.length - 15} more specialized paths aligned with your Hidden Passion number{data.hiddenPassionNumbers.length > 1 ? 's' : ''}
+              </p>
+            )}
           </div>
         </div>
       </Card>

@@ -189,7 +189,59 @@ export const calculateAchievementNumber = (birthDate: string): { number: number,
   return { number: reduction.final, breakdown };
 };
 
-export const calculateHiddenPassionNumber = (fullName: string): { numbers: number[], breakdown: string[] } => {
+// Hidden Passion Number career paths based on Chaldean numerology
+const hiddenPassionCareers = {
+  1: [
+    "Executive Leadership", "Entrepreneurship", "Creative Direction", "Independent Consulting", 
+    "Innovation Management", "Start-up Founder", "Creative Arts Direction", "Personal Brand Building",
+    "Motivational Speaking", "Business Development", "Product Management", "Creative Writing",
+    "Artistic Innovation", "Independent Filmmaking", "Solo Performance Arts"
+  ],
+  2: [
+    "Collaborative Arts", "Team Facilitation", "Partnership Development", "Diplomatic Services",
+    "Relationship Counseling", "Mediation Services", "Community Building", "Social Coordination",
+    "Group Therapy", "Cultural Bridge-Building", "International Relations", "Cooperative Business",
+    "Supportive Leadership", "Harmony Creation", "Peacekeeping Services"
+  ],
+  3: [
+    "Creative Expression", "Public Speaking", "Entertainment Industry", "Communication Arts",
+    "Social Media Creation", "Creative Writing", "Performing Arts", "Broadcasting",
+    "Marketing Communications", "Artistic Performance", "Creative Consulting", "Event Entertainment",
+    "Content Creation", "Artistic Direction", "Inspirational Communication"
+  ],
+  4: [
+    "Systems Building", "Process Optimization", "Project Management", "Technical Implementation",
+    "Quality Assurance", "Methodical Research", "Construction Management", "Operations Excellence",
+    "Systematic Planning", "Infrastructure Development", "Detailed Analysis", "Procedure Development",
+    "Technical Documentation", "Organizational Systems", "Reliability Engineering"
+  ],
+  5: [
+    "Adventure Tourism", "International Business", "Travel Industry", "Dynamic Sales",
+    "Change Management", "Variety-Based Careers", "Multi-Cultural Work", "Flexible Consulting",
+    "Dynamic Marketing", "Exploration Services", "Progressive Innovation", "Adaptable Leadership",
+    "Freedom-Based Entrepreneurship", "Diverse Project Management", "Global Connectivity"
+  ],
+  6: [
+    "Healthcare Services", "Community Care", "Family Services", "Educational Support",
+    "Nurturing Leadership", "Home-Based Business", "Care Management", "Healing Arts",
+    "Community Development", "Service-Oriented Business", "Wellness Coaching", "Support Services",
+    "Therapeutic Services", "Humanitarian Work", "Caring Professions"
+  ],
+  7: [
+    "Spiritual Services", "Research & Analysis", "Investigative Work", "Wisdom Sharing",
+    "Introspective Arts", "Mystical Studies", "Deep Analysis", "Philosophical Work",
+    "Spiritual Counseling", "Metaphysical Services", "Esoteric Studies", "Inner Wisdom Sharing",
+    "Contemplative Arts", "Sacred Studies", "Transformational Work"
+  ],
+  8: [
+    "Material Achievement", "Business Mastery", "Financial Services", "Power Leadership",
+    "Success Coaching", "Achievement Consulting", "Business Empire Building", "Wealth Management",
+    "Corporate Leadership", "Material Success Guidance", "Power Dynamics", "Achievement Systems",
+    "Success Strategy", "Material Manifestation", "Authority Positions"
+  ]
+};
+
+export const calculateHiddenPassionNumber = (fullName: string): { numbers: number[], breakdown: string[], careers: string[] } => {
   console.log('Hidden Passion Number Calculation for:', fullName);
   
   const cleanName = fullName.toUpperCase().replace(/[^A-Z]/g, '');
@@ -211,6 +263,14 @@ export const calculateHiddenPassionNumber = (fullName: string): { numbers: numbe
     .filter(num => frequency[parseInt(num)] === maxFrequency)
     .map(num => parseInt(num));
   
+  // Get career paths for all hidden passion numbers
+  const allCareers: string[] = [];
+  hiddenPassionNumbers.forEach(num => {
+    if (hiddenPassionCareers[num as keyof typeof hiddenPassionCareers]) {
+      allCareers.push(...hiddenPassionCareers[num as keyof typeof hiddenPassionCareers]);
+    }
+  });
+  
   const breakdown = [
     `Letters: ${letterBreakdown.join(', ')}`,
     `Frequency count: ${Object.entries(frequency).map(([num, count]) => `${num} appears ${count} time${count > 1 ? 's' : ''}`).join(', ')}`,
@@ -218,7 +278,7 @@ export const calculateHiddenPassionNumber = (fullName: string): { numbers: numbe
   ];
   
   console.log('Hidden Passion Numbers result:', hiddenPassionNumbers);
-  return { numbers: hiddenPassionNumbers, breakdown };
+  return { numbers: hiddenPassionNumbers, breakdown, careers: allCareers };
 };
 
 export const calculateKarmicLessonNumbers = (fullName: string): { numbers: number[], breakdown: string[] } => {
@@ -284,6 +344,7 @@ export const generateNumerologyReport = (name: string, email: string, birthDate:
     achievementBreakdown: achievementCalc.breakdown,
     hiddenPassionNumbers: hiddenPassionCalc.numbers,
     hiddenPassionBreakdown: hiddenPassionCalc.breakdown,
+    hiddenPassionCareers: hiddenPassionCalc.careers,
     karmicLessonNumbers: karmicLessonCalc.numbers,
     karmicLessonBreakdown: karmicLessonCalc.breakdown
   };
