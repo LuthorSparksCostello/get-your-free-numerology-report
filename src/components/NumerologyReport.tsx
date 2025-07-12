@@ -12,7 +12,9 @@ import {
   ArrowLeft,
   Calendar,
   User,
-  Calculator
+  Calculator,
+  Zap,
+  AlertTriangle
 } from 'lucide-react';
 import jsPDF from 'jspdf';
 
@@ -34,6 +36,10 @@ interface ReportData {
   maturityBreakdown: string[];
   achievementNumber: number;
   achievementBreakdown: string[];
+  hiddenPassionNumbers: number[];
+  hiddenPassionBreakdown: string[];
+  karmicLessonNumbers: number[];
+  karmicLessonBreakdown: string[];
 }
 
 interface NumerologyReportProps {
@@ -173,6 +179,8 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
     addText(`• Life Path Number: ${data.lifePathNumber} (${lifePathMeaning.title})`);
     addText(`• Maturity Number: ${data.maturityNumber} (${maturityMeaning.title})`);
     addText(`• Achievement Number: ${data.achievementNumber} (${achievementMeaning.title})`);
+    addText(`• Hidden Passion Number${data.hiddenPassionNumbers.length > 1 ? 's' : ''}: ${data.hiddenPassionNumbers.join(', ')}`);
+    addText(`• Karmic Lesson Number${data.karmicLessonNumbers.length > 1 ? 's' : ''}: ${data.karmicLessonNumbers.length > 0 ? data.karmicLessonNumbers.join(', ') : 'None'}`);
     yPosition += 10;
 
     // Calculation Breakdowns
@@ -204,6 +212,14 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
 
     addText('Achievement Number Calculation:', 12, true);
     data.achievementBreakdown.forEach(step => addText(step));
+    yPosition += 5;
+
+    addText('Hidden Passion Number Calculation:', 12, true);
+    data.hiddenPassionBreakdown.forEach(step => addText(step));
+    yPosition += 5;
+
+    addText('Karmic Lesson Numbers Calculation:', 12, true);
+    data.karmicLessonBreakdown.forEach(step => addText(step));
     yPosition += 10;
 
     // Detailed Analysis
@@ -256,6 +272,33 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
     addText(achievementMeaning.description);
     addText(`Natural Talents: ${achievementMeaning.strengths.join(', ')}`);
     addText(`Areas to Develop: ${achievementMeaning.challenges.join(', ')}`);
+    yPosition += 5;
+
+    // Hidden Passion Numbers Analysis
+    addText(`HIDDEN PASSION NUMBER${data.hiddenPassionNumbers.length > 1 ? 'S' : ''}`, 14, true);
+    data.hiddenPassionNumbers.forEach(num => {
+      const meaning = numberMeanings[num as keyof typeof numberMeanings];
+      addText(`Number ${num} - ${meaning.title}`);
+      addText(meaning.description);
+      addText(`Natural Talents: ${meaning.strengths.join(', ')}`);
+      addText(`Areas to Develop: ${meaning.challenges.join(', ')}`);
+      yPosition += 3;
+    });
+    yPosition += 5;
+
+    // Karmic Lesson Numbers Analysis
+    addText(`KARMIC LESSON NUMBERS`, 14, true);
+    if (data.karmicLessonNumbers.length > 0) {
+      data.karmicLessonNumbers.forEach(num => {
+        const meaning = numberMeanings[num as keyof typeof numberMeanings];
+        addText(`Number ${num} - Develop ${meaning.title} Qualities`);
+        addText(`Focus on developing: ${meaning.strengths.join(', ')}`);
+        yPosition += 3;
+      });
+    } else {
+      addText('You have no Karmic Lesson Numbers - all numbers 1-8 are present in your name.');
+      addText('This indicates a complete spiritual foundation and well-rounded development.');
+    }
     yPosition += 10;
 
     // Career Paths
@@ -886,6 +929,141 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
               ))}
             </div>
           </div>
+        </div>
+      </Card>
+
+      {/* Hidden Passion Number Analysis */}
+      <Card className="report-card">
+        <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+          <Zap className="w-6 h-6 text-orange-400" />
+          Hidden Passion Number{data.hiddenPassionNumbers.length > 1 ? 's' : ''}: {data.hiddenPassionNumbers.join(', ')}
+        </h2>
+        
+        <div className="space-y-6">
+          <p className="text-gray-300 text-lg leading-relaxed">
+            Your Hidden Passion Number{data.hiddenPassionNumbers.length > 1 ? 's reveal' : ' reveals'} your dominant trait{data.hiddenPassionNumbers.length > 1 ? 's' : ''} or talent{data.hiddenPassionNumbers.length > 1 ? 's' : ''} based on the most frequent number{data.hiddenPassionNumbers.length > 1 ? 's' : ''} in your name.
+          </p>
+
+          {/* Calculation Breakdown */}
+          <div className="p-4 rounded-xl bg-gradient-to-r from-orange-500/10 to-red-500/10 border border-orange-500/20">
+            <h3 className="text-lg font-semibold text-orange-400 mb-3 flex items-center gap-2">
+              <Calculator className="w-5 h-5" />
+              How We Calculated Your Hidden Passion Number{data.hiddenPassionNumbers.length > 1 ? 's' : ''}
+            </h3>
+            <div className="space-y-1 text-gray-300 font-mono text-sm">
+              {data.hiddenPassionBreakdown.map((step, index) => (
+                <div key={index}>{step}</div>
+              ))}
+            </div>
+          </div>
+
+          {/* Hidden Passion Meanings */}
+          <div className="space-y-4">
+            {data.hiddenPassionNumbers.map((num, index) => {
+              const meaning = numberMeanings[num as keyof typeof numberMeanings];
+              return (
+                <div key={index} className="p-4 rounded-xl bg-gradient-to-r from-orange-500/10 to-yellow-500/10 border border-orange-500/20">
+                  <h3 className="text-lg font-semibold text-orange-400 mb-3">
+                    Hidden Passion Number {num}: {meaning.title}
+                  </h3>
+                  <p className="text-gray-300 mb-3">{meaning.description}</p>
+                  
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <h4 className="text-md font-semibold text-orange-400 mb-2">Natural Talents</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {meaning.strengths.slice(0, 3).map((strength, idx) => (
+                          <Badge key={idx} className="bg-orange-500/20 text-orange-300 border-orange-500/30">
+                            {strength}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="text-md font-semibold text-orange-400 mb-2">Areas to Develop</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {meaning.challenges.slice(0, 3).map((challenge, idx) => (
+                          <Badge key={idx} className="bg-red-500/20 text-red-300 border-red-500/30">
+                            {challenge}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </Card>
+
+      {/* Karmic Lesson Numbers Analysis */}
+      <Card className="report-card">
+        <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+          <AlertTriangle className="w-6 h-6 text-red-400" />
+          Karmic Lesson Numbers: {data.karmicLessonNumbers.length > 0 ? data.karmicLessonNumbers.join(', ') : 'None'}
+        </h2>
+        
+        <div className="space-y-6">
+          <p className="text-gray-300 text-lg leading-relaxed">
+            {data.karmicLessonNumbers.length > 0 
+              ? `Your Karmic Lesson Numbers reveal areas where you may face challenges or lessons to grow spiritually and emotionally. These are the numbers missing from your name.`
+              : `Congratulations! You have no Karmic Lesson Numbers, meaning all numbers 1-8 are present in your name. This indicates a well-rounded spiritual foundation.`
+            }
+          </p>
+
+          {/* Calculation Breakdown */}
+          <div className="p-4 rounded-xl bg-gradient-to-r from-red-500/10 to-orange-500/10 border border-red-500/20">
+            <h3 className="text-lg font-semibold text-red-400 mb-3 flex items-center gap-2">
+              <Calculator className="w-5 h-5" />
+              How We Identified Your Karmic Lesson Numbers
+            </h3>
+            <div className="space-y-1 text-gray-300 font-mono text-sm">
+              {data.karmicLessonBreakdown.map((step, index) => (
+                <div key={index}>{step}</div>
+              ))}
+            </div>
+          </div>
+
+          {/* Karmic Lesson Meanings */}
+          {data.karmicLessonNumbers.length > 0 ? (
+            <div className="space-y-4">
+              {data.karmicLessonNumbers.map((num, index) => {
+                const meaning = numberMeanings[num as keyof typeof numberMeanings];
+                return (
+                  <div key={index} className="p-4 rounded-xl bg-gradient-to-r from-red-500/10 to-pink-500/10 border border-red-500/20">
+                    <h3 className="text-lg font-semibold text-red-400 mb-3">
+                      Karmic Lesson {num}: Develop {meaning.title} Qualities
+                    </h3>
+                    <p className="text-gray-300 mb-3">
+                      You're here to learn and develop qualities related to {meaning.title.toLowerCase()}. {meaning.description}
+                    </p>
+                    
+                    <div>
+                      <h4 className="text-md font-semibold text-red-400 mb-2">Qualities to Develop</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {meaning.strengths.slice(0, 4).map((strength, idx) => (
+                          <Badge key={idx} className="bg-red-500/20 text-red-300 border-red-500/30">
+                            {strength}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="p-6 rounded-xl bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/20">
+              <h3 className="text-lg font-semibold text-green-400 mb-3">✨ Complete Spiritual Foundation</h3>
+              <p className="text-gray-300">
+                Having all numbers 1-8 present in your name indicates you have access to all the fundamental spiritual energies. 
+                This is quite rare and suggests you've developed these qualities in past experiences or lifetimes. 
+                Your challenge now is to balance and harmonize these energies effectively.
+              </p>
+            </div>
+          )}
         </div>
       </Card>
 
