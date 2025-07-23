@@ -125,6 +125,27 @@ const numberMeanings = {
     strengths: ["Visionary building", "Practical idealism", "Large-scale thinking", "Material mastery", "System building", "Global impact"],
     challenges: ["Overwhelming pressure", "Self-doubt", "Scattered focus", "Burnout", "Unrealistic expectations"],
     careers: ["Visionary CEO", "Social Entrepreneur", "Global Organization Leader", "Large Project Director", "Systems Architect", "International Business Leader", "Social Impact Investor", "Transformational Change Agent", "Global Initiative Director", "Master Builder", "Social Innovation Leader", "International Development Director", "Large-Scale Consultant", "Global Strategy Director", "World-Changing Entrepreneur"]
+  },
+  33: {
+    title: "The Spiritual Teacher",
+    description: "The most influential of all numbers, with extraordinary healing and teaching abilities. Dedicated to uplifting humanity through spiritual service.",
+    strengths: ["Spiritual healing", "Universal teaching", "Compassionate service", "Divine guidance", "Unconditional love", "Enlightened wisdom"],
+    challenges: ["Overwhelming responsibility", "Emotional sacrifice", "Burnout from giving", "Perfectionism", "Martyrdom complex"],
+    careers: ["Spiritual Healer", "Master Teacher", "Humanitarian Leader", "Spiritual Guide", "Divine Channel", "Compassionate Healer", "Universal Teacher", "Enlightened Leader", "Spiritual Counselor", "Sacred Service Provider", "Divine Messenger", "Transformational Healer", "Spiritual Mentor", "Consciousness Facilitator", "Divine Service Leader"]
+  },
+  44: {
+    title: "The Master Teacher",
+    description: "Combines spiritual wisdom with material mastery to create transformational systems that benefit humanity on a global scale.",
+    strengths: ["System mastery", "Transformational teaching", "Global influence", "Practical spirituality", "Material-spiritual balance", "Universal impact"],
+    challenges: ["Overwhelming expectations", "Material-spiritual conflict", "System limitations", "Global pressure", "Perfectionist standards"],
+    careers: ["Global Systems Leader", "Transformational Educator", "Universal Teacher", "Master Architect", "Global Change Agent", "System Transformer", "World Teacher", "Universal Builder", "Global Healer", "Master Facilitator", "System Innovator", "Global Mentor", "Universal Guide", "Master Strategist", "Global Visionary"]
+  },
+  55: {
+    title: "The Master Liberator", 
+    description: "Represents ultimate freedom and liberation, breaking through all limitations to achieve complete spiritual and material mastery.",
+    strengths: ["Ultimate freedom", "Liberation mastery", "Limitless potential", "Revolutionary change", "Transcendent wisdom", "Universal liberation"],
+    challenges: ["Restless energy", "Revolutionary extremes", "Freedom addiction", "Responsibility avoidance", "Scattered focus"],
+    careers: ["Revolutionary Leader", "Freedom Fighter", "Liberation Teacher", "Change Revolutionary", "Freedom Advocate", "Liberation Guide", "Revolutionary Healer", "Freedom Coach", "Liberation Consultant", "Change Catalyst", "Freedom Facilitator", "Revolutionary Mentor", "Liberation Leader", "Freedom Visionary", "Revolutionary Guide"]
   }
 };
 
