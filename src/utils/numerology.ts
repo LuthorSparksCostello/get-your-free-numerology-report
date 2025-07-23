@@ -17,8 +17,8 @@ const reduceWithMasterNumbers = (num: number): { final: number, steps: string[] 
     num = sum;
   }
   
-  // Preserve master numbers 11 and 22
-  if (num === 11 || num === 22) {
+  // Preserve master numbers 11, 22, 33, 44, and 55
+  if (num === 11 || num === 22 || num === 33 || num === 44 || num === 55) {
     steps.push(`${num} is a Master Number - not reduced further`);
     return { final: num, steps };
   }
@@ -31,7 +31,7 @@ const reduceWithMasterNumbers = (num: number): { final: number, steps: string[] 
     num = sum;
     
     // Check again for master numbers after reduction
-    if (num === 11 || num === 22) {
+    if (num === 11 || num === 22 || num === 33 || num === 44 || num === 55) {
       steps.push(`${num} is a Master Number - not reduced further`);
       return { final: num, steps };
     }
