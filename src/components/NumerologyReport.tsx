@@ -769,11 +769,17 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
           {(data.lifePathNumber === 11 || data.lifePathNumber === 22 || data.lifePathNumber === 33 || data.lifePathNumber === 44 || data.lifePathNumber === 55) && (
             <div className="p-6 rounded-xl bg-gradient-to-r from-amber-500/10 to-yellow-500/10 border border-amber-500/20">
               <h3 className="text-lg font-semibold text-amber-400 mb-3">✨ Master Number Significance</h3>
-              <p className="text-gray-300">
-                {data.lifePathNumber === 11 
-                  ? "As a Master 11, you carry the potential for profound spiritual insight and the ability to inspire others. Your path involves developing your intuitive gifts while staying grounded in practical reality."
-                  : "As a Master 22, you have the rare combination of visionary insight and practical building skills. Your mission is to turn big dreams into tangible reality that benefits humanity."
-                }
+               <p className="text-gray-300">
+                 {data.lifePathNumber === 11 
+                   ? "As a Master 11, you carry the potential for profound spiritual insight and the ability to inspire others. Your path involves developing your intuitive gifts while staying grounded in practical reality."
+                   : data.lifePathNumber === 22
+                   ? "As a Master 22, you have the rare combination of visionary insight and practical building skills. Your mission is to turn big dreams into tangible reality that benefits humanity."
+                   : data.lifePathNumber === 33
+                   ? "As a Master 33, you are here to serve as a spiritual teacher and healer. Your path involves selfless service, compassionate guidance, and uplifting humanity through your wisdom and love."
+                   : data.lifePathNumber === 44
+                   ? "As a Master 44, you combine spiritual wisdom with material mastery. Your mission is to create transformational systems and teach on a global scale, balancing the spiritual and material worlds."
+                   : "As a Master 55, you represent ultimate freedom and liberation. Your path involves breaking through all limitations and helping others achieve complete spiritual and material mastery."
+                 }
               </p>
             </div>
           )}
