@@ -411,42 +411,51 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
           <div className="text-center p-4 rounded-xl bg-gradient-to-b from-green-500/10 to-transparent border border-green-500/20">
             <div className="text-3xl font-bold text-green-400 mb-2">{data.birthdayNumber}</div>
             <div className="text-sm text-gray-300">Birthday</div>
+            {(data.birthdayNumber === 11 || data.birthdayNumber === 22 || data.birthdayNumber === 33 || data.birthdayNumber === 44 || data.birthdayNumber === 55) && (
+              <div className="text-xs text-green-300 mt-1">Master Number</div>
+            )}
           </div>
           <div className="text-center p-4 rounded-xl bg-gradient-to-b from-blue-500/10 to-transparent border border-blue-500/20">
             <div className="text-3xl font-bold text-blue-400 mb-2">{data.personalityNumber}</div>
             <div className="text-sm text-gray-300">Personality</div>
-            {(data.personalityNumber === 11 || data.personalityNumber === 22) && (
+            {(data.personalityNumber === 11 || data.personalityNumber === 22 || data.personalityNumber === 33 || data.personalityNumber === 44 || data.personalityNumber === 55) && (
               <div className="text-xs text-blue-300 mt-1">Master Number</div>
             )}
           </div>
           <div className="text-center p-4 rounded-xl bg-gradient-to-b from-pink-500/10 to-transparent border border-pink-500/20">
             <div className="text-3xl font-bold text-pink-400 mb-2">{data.soulUrgeNumber}</div>
             <div className="text-sm text-gray-300">Heart's Desire</div>
-            {(data.soulUrgeNumber === 11 || data.soulUrgeNumber === 22) && (
+            {(data.soulUrgeNumber === 11 || data.soulUrgeNumber === 22 || data.soulUrgeNumber === 33 || data.soulUrgeNumber === 44 || data.soulUrgeNumber === 55) && (
               <div className="text-xs text-pink-300 mt-1">Master Number</div>
             )}
           </div>
           <div className="text-center p-4 rounded-xl bg-gradient-to-b from-purple-500/10 to-transparent border border-purple-500/20">
             <div className="text-3xl font-bold text-purple-400 mb-2">{data.expressionNumber}</div>
             <div className="text-sm text-gray-300">Expression</div>
-            {(data.expressionNumber === 11 || data.expressionNumber === 22) && (
+            {(data.expressionNumber === 11 || data.expressionNumber === 22 || data.expressionNumber === 33 || data.expressionNumber === 44 || data.expressionNumber === 55) && (
               <div className="text-xs text-purple-300 mt-1">Master Number</div>
             )}
           </div>
           <div className="text-center p-4 rounded-xl bg-gradient-to-b from-amber-500/10 to-transparent border border-amber-500/20">
             <div className="text-3xl font-bold text-amber-400 mb-2">{data.lifePathNumber}</div>
             <div className="text-sm text-gray-300">Life Path</div>
-            {(data.lifePathNumber === 11 || data.lifePathNumber === 22) && (
+            {(data.lifePathNumber === 11 || data.lifePathNumber === 22 || data.lifePathNumber === 33 || data.lifePathNumber === 44 || data.lifePathNumber === 55) && (
               <div className="text-xs text-amber-300 mt-1">Master Number</div>
             )}
           </div>
           <div className="text-center p-4 rounded-xl bg-gradient-to-b from-indigo-500/10 to-transparent border border-indigo-500/20">
             <div className="text-3xl font-bold text-indigo-400 mb-2">{data.maturityNumber}</div>
             <div className="text-sm text-gray-300">Maturity</div>
+            {(data.maturityNumber === 11 || data.maturityNumber === 22 || data.maturityNumber === 33 || data.maturityNumber === 44 || data.maturityNumber === 55) && (
+              <div className="text-xs text-indigo-300 mt-1">Master Number</div>
+            )}
           </div>
           <div className="text-center p-4 rounded-xl bg-gradient-to-b from-yellow-500/10 to-transparent border border-yellow-500/20">
             <div className="text-3xl font-bold text-yellow-400 mb-2">{data.achievementNumber}</div>
             <div className="text-sm text-gray-300">Achievement</div>
+            {(data.achievementNumber === 11 || data.achievementNumber === 22 || data.achievementNumber === 33 || data.achievementNumber === 44 || data.achievementNumber === 55) && (
+              <div className="text-xs text-yellow-300 mt-1">Master Number</div>
+            )}
           </div>
         </div>
       </Card>
@@ -456,6 +465,11 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
         <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
           <Calendar className="w-6 h-6 text-emerald-400" />
           Birthday Number {data.birthdayNumber}: {birthdayMeaning.title}
+          {(data.birthdayNumber === 11 || data.birthdayNumber === 22 || data.birthdayNumber === 33 || data.birthdayNumber === 44 || data.birthdayNumber === 55) && (
+            <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30 ml-2">
+              Master Number
+            </Badge>
+          )}
         </h2>
         
         <div className="space-y-6">
@@ -523,7 +537,7 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
         <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
           <User className="w-6 h-6 text-cyan-400" />
           Personality Number {data.personalityNumber}: {personalityMeaning.title}
-          {(data.personalityNumber === 11 || data.personalityNumber === 22) && (
+          {(data.personalityNumber === 11 || data.personalityNumber === 22 || data.personalityNumber === 33 || data.personalityNumber === 44 || data.personalityNumber === 55) && (
             <Badge className="bg-cyan-500/20 text-cyan-300 border-cyan-500/30 ml-2">
               Master Number
             </Badge>
@@ -595,7 +609,7 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
         <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
           <Heart className="w-6 h-6 text-rose-400" />
           Heart's Desire Number {data.soulUrgeNumber}: {soulUrgeMeaning.title}
-          {(data.soulUrgeNumber === 11 || data.soulUrgeNumber === 22) && (
+          {(data.soulUrgeNumber === 11 || data.soulUrgeNumber === 22 || data.soulUrgeNumber === 33 || data.soulUrgeNumber === 44 || data.soulUrgeNumber === 55) && (
             <Badge className="bg-rose-500/20 text-rose-300 border-rose-500/30 ml-2">
               Master Number
             </Badge>
@@ -667,7 +681,7 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
         <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
           <Users className="w-6 h-6 text-purple-400" />
           Expression Number {data.expressionNumber}: {expressionMeaning.title}
-          {(data.expressionNumber === 11 || data.expressionNumber === 22) && (
+          {(data.expressionNumber === 11 || data.expressionNumber === 22 || data.expressionNumber === 33 || data.expressionNumber === 44 || data.expressionNumber === 55) && (
             <Badge className="bg-purple-500/20 text-purple-300 border-purple-500/30 ml-2">
               Master Number
             </Badge>
@@ -740,7 +754,7 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
         <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
           <Star className="w-6 h-6 text-amber-400" />
           Life Path Number {data.lifePathNumber}: {lifePathMeaning.title}
-          {(data.lifePathNumber === 11 || data.lifePathNumber === 22) && (
+          {(data.lifePathNumber === 11 || data.lifePathNumber === 22 || data.lifePathNumber === 33 || data.lifePathNumber === 44 || data.lifePathNumber === 55) && (
             <Badge className="bg-amber-500/20 text-amber-300 border-amber-500/30 ml-2">
               Master Number
             </Badge>
@@ -752,7 +766,7 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
             {lifePathMeaning.description}
           </p>
           
-          {(data.lifePathNumber === 11 || data.lifePathNumber === 22) && (
+          {(data.lifePathNumber === 11 || data.lifePathNumber === 22 || data.lifePathNumber === 33 || data.lifePathNumber === 44 || data.lifePathNumber === 55) && (
             <div className="p-6 rounded-xl bg-gradient-to-r from-amber-500/10 to-yellow-500/10 border border-amber-500/20">
               <h3 className="text-lg font-semibold text-amber-400 mb-3">✨ Master Number Significance</h3>
               <p className="text-gray-300">
@@ -829,6 +843,11 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
         <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
           <Target className="w-6 h-6 text-indigo-400" />
           Maturity Number {data.maturityNumber}: {maturityMeaning.title}
+          {(data.maturityNumber === 11 || data.maturityNumber === 22 || data.maturityNumber === 33 || data.maturityNumber === 44 || data.maturityNumber === 55) && (
+            <Badge className="bg-indigo-500/20 text-indigo-300 border-indigo-500/30 ml-2">
+              Master Number
+            </Badge>
+          )}
         </h2>
         
         <div className="space-y-6">
@@ -896,6 +915,11 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
         <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
           <Star className="w-6 h-6 text-yellow-400" />
           Achievement Number {data.achievementNumber}: {achievementMeaning.title}
+          {(data.achievementNumber === 11 || data.achievementNumber === 22 || data.achievementNumber === 33 || data.achievementNumber === 44 || data.achievementNumber === 55) && (
+            <Badge className="bg-yellow-500/20 text-yellow-300 border-yellow-500/30 ml-2">
+              Master Number
+            </Badge>
+          )}
         </h2>
         
         <div className="space-y-6">
