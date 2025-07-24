@@ -17,8 +17,8 @@ const reduceWithMasterNumbers = (num: number): { final: number, steps: string[] 
     num = sum;
   }
   
-  // Preserve master numbers 11, 22, 33, 44, and 55
-  if (num === 11 || num === 22 || num === 33 || num === 44 || num === 55) {
+  // Preserve master numbers 11, 22, 33, 44, 55, 66, 77, 88, and 99
+  if (num === 11 || num === 22 || num === 33 || num === 44 || num === 55 || num === 66 || num === 77 || num === 88 || num === 99) {
     steps.push(`${num} is a Master Number - not reduced further`);
     return { final: num, steps };
   }
@@ -31,7 +31,7 @@ const reduceWithMasterNumbers = (num: number): { final: number, steps: string[] 
     num = sum;
     
     // Check again for master numbers after reduction
-    if (num === 11 || num === 22 || num === 33 || num === 44 || num === 55) {
+    if (num === 11 || num === 22 || num === 33 || num === 44 || num === 55 || num === 66 || num === 77 || num === 88 || num === 99) {
       steps.push(`${num} is a Master Number - not reduced further`);
       return { final: num, steps };
     }
@@ -150,8 +150,8 @@ export const calculateBirthdayNumber = (birthDate: string): { number: number, br
   
   const breakdown = [`Birth Day: ${day}`];
   
-  // Birthday number is typically reduced to single digit (no master numbers for birthday)
-  const reduction = reduceToSingleDigit(day);
+  // Birthday number can be a master number and should not be reduced if it is
+  const reduction = reduceWithMasterNumbers(day);
   breakdown.push(...reduction.steps);
   
   console.log('Birthday Number result:', reduction.final);
@@ -164,7 +164,7 @@ export const calculateMaturityNumber = (lifePathNumber: number, expressionNumber
   const sum = lifePathNumber + expressionNumber;
   const breakdown = [`Life Path (${lifePathNumber}) + Expression (${expressionNumber}) = ${sum}`];
   
-  const reduction = reduceToSingleDigit(sum);
+  const reduction = reduceWithMasterNumbers(sum);
   breakdown.push(...reduction.steps);
   
   console.log('Maturity Number result:', reduction.final);
@@ -182,7 +182,7 @@ export const calculateAchievementNumber = (birthDate: string): { number: number,
   const sum = month + day;
   const breakdown = [`Month (${month}) + Day (${day}) = ${sum}`];
   
-  const reduction = reduceToSingleDigit(sum);
+  const reduction = reduceWithMasterNumbers(sum);
   breakdown.push(...reduction.steps);
   
   console.log('Achievement Number result:', reduction.final);

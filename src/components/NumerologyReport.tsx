@@ -146,10 +146,43 @@ const numberMeanings = {
     strengths: ["Ultimate freedom", "Liberation mastery", "Limitless potential", "Revolutionary change", "Transcendent wisdom", "Universal liberation"],
     challenges: ["Restless energy", "Revolutionary extremes", "Freedom addiction", "Responsibility avoidance", "Scattered focus"],
     careers: ["Revolutionary Leader", "Freedom Fighter", "Liberation Teacher", "Change Revolutionary", "Freedom Advocate", "Liberation Guide", "Revolutionary Healer", "Freedom Coach", "Liberation Consultant", "Change Catalyst", "Freedom Facilitator", "Revolutionary Mentor", "Liberation Leader", "Freedom Visionary", "Revolutionary Guide"]
+  },
+  66: {
+    title: "The Master Healer",
+    description: "Embodies the highest form of nurturing and healing, dedicated to serving humanity through compassionate care and cosmic love.",
+    strengths: ["Cosmic healing", "Universal compassion", "Divine nurturing", "Planetary healing", "Sacred service", "Unconditional love"],
+    challenges: ["Overwhelming responsibility", "Sacrificial tendencies", "Cosmic burden", "Universal suffering", "Self-neglect"],
+    careers: ["Master Healer", "Cosmic Therapist", "Universal Caregiver", "Planetary Healer", "Divine Nurturer", "Sacred Healer", "Cosmic Counselor", "Universal Teacher", "Planetary Caregiver", "Master Therapist", "Divine Healer", "Universal Healer", "Cosmic Caregiver", "Planetary Counselor", "Master Nurturer"]
+  },
+  77: {
+    title: "The Master Mystic",
+    description: "Represents the highest spiritual wisdom and mystical knowledge, bridging the divine and earthly realms.",
+    strengths: ["Divine wisdom", "Mystical knowledge", "Spiritual mastery", "Cosmic consciousness", "Sacred insight", "Universal truth"],
+    challenges: ["Spiritual isolation", "Otherworldly detachment", "Mystical overwhelm", "Reality disconnection", "Sacred loneliness"],
+    careers: ["Mystical Teacher", "Spiritual Master", "Divine Guide", "Cosmic Advisor", "Sacred Wisdom Teacher", "Universal Mystic", "Spiritual Guru", "Divine Counselor", "Cosmic Teacher", "Sacred Guide", "Mystical Healer", "Universal Sage", "Spiritual Visionary", "Divine Mystic", "Cosmic Sage"]
+  },
+  88: {
+    title: "The Master Manifestor",
+    description: "Combines infinite material and spiritual power to manifest on the highest level, creating lasting impact on a global scale.",
+    strengths: ["Infinite manifestation", "Material-spiritual mastery", "Global influence", "Universal success", "Cosmic achievement", "Planetary impact"],
+    challenges: ["Overwhelming power", "Material-spiritual balance", "Global responsibility", "Universal pressure", "Cosmic burden"],
+    careers: ["Global Leader", "Universal Entrepreneur", "Cosmic Business Leader", "Planetary Influencer", "Master Manifestor", "Universal Builder", "Global Visionary", "Cosmic CEO", "Planetary Leader", "Master Achiever", "Universal Success Coach", "Global Strategist", "Cosmic Innovator", "Planetary CEO", "Master Builder"]
+  },
+  99: {
+    title: "The Master Completion",
+    description: "Represents the completion of all spiritual lessons and the highest service to humanity, embodying universal love and wisdom.",
+    strengths: ["Universal completion", "Divine service", "Planetary wisdom", "Cosmic love", "Universal healing", "Complete mastery"],
+    challenges: ["Ultimate responsibility", "Universal burden", "Completion pressure", "Cosmic overwhelm", "Divine sacrifice"],
+    careers: ["Universal Humanitarian", "Planetary Healer", "Cosmic Servant", "Divine Teacher", "Universal Guide", "Master Humanitarian", "Planetary Teacher", "Cosmic Healer", "Universal Leader", "Divine Servant", "Master Wise One", "Planetary Guide", "Cosmic Mentor", "Universal Sage", "Divine Leader"]
   }
 };
 
 const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
+  // Helper function to check if a number is a master number
+  const isMasterNumber = (num: number): boolean => {
+    return num === 11 || num === 22 || num === 33 || num === 44 || num === 55 || num === 66 || num === 77 || num === 88 || num === 99;
+  };
+
   const lifePathMeaning = numberMeanings[data.lifePathNumber as keyof typeof numberMeanings];
   const expressionMeaning = numberMeanings[data.expressionNumber as keyof typeof numberMeanings];
   const soulUrgeMeaning = numberMeanings[data.soulUrgeNumber as keyof typeof numberMeanings];
@@ -411,49 +444,49 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
           <div className="text-center p-4 rounded-xl bg-gradient-to-b from-green-500/10 to-transparent border border-green-500/20">
             <div className="text-3xl font-bold text-green-400 mb-2">{data.birthdayNumber}</div>
             <div className="text-sm text-gray-300">Birthday</div>
-            {(data.birthdayNumber === 11 || data.birthdayNumber === 22 || data.birthdayNumber === 33 || data.birthdayNumber === 44 || data.birthdayNumber === 55) && (
+            {isMasterNumber(data.birthdayNumber) && (
               <div className="text-xs text-green-300 mt-1">Master Number</div>
             )}
           </div>
           <div className="text-center p-4 rounded-xl bg-gradient-to-b from-blue-500/10 to-transparent border border-blue-500/20">
             <div className="text-3xl font-bold text-blue-400 mb-2">{data.personalityNumber}</div>
             <div className="text-sm text-gray-300">Personality</div>
-            {(data.personalityNumber === 11 || data.personalityNumber === 22 || data.personalityNumber === 33 || data.personalityNumber === 44 || data.personalityNumber === 55) && (
+            {isMasterNumber(data.personalityNumber) && (
               <div className="text-xs text-blue-300 mt-1">Master Number</div>
             )}
           </div>
           <div className="text-center p-4 rounded-xl bg-gradient-to-b from-pink-500/10 to-transparent border border-pink-500/20">
             <div className="text-3xl font-bold text-pink-400 mb-2">{data.soulUrgeNumber}</div>
             <div className="text-sm text-gray-300">Heart's Desire</div>
-            {(data.soulUrgeNumber === 11 || data.soulUrgeNumber === 22 || data.soulUrgeNumber === 33 || data.soulUrgeNumber === 44 || data.soulUrgeNumber === 55) && (
+            {isMasterNumber(data.soulUrgeNumber) && (
               <div className="text-xs text-pink-300 mt-1">Master Number</div>
             )}
           </div>
           <div className="text-center p-4 rounded-xl bg-gradient-to-b from-purple-500/10 to-transparent border border-purple-500/20">
             <div className="text-3xl font-bold text-purple-400 mb-2">{data.expressionNumber}</div>
             <div className="text-sm text-gray-300">Expression</div>
-            {(data.expressionNumber === 11 || data.expressionNumber === 22 || data.expressionNumber === 33 || data.expressionNumber === 44 || data.expressionNumber === 55) && (
+            {isMasterNumber(data.expressionNumber) && (
               <div className="text-xs text-purple-300 mt-1">Master Number</div>
             )}
           </div>
           <div className="text-center p-4 rounded-xl bg-gradient-to-b from-amber-500/10 to-transparent border border-amber-500/20">
             <div className="text-3xl font-bold text-amber-400 mb-2">{data.lifePathNumber}</div>
             <div className="text-sm text-gray-300">Life Path</div>
-            {(data.lifePathNumber === 11 || data.lifePathNumber === 22 || data.lifePathNumber === 33 || data.lifePathNumber === 44 || data.lifePathNumber === 55) && (
+            {isMasterNumber(data.lifePathNumber) && (
               <div className="text-xs text-amber-300 mt-1">Master Number</div>
             )}
           </div>
           <div className="text-center p-4 rounded-xl bg-gradient-to-b from-indigo-500/10 to-transparent border border-indigo-500/20">
             <div className="text-3xl font-bold text-indigo-400 mb-2">{data.maturityNumber}</div>
             <div className="text-sm text-gray-300">Maturity</div>
-            {(data.maturityNumber === 11 || data.maturityNumber === 22 || data.maturityNumber === 33 || data.maturityNumber === 44 || data.maturityNumber === 55) && (
+            {isMasterNumber(data.maturityNumber) && (
               <div className="text-xs text-indigo-300 mt-1">Master Number</div>
             )}
           </div>
           <div className="text-center p-4 rounded-xl bg-gradient-to-b from-yellow-500/10 to-transparent border border-yellow-500/20">
             <div className="text-3xl font-bold text-yellow-400 mb-2">{data.achievementNumber}</div>
             <div className="text-sm text-gray-300">Achievement</div>
-            {(data.achievementNumber === 11 || data.achievementNumber === 22 || data.achievementNumber === 33 || data.achievementNumber === 44 || data.achievementNumber === 55) && (
+            {isMasterNumber(data.achievementNumber) && (
               <div className="text-xs text-yellow-300 mt-1">Master Number</div>
             )}
           </div>
@@ -465,7 +498,7 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
         <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
           <Calendar className="w-6 h-6 text-emerald-400" />
           Birthday Number {data.birthdayNumber}: {birthdayMeaning.title}
-          {(data.birthdayNumber === 11 || data.birthdayNumber === 22 || data.birthdayNumber === 33 || data.birthdayNumber === 44 || data.birthdayNumber === 55) && (
+          {isMasterNumber(data.birthdayNumber) && (
             <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30 ml-2">
               Master Number
             </Badge>
@@ -537,7 +570,7 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
         <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
           <User className="w-6 h-6 text-cyan-400" />
           Personality Number {data.personalityNumber}: {personalityMeaning.title}
-          {(data.personalityNumber === 11 || data.personalityNumber === 22 || data.personalityNumber === 33 || data.personalityNumber === 44 || data.personalityNumber === 55) && (
+          {isMasterNumber(data.personalityNumber) && (
             <Badge className="bg-cyan-500/20 text-cyan-300 border-cyan-500/30 ml-2">
               Master Number
             </Badge>
@@ -609,7 +642,7 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
         <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
           <Heart className="w-6 h-6 text-rose-400" />
           Heart's Desire Number {data.soulUrgeNumber}: {soulUrgeMeaning.title}
-          {(data.soulUrgeNumber === 11 || data.soulUrgeNumber === 22 || data.soulUrgeNumber === 33 || data.soulUrgeNumber === 44 || data.soulUrgeNumber === 55) && (
+          {isMasterNumber(data.soulUrgeNumber) && (
             <Badge className="bg-rose-500/20 text-rose-300 border-rose-500/30 ml-2">
               Master Number
             </Badge>
@@ -681,7 +714,7 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
         <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
           <Users className="w-6 h-6 text-purple-400" />
           Expression Number {data.expressionNumber}: {expressionMeaning.title}
-          {(data.expressionNumber === 11 || data.expressionNumber === 22 || data.expressionNumber === 33 || data.expressionNumber === 44 || data.expressionNumber === 55) && (
+          {isMasterNumber(data.expressionNumber) && (
             <Badge className="bg-purple-500/20 text-purple-300 border-purple-500/30 ml-2">
               Master Number
             </Badge>
@@ -754,7 +787,7 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
         <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
           <Star className="w-6 h-6 text-amber-400" />
           Life Path Number {data.lifePathNumber}: {lifePathMeaning.title}
-          {(data.lifePathNumber === 11 || data.lifePathNumber === 22 || data.lifePathNumber === 33 || data.lifePathNumber === 44 || data.lifePathNumber === 55) && (
+          {isMasterNumber(data.lifePathNumber) && (
             <Badge className="bg-amber-500/20 text-amber-300 border-amber-500/30 ml-2">
               Master Number
             </Badge>
@@ -766,7 +799,7 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
             {lifePathMeaning.description}
           </p>
           
-          {(data.lifePathNumber === 11 || data.lifePathNumber === 22 || data.lifePathNumber === 33 || data.lifePathNumber === 44 || data.lifePathNumber === 55) && (
+          {isMasterNumber(data.lifePathNumber) && (
             <div className="p-6 rounded-xl bg-gradient-to-r from-amber-500/10 to-yellow-500/10 border border-amber-500/20">
               <h3 className="text-lg font-semibold text-amber-400 mb-3">✨ Master Number Significance</h3>
                <p className="text-gray-300">
@@ -778,9 +811,17 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
                    ? "As a Master 33, you are here to serve as a spiritual teacher and healer. Your path involves selfless service, compassionate guidance, and uplifting humanity through your wisdom and love."
                    : data.lifePathNumber === 44
                    ? "As a Master 44, you combine spiritual wisdom with material mastery. Your mission is to create transformational systems and teach on a global scale, balancing the spiritual and material worlds."
-                   : "As a Master 55, you represent ultimate freedom and liberation. Your path involves breaking through all limitations and helping others achieve complete spiritual and material mastery."
+                   : data.lifePathNumber === 55
+                   ? "As a Master 55, you represent ultimate freedom and liberation. Your path involves breaking through all limitations and helping others achieve complete spiritual and material mastery."
+                   : data.lifePathNumber === 66
+                   ? "As a Master 66, you embody the highest form of nurturing and healing, dedicated to serving humanity through compassionate care and cosmic love."
+                   : data.lifePathNumber === 77
+                   ? "As a Master 77, you represent the highest spiritual wisdom and mystical knowledge, bridging the divine and earthly realms."
+                   : data.lifePathNumber === 88
+                   ? "As a Master 88, you combine infinite material and spiritual power to manifest on the highest level, creating lasting impact on a global scale."
+                   : "As a Master 99, you represent the completion of all spiritual lessons and the highest service to humanity, embodying universal love and wisdom."
                  }
-              </p>
+               </p>
             </div>
           )}
 
@@ -849,7 +890,7 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
         <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
           <Target className="w-6 h-6 text-indigo-400" />
           Maturity Number {data.maturityNumber}: {maturityMeaning.title}
-          {(data.maturityNumber === 11 || data.maturityNumber === 22 || data.maturityNumber === 33 || data.maturityNumber === 44 || data.maturityNumber === 55) && (
+          {isMasterNumber(data.maturityNumber) && (
             <Badge className="bg-indigo-500/20 text-indigo-300 border-indigo-500/30 ml-2">
               Master Number
             </Badge>
@@ -921,7 +962,7 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
         <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
           <Star className="w-6 h-6 text-yellow-400" />
           Achievement Number {data.achievementNumber}: {achievementMeaning.title}
-          {(data.achievementNumber === 11 || data.achievementNumber === 22 || data.achievementNumber === 33 || data.achievementNumber === 44 || data.achievementNumber === 55) && (
+          {isMasterNumber(data.achievementNumber) && (
             <Badge className="bg-yellow-500/20 text-yellow-300 border-yellow-500/30 ml-2">
               Master Number
             </Badge>
