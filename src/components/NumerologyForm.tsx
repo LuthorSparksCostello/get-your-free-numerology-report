@@ -30,7 +30,7 @@ const NumerologyForm = ({ onSubmit, isLoading = false }: NumerologyFormProps) =>
       case 'fullName':
         if (!value.trim()) return 'Full name is required';
         if (value.trim().length < 2) return 'Name must be at least 2 characters';
-        if (!/^[a-zA-Z\s]+$/.test(value.trim())) return 'Name can only contain letters and spaces';
+        if (!/^[a-zA-Z0-9\s]+$/.test(value.trim())) return 'Name can only contain letters, numbers, and spaces';
         return undefined;
       case 'birthDate':
         if (!value) return 'Birth date is required';
