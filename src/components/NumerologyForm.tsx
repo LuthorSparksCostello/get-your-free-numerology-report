@@ -34,9 +34,6 @@ const NumerologyForm = ({ onSubmit, isLoading = false }: NumerologyFormProps) =>
         return undefined;
       case 'birthDate':
         if (!value) return 'Birth date is required';
-        const date = new Date(value);
-        const today = new Date();
-        if (date > today) return 'Birth date cannot be in the future';
         return undefined;
       default:
         return undefined;
