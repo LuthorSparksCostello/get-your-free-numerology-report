@@ -1,254 +1,165 @@
+/**
+ * Chaldean Numerology Calculation Engine
+ *
+ * Implements the ancient Chaldean system where letters are assigned
+ * values 1-8 (no 9 in the base mapping). Supports master numbers
+ * 11, 22, 33, 44, 55, 66, 77, 88, 99.
+ */
 
-// Chaldean numerology mapping
-const chaldeanValues: { [key: string]: number } = {
+import { hiddenPassionCareers } from './numerologyMeanings';
+import type { PinnacleData, ChallengeData } from '../hooks/useReportStore';
+
+/** Chaldean letter-to-number mapping (1-8 system) */
+const chaldeanValues: Record<string, number> = {
   A: 1, B: 2, C: 3, D: 4, E: 5, F: 8, G: 3, H: 5, I: 1, J: 1, K: 2, L: 3, M: 4,
   N: 5, O: 7, P: 8, Q: 1, R: 2, S: 3, T: 4, U: 6, V: 6, W: 6, X: 5, Y: 1, Z: 7
 };
 
-// Helper function to reduce to single digit while preserving master numbers
-const reduceWithMasterNumbers = (num: number): { final: number, steps: string[] } => {
+const MASTER_NUMBERS = new Set([11, 22, 33, 44, 55, 66, 77, 88, 99]);
+
+/** Check if a number is a master number */
+export const isMasterNumber = (num: number): boolean => MASTER_NUMBERS.has(num);
+
+/** Reduce to single digit while preserving master numbers */
+const reduceWithMasterNumbers = (num: number): { final: number; steps: string[] } => {
   const steps: string[] = [];
-  
-  // First, reduce very large numbers by breaking them down
+
   while (num > 99) {
     const digits = num.toString().split('');
-    const sum = digits.reduce((acc, digit) => acc + parseInt(digit), 0);
+    const sum = digits.reduce((acc, d) => acc + parseInt(d), 0);
     steps.push(`${num} → ${digits.join(' + ')} = ${sum}`);
     num = sum;
   }
-  
-  // Preserve master numbers 11, 22, 33, 44, 55, 66, 77, 88, and 99
-  if (num === 11 || num === 22 || num === 33 || num === 44 || num === 55 || num === 66 || num === 77 || num === 88 || num === 99) {
-    steps.push(`${num} is a Master Number - not reduced further`);
+
+  if (MASTER_NUMBERS.has(num)) {
+    steps.push(`${num} is a Master Number — preserved`);
     return { final: num, steps };
   }
-  
-  // Continue reducing if it's not a master number but still > 9
+
   while (num > 9) {
     const digits = num.toString().split('');
-    const sum = digits.reduce((acc, digit) => acc + parseInt(digit), 0);
+    const sum = digits.reduce((acc, d) => acc + parseInt(d), 0);
     steps.push(`${num} → ${digits.join(' + ')} = ${sum}`);
     num = sum;
-    
-    // Check again for master numbers after reduction
-    if (num === 11 || num === 22 || num === 33 || num === 44 || num === 55 || num === 66 || num === 77 || num === 88 || num === 99) {
-      steps.push(`${num} is a Master Number - not reduced further`);
+
+    if (MASTER_NUMBERS.has(num)) {
+      steps.push(`${num} is a Master Number — preserved`);
       return { final: num, steps };
     }
   }
-  
+
   return { final: num, steps };
 };
 
-// Standard reduction to single digit (for non-master number calculations)
-const reduceToSingleDigit = (num: number): { final: number, steps: string[] } => {
+/** Standard reduction to single digit (no master number preservation) */
+const reduceToSingleDigit = (num: number): { final: number; steps: string[] } => {
   const steps: string[] = [];
-  
   while (num > 9) {
     const digits = num.toString().split('');
-    const sum = digits.reduce((acc, digit) => acc + parseInt(digit), 0);
+    const sum = digits.reduce((acc, d) => acc + parseInt(d), 0);
     steps.push(`${num} → ${digits.join(' + ')} = ${sum}`);
     num = sum;
   }
-  
   return { final: num, steps };
 };
 
-// Helper function to calculate name-based numbers with breakdown
-const calculateNameValue = (name: string): { sum: number, breakdown: string[] } => {
+/** Calculate the Chaldean value sum of a name string with breakdown */
+const calculateNameValue = (name: string): { sum: number; breakdown: string[] } => {
   const cleanName = name.toUpperCase().replace(/[^A-Z]/g, '');
   let sum = 0;
   const breakdown: string[] = [];
-  
-  console.log('Calculating name value for:', cleanName);
-  
+
   for (const char of cleanName) {
     if (chaldeanValues[char]) {
       sum += chaldeanValues[char];
       breakdown.push(`${char} = ${chaldeanValues[char]}`);
-      console.log(`${char} = ${chaldeanValues[char]}, running sum: ${sum}`);
     }
   }
-  
-  console.log('Total sum before reduction:', sum);
+
   return { sum, breakdown };
 };
 
-export const calculateLifePathNumber = (birthDate: string): { number: number, breakdown: string[] } => {
-  // Parse the date string directly to avoid timezone issues
-  const dateParts = birthDate.split('-');
-  const year = parseInt(dateParts[0], 10);
-  const month = parseInt(dateParts[1], 10);
-  const day = parseInt(dateParts[2], 10);
-  
-  console.log('Life Path Calculation:', { birthDate, year, month, day });
-  
-  // Chaldean method: Add the full numbers first (month + day + year), then reduce the total
+/** Parse a date string (YYYY-MM-DD) into components */
+const parseDateString = (dateStr: string): { year: number; month: number; day: number } => {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  return { year: y, month: m, day: d };
+};
+
+// ===== CORE NUMBER CALCULATIONS =====
+
+/** Life Path Number: month + day + full year → reduce */
+export const calculateLifePathNumber = (birthDate: string): { number: number; breakdown: string[] } => {
+  const { year, month, day } = parseDateString(birthDate);
   const totalSum = month + day + year;
   const breakdown = [`Month: ${month}`, `Day: ${day}`, `Year: ${year}`, `Total: ${month} + ${day} + ${year} = ${totalSum}`];
-  
-  console.log('Total sum before reduction:', totalSum);
-  
   const reduction = reduceWithMasterNumbers(totalSum);
   breakdown.push(...reduction.steps);
-  
-  console.log('Final Life Path Number:', reduction.final);
-  
   return { number: reduction.final, breakdown };
 };
 
-export const calculateExpressionNumber = (fullName: string): { number: number, breakdown: string[] } => {
-  console.log('Expression Number Calculation for:', fullName);
+/** Expression Number: sum of all letter values in full name */
+export const calculateExpressionNumber = (fullName: string): { number: number; breakdown: string[] } => {
   const nameCalc = calculateNameValue(fullName);
   const breakdown = [`Letters: ${nameCalc.breakdown.join(', ')}`, `Sum: ${nameCalc.sum}`];
-  
   const reduction = reduceWithMasterNumbers(nameCalc.sum);
   breakdown.push(...reduction.steps);
-  
-  console.log('Expression Number result:', reduction.final);
   return { number: reduction.final, breakdown };
 };
 
-export const calculateSoulUrgeNumber = (fullName: string): { number: number, breakdown: string[] } => {
-  console.log('Soul Urge (Heart\'s Desire) Number Calculation for:', fullName);
-  // Extract only vowels
+/** Soul Urge (Heart's Desire) Number: sum of vowel values only */
+export const calculateSoulUrgeNumber = (fullName: string): { number: number; breakdown: string[] } => {
   const vowels = fullName.toUpperCase().replace(/[^AEIOU]/g, '');
-  console.log('Vowels extracted:', vowels);
-  
   const nameCalc = calculateNameValue(vowels);
   const breakdown = [`Vowels: ${vowels}`, `Values: ${nameCalc.breakdown.join(', ')}`, `Sum: ${nameCalc.sum}`];
-  
   const reduction = reduceWithMasterNumbers(nameCalc.sum);
   breakdown.push(...reduction.steps);
-  
-  console.log('Soul Urge Number result:', reduction.final);
   return { number: reduction.final, breakdown };
 };
 
-export const calculatePersonalityNumber = (fullName: string): { number: number, breakdown: string[] } => {
-  console.log('Personality Number Calculation for:', fullName);
-  // Extract only consonants (remove vowels and spaces)
+/** Personality Number: sum of consonant values only */
+export const calculatePersonalityNumber = (fullName: string): { number: number; breakdown: string[] } => {
   const consonants = fullName.toUpperCase().replace(/[AEIOU\s]/g, '');
-  console.log('Consonants extracted:', consonants);
-  
   const nameCalc = calculateNameValue(consonants);
   const breakdown = [`Consonants: ${consonants}`, `Values: ${nameCalc.breakdown.join(', ')}`, `Sum: ${nameCalc.sum}`];
-  
   const reduction = reduceWithMasterNumbers(nameCalc.sum);
   breakdown.push(...reduction.steps);
-  
-  console.log('Personality Number result:', reduction.final);
   return { number: reduction.final, breakdown };
 };
 
-export const calculateBirthdayNumber = (birthDate: string): { number: number, breakdown: string[] } => {
-  // Parse the date string directly to avoid timezone issues
-  const dateParts = birthDate.split('-');
-  const day = parseInt(dateParts[2], 10);
-  
-  console.log('Birthday Number Calculation:', { birthDate, day });
-  
+/** Birthday Number: the day of birth reduced */
+export const calculateBirthdayNumber = (birthDate: string): { number: number; breakdown: string[] } => {
+  const { day } = parseDateString(birthDate);
   const breakdown = [`Birth Day: ${day}`];
-  
-  // Birthday number can be a master number and should not be reduced if it is
   const reduction = reduceWithMasterNumbers(day);
   breakdown.push(...reduction.steps);
-  
-  console.log('Birthday Number result:', reduction.final);
   return { number: reduction.final, breakdown };
 };
 
-export const calculateMaturityNumber = (lifePathNumber: number, expressionNumber: number): { number: number, breakdown: string[] } => {
-  console.log('Maturity Number Calculation:', { lifePathNumber, expressionNumber });
-  
+/** Maturity Number: Life Path + Expression → reduce */
+export const calculateMaturityNumber = (lifePathNumber: number, expressionNumber: number): { number: number; breakdown: string[] } => {
   const sum = lifePathNumber + expressionNumber;
   const breakdown = [`Life Path (${lifePathNumber}) + Expression (${expressionNumber}) = ${sum}`];
-  
   const reduction = reduceWithMasterNumbers(sum);
   breakdown.push(...reduction.steps);
-  
-  console.log('Maturity Number result:', reduction.final);
   return { number: reduction.final, breakdown };
 };
 
-export const calculateAchievementNumber = (birthDate: string): { number: number, breakdown: string[] } => {
-  // Parse the date string directly to avoid timezone issues
-  const dateParts = birthDate.split('-');
-  const month = parseInt(dateParts[1], 10);
-  const day = parseInt(dateParts[2], 10);
-  
-  console.log('Achievement Number Calculation:', { birthDate, month, day });
-  
+/** Achievement Number: month + day → reduce */
+export const calculateAchievementNumber = (birthDate: string): { number: number; breakdown: string[] } => {
+  const { month, day } = parseDateString(birthDate);
   const sum = month + day;
   const breakdown = [`Month (${month}) + Day (${day}) = ${sum}`];
-  
   const reduction = reduceWithMasterNumbers(sum);
   breakdown.push(...reduction.steps);
-  
-  console.log('Achievement Number result:', reduction.final);
   return { number: reduction.final, breakdown };
 };
 
-// Hidden Passion Number career paths based on Chaldean numerology
-const hiddenPassionCareers = {
-  1: [
-    "Executive Leadership", "Entrepreneurship", "Creative Direction", "Independent Consulting", 
-    "Innovation Management", "Start-up Founder", "Creative Arts Direction", "Personal Brand Building",
-    "Motivational Speaking", "Business Development", "Product Management", "Creative Writing",
-    "Artistic Innovation", "Independent Filmmaking", "Solo Performance Arts"
-  ],
-  2: [
-    "Collaborative Arts", "Team Facilitation", "Partnership Development", "Diplomatic Services",
-    "Relationship Counseling", "Mediation Services", "Community Building", "Social Coordination",
-    "Group Therapy", "Cultural Bridge-Building", "International Relations", "Cooperative Business",
-    "Supportive Leadership", "Harmony Creation", "Peacekeeping Services"
-  ],
-  3: [
-    "Creative Expression", "Public Speaking", "Entertainment Industry", "Communication Arts",
-    "Social Media Creation", "Creative Writing", "Performing Arts", "Broadcasting",
-    "Marketing Communications", "Artistic Performance", "Creative Consulting", "Event Entertainment",
-    "Content Creation", "Artistic Direction", "Inspirational Communication"
-  ],
-  4: [
-    "Systems Building", "Process Optimization", "Project Management", "Technical Implementation",
-    "Quality Assurance", "Methodical Research", "Construction Management", "Operations Excellence",
-    "Systematic Planning", "Infrastructure Development", "Detailed Analysis", "Procedure Development",
-    "Technical Documentation", "Organizational Systems", "Reliability Engineering"
-  ],
-  5: [
-    "Adventure Tourism", "International Business", "Travel Industry", "Dynamic Sales",
-    "Change Management", "Variety-Based Careers", "Multi-Cultural Work", "Flexible Consulting",
-    "Dynamic Marketing", "Exploration Services", "Progressive Innovation", "Adaptable Leadership",
-    "Freedom-Based Entrepreneurship", "Diverse Project Management", "Global Connectivity"
-  ],
-  6: [
-    "Healthcare Services", "Community Care", "Family Services", "Educational Support",
-    "Nurturing Leadership", "Home-Based Business", "Care Management", "Healing Arts",
-    "Community Development", "Service-Oriented Business", "Wellness Coaching", "Support Services",
-    "Therapeutic Services", "Humanitarian Work", "Caring Professions"
-  ],
-  7: [
-    "Spiritual Services", "Research & Analysis", "Investigative Work", "Wisdom Sharing",
-    "Introspective Arts", "Mystical Studies", "Deep Analysis", "Philosophical Work",
-    "Spiritual Counseling", "Metaphysical Services", "Esoteric Studies", "Inner Wisdom Sharing",
-    "Contemplative Arts", "Sacred Studies", "Transformational Work"
-  ],
-  8: [
-    "Material Achievement", "Business Mastery", "Financial Services", "Power Leadership",
-    "Success Coaching", "Achievement Consulting", "Business Empire Building", "Wealth Management",
-    "Corporate Leadership", "Material Success Guidance", "Power Dynamics", "Achievement Systems",
-    "Success Strategy", "Material Manifestation", "Authority Positions"
-  ]
-};
-
-export const calculateHiddenPassionNumber = (fullName: string): { numbers: number[], breakdown: string[], careers: string[] } => {
-  console.log('Hidden Passion Number Calculation for:', fullName);
-  
+/** Hidden Passion Number: most frequently occurring Chaldean value in the name */
+export const calculateHiddenPassionNumber = (fullName: string): { numbers: number[]; breakdown: string[]; careers: string[] } => {
   const cleanName = fullName.toUpperCase().replace(/[^A-Z]/g, '');
-  const frequency: { [key: number]: number } = {};
+  const frequency: Record<number, number> = {};
   const letterBreakdown: string[] = [];
-  
-  // Count frequency of each number
+
   for (const char of cleanName) {
     if (chaldeanValues[char]) {
       const value = chaldeanValues[char];
@@ -256,64 +167,202 @@ export const calculateHiddenPassionNumber = (fullName: string): { numbers: numbe
       letterBreakdown.push(`${char} = ${value}`);
     }
   }
-  
-  // Find the highest frequency
+
   const maxFrequency = Math.max(...Object.values(frequency));
   const hiddenPassionNumbers = Object.keys(frequency)
     .filter(num => frequency[parseInt(num)] === maxFrequency)
     .map(num => parseInt(num));
-  
-  // Get career paths for all hidden passion numbers
+
   const allCareers: string[] = [];
   hiddenPassionNumbers.forEach(num => {
-    if (hiddenPassionCareers[num as keyof typeof hiddenPassionCareers]) {
-      allCareers.push(...hiddenPassionCareers[num as keyof typeof hiddenPassionCareers]);
+    if (hiddenPassionCareers[num]) {
+      allCareers.push(...hiddenPassionCareers[num]);
     }
   });
-  
+
   const breakdown = [
     `Letters: ${letterBreakdown.join(', ')}`,
-    `Frequency count: ${Object.entries(frequency).map(([num, count]) => `${num} appears ${count} time${count > 1 ? 's' : ''}`).join(', ')}`,
-    `Most frequent: ${hiddenPassionNumbers.join(', ')} (appears ${maxFrequency} time${maxFrequency > 1 ? 's' : ''})`
+    `Frequency: ${Object.entries(frequency).map(([num, count]) => `${num} appears ${count}×`).join(', ')}`,
+    `Most frequent: ${hiddenPassionNumbers.join(', ')} (${maxFrequency}×)`
   ];
-  
-  console.log('Hidden Passion Numbers result:', hiddenPassionNumbers);
+
   return { numbers: hiddenPassionNumbers, breakdown, careers: allCareers };
 };
 
-export const calculateKarmicLessonNumbers = (fullName: string): { numbers: number[], breakdown: string[] } => {
-  console.log('Karmic Lesson Numbers Calculation for:', fullName);
-  
+/** Karmic Lesson Numbers: which Chaldean values 1-8 are missing from the name */
+export const calculateKarmicLessonNumbers = (fullName: string): { numbers: number[]; breakdown: string[] } => {
   const cleanName = fullName.toUpperCase().replace(/[^A-Z]/g, '');
   const presentNumbers = new Set<number>();
   const letterBreakdown: string[] = [];
-  
-  // Find which numbers are present in the name
+
   for (const char of cleanName) {
     if (chaldeanValues[char]) {
-      const value = chaldeanValues[char];
-      presentNumbers.add(value);
-      letterBreakdown.push(`${char} = ${value}`);
+      presentNumbers.add(chaldeanValues[char]);
+      letterBreakdown.push(`${char} = ${chaldeanValues[char]}`);
     }
   }
-  
-  // Find missing numbers (1-8 in Chaldean system)
-  const allNumbers = [1, 2, 3, 4, 5, 6, 7, 8];
-  const missingNumbers = allNumbers.filter(num => !presentNumbers.has(num));
-  
+
+  const missingNumbers = [1, 2, 3, 4, 5, 6, 7, 8].filter(n => !presentNumbers.has(n));
+
   const breakdown = [
     `Letters: ${letterBreakdown.join(', ')}`,
-    `Numbers present: ${Array.from(presentNumbers).sort().join(', ')}`,
-    `Missing numbers (Karmic Lessons): ${missingNumbers.length > 0 ? missingNumbers.join(', ') : 'None - all numbers are present'}`
+    `Present: ${Array.from(presentNumbers).sort().join(', ')}`,
+    `Missing (Karmic Lessons): ${missingNumbers.length > 0 ? missingNumbers.join(', ') : 'None — all numbers present'}`
   ];
-  
-  console.log('Karmic Lesson Numbers result:', missingNumbers);
+
   return { numbers: missingNumbers, breakdown };
 };
 
+// ===== NEW CALCULATIONS =====
+
+/** Personal Year Number: birth month + birth day + current year → reduce */
+export const calculatePersonalYearNumber = (birthDate: string): { number: number; breakdown: string[] } => {
+  const { month, day } = parseDateString(birthDate);
+  const currentYear = new Date().getFullYear();
+  const sum = month + day + currentYear;
+  const breakdown = [
+    `Birth Month (${month}) + Birth Day (${day}) + Current Year (${currentYear})`,
+    `${month} + ${day} + ${currentYear} = ${sum}`
+  ];
+  const reduction = reduceToSingleDigit(sum);
+  breakdown.push(...reduction.steps);
+  return { number: reduction.final, breakdown };
+};
+
+/** Personal Month Number: personal year + current month → reduce */
+export const calculatePersonalMonthNumber = (personalYear: number): { number: number; breakdown: string[] } => {
+  const currentMonth = new Date().getMonth() + 1;
+  const sum = personalYear + currentMonth;
+  const breakdown = [
+    `Personal Year (${personalYear}) + Current Month (${currentMonth})`,
+    `${personalYear} + ${currentMonth} = ${sum}`
+  ];
+  const reduction = reduceToSingleDigit(sum);
+  breakdown.push(...reduction.steps);
+  return { number: reduction.final, breakdown };
+};
+
+/** Personal Day Number: personal month + current day → reduce */
+export const calculatePersonalDayNumber = (personalMonth: number): { number: number; breakdown: string[] } => {
+  const currentDay = new Date().getDate();
+  const sum = personalMonth + currentDay;
+  const breakdown = [
+    `Personal Month (${personalMonth}) + Today (${currentDay})`,
+    `${personalMonth} + ${currentDay} = ${sum}`
+  ];
+  const reduction = reduceToSingleDigit(sum);
+  breakdown.push(...reduction.steps);
+  return { number: reduction.final, breakdown };
+};
+
+/**
+ * Pinnacle Numbers: 4 life periods calculated from the birth date.
+ * - 1st Pinnacle: month + day, ages 0 to (36 - Life Path)
+ * - 2nd Pinnacle: day + year(reduced), next 9 years
+ * - 3rd Pinnacle: 1st + 2nd pinnacle numbers, next 9 years
+ * - 4th Pinnacle: month + year(reduced), remainder of life
+ */
+export const calculatePinnacleNumbers = (birthDate: string, lifePathNumber: number): PinnacleData[] => {
+  const { year, month, day } = parseDateString(birthDate);
+
+  const monthReduced = reduceToSingleDigit(month).final;
+  const dayReduced = reduceToSingleDigit(day).final;
+  const yearReduced = reduceToSingleDigit(year).final;
+  const lpReduced = lifePathNumber > 9 ? reduceToSingleDigit(lifePathNumber).final : lifePathNumber;
+
+  const firstEnd = 36 - lpReduced;
+
+  const p1Sum = monthReduced + dayReduced;
+  const p1 = reduceWithMasterNumbers(p1Sum);
+
+  const p2Sum = dayReduced + yearReduced;
+  const p2 = reduceWithMasterNumbers(p2Sum);
+
+  const p3Sum = p1.final + p2.final;
+  const p3 = reduceWithMasterNumbers(p3Sum);
+
+  const p4Sum = monthReduced + yearReduced;
+  const p4 = reduceWithMasterNumbers(p4Sum);
+
+  return [
+    {
+      number: p1.final,
+      period: `Birth to Age ${firstEnd}`,
+      startAge: 0,
+      endAge: firstEnd,
+      breakdown: [`Month (${monthReduced}) + Day (${dayReduced}) = ${p1Sum}`, ...p1.steps],
+    },
+    {
+      number: p2.final,
+      period: `Age ${firstEnd + 1} to ${firstEnd + 9}`,
+      startAge: firstEnd + 1,
+      endAge: firstEnd + 9,
+      breakdown: [`Day (${dayReduced}) + Year (${yearReduced}) = ${p2Sum}`, ...p2.steps],
+    },
+    {
+      number: p3.final,
+      period: `Age ${firstEnd + 10} to ${firstEnd + 18}`,
+      startAge: firstEnd + 10,
+      endAge: firstEnd + 18,
+      breakdown: [`1st Pinnacle (${p1.final}) + 2nd Pinnacle (${p2.final}) = ${p3Sum}`, ...p3.steps],
+    },
+    {
+      number: p4.final,
+      period: `Age ${firstEnd + 19} onward`,
+      startAge: firstEnd + 19,
+      endAge: null,
+      breakdown: [`Month (${monthReduced}) + Year (${yearReduced}) = ${p4Sum}`, ...p4.steps],
+    },
+  ];
+};
+
+/**
+ * Challenge Numbers: 4 challenges from the birth date (differences).
+ * - 1st Challenge: |month(reduced) - day(reduced)|
+ * - 2nd Challenge: |day(reduced) - year(reduced)|
+ * - 3rd Challenge: |1st - 2nd|
+ * - 4th Challenge: |month(reduced) - year(reduced)|
+ */
+export const calculateChallengeNumbers = (birthDate: string): ChallengeData[] => {
+  const { year, month, day } = parseDateString(birthDate);
+
+  const monthReduced = reduceToSingleDigit(month).final;
+  const dayReduced = reduceToSingleDigit(day).final;
+  const yearReduced = reduceToSingleDigit(year).final;
+
+  const c1 = Math.abs(monthReduced - dayReduced);
+  const c2 = Math.abs(dayReduced - yearReduced);
+  const c3 = Math.abs(c1 - c2);
+  const c4 = Math.abs(monthReduced - yearReduced);
+
+  return [
+    {
+      number: c1,
+      period: "First Challenge (Youth)",
+      breakdown: [`|Month (${monthReduced}) − Day (${dayReduced})| = ${c1}`],
+    },
+    {
+      number: c2,
+      period: "Second Challenge (Middle Age)",
+      breakdown: [`|Day (${dayReduced}) − Year (${yearReduced})| = ${c2}`],
+    },
+    {
+      number: c3,
+      period: "Third Challenge (Main/Life Challenge)",
+      breakdown: [`|1st (${c1}) − 2nd (${c2})| = ${c3}`],
+    },
+    {
+      number: c4,
+      period: "Fourth Challenge (Later Life)",
+      breakdown: [`|Month (${monthReduced}) − Year (${yearReduced})| = ${c4}`],
+    },
+  ];
+};
+
+// ===== MASTER REPORT GENERATOR =====
+
+/** Generate the complete numerology report from name and birth date */
 export const generateNumerologyReport = (name: string, email: string, birthDate: string) => {
-  console.log('Generating comprehensive numerology report for:', { name, email, birthDate });
-  
   const lifePathCalc = calculateLifePathNumber(birthDate);
   const expressionCalc = calculateExpressionNumber(name);
   const soulUrgeCalc = calculateSoulUrgeNumber(name);
@@ -323,8 +372,13 @@ export const generateNumerologyReport = (name: string, email: string, birthDate:
   const achievementCalc = calculateAchievementNumber(birthDate);
   const hiddenPassionCalc = calculateHiddenPassionNumber(name);
   const karmicLessonCalc = calculateKarmicLessonNumbers(name);
-  
-  const report = {
+  const personalYearCalc = calculatePersonalYearNumber(birthDate);
+  const personalMonthCalc = calculatePersonalMonthNumber(personalYearCalc.number);
+  const personalDayCalc = calculatePersonalDayNumber(personalMonthCalc.number);
+  const pinnacles = calculatePinnacleNumbers(birthDate, lifePathCalc.number);
+  const challenges = calculateChallengeNumbers(birthDate);
+
+  return {
     name,
     email,
     birthDate,
@@ -346,9 +400,14 @@ export const generateNumerologyReport = (name: string, email: string, birthDate:
     hiddenPassionBreakdown: hiddenPassionCalc.breakdown,
     hiddenPassionCareers: hiddenPassionCalc.careers,
     karmicLessonNumbers: karmicLessonCalc.numbers,
-    karmicLessonBreakdown: karmicLessonCalc.breakdown
+    karmicLessonBreakdown: karmicLessonCalc.breakdown,
+    personalYearNumber: personalYearCalc.number,
+    personalYearBreakdown: personalYearCalc.breakdown,
+    personalMonthNumber: personalMonthCalc.number,
+    personalMonthBreakdown: personalMonthCalc.breakdown,
+    personalDayNumber: personalDayCalc.number,
+    personalDayBreakdown: personalDayCalc.breakdown,
+    pinnacleNumbers: pinnacles,
+    challengeNumbers: challenges,
   };
-  
-  console.log('Complete numerology report:', report);
-  return report;
 };
