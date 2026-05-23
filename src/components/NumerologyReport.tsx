@@ -364,7 +364,7 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
           and career paths. Book a consultation to transform these insights into a thriving business.
         </p>
         <a
-          href="https://cal.com/dangeloali/unlock-abundance-with-ai-intuition-a-soul-urged-business-strategy-call"
+          href="https://cal.com/luthor-sparks-costello"
           target="_blank"
           rel="noopener noreferrer"
           id="book-consultation"
