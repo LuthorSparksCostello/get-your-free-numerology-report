@@ -5,6 +5,7 @@ interface CosmicChartProps {
   numbers: {
     label: string;
     value: number;
+    compound?: number | null;
     color: string;
   }[];
   onSegmentClick?: (index: number) => void;
@@ -175,6 +176,24 @@ const CosmicChart = ({ numbers, onSegmentClick }: CosmicChartProps) => {
                   <tspan className="text-[7px]" dy="-6">✦</tspan>
                 )}
               </text>
+
+              {/* Compound sub-label on hover */}
+              {isHovered && n.compound && (
+                <text
+                  x={valuePos.x}
+                  y={valuePos.y + 13}
+                  textAnchor="middle"
+                  dominantBaseline="central"
+                  className="opacity-80"
+                  style={{
+                    fill: 'rgba(255,255,255,0.6)',
+                    fontSize: '7px',
+                    fontFamily: "'Space Grotesk', sans-serif",
+                  }}
+                >
+                  ({n.compound})
+                </text>
+              )}
 
               {/* Label outside */}
               <text

@@ -29,10 +29,13 @@ const MASTER_NUMBERS = new Set([11, 22, 33, 44, 55, 66, 77, 88, 99]);
 /** Check if a number is a master number */
 export const isMasterNumber = (num: number): boolean => MASTER_NUMBERS.has(num);
 
-/** Reduce to single digit while preserving master numbers */
-const reduceWithMasterNumbers = (num: number): { final: number; steps: string[] } => {
+/** Reduce to single digit while preserving master numbers.
+ *  Also captures the compound (double-digit) number before final reduction
+ *  — in Chaldean numerology this reveals inner/hidden influences. */
+const reduceWithMasterNumbers = (num: number): { final: number; compound: number | null; steps: string[] } => {
   const steps: string[] = [];
 
+  // Reduce three-digit+ numbers down to two digits first
   while (num > 99) {
     const digits = num.toString().split('');
     const sum = digits.reduce((acc, d) => acc + parseInt(d), 0);
@@ -40,9 +43,12 @@ const reduceWithMasterNumbers = (num: number): { final: number; steps: string[] 
     num = sum;
   }
 
+  // Capture the compound (double-digit) number before final reduction
+  const compound = num > 9 ? num : null;
+
   if (MASTER_NUMBERS.has(num)) {
     steps.push(`${num} is a Master Number — preserved`);
-    return { final: num, steps };
+    return { final: num, compound, steps };
   }
 
   while (num > 9) {
@@ -53,11 +59,11 @@ const reduceWithMasterNumbers = (num: number): { final: number; steps: string[] 
 
     if (MASTER_NUMBERS.has(num)) {
       steps.push(`${num} is a Master Number — preserved`);
-      return { final: num, steps };
+      return { final: num, compound, steps };
     }
   }
 
-  return { final: num, steps };
+  return { final: num, compound, steps };
 };
 
 /** Standard reduction to single digit (no master number preservation) */
@@ -97,70 +103,70 @@ const parseDateString = (dateStr: string): { year: number; month: number; day: n
 // ===== CORE NUMBER CALCULATIONS =====
 
 /** Life Path Number: month + day + full year → reduce */
-export const calculateLifePathNumber = (birthDate: string): { number: number; breakdown: string[] } => {
+export const calculateLifePathNumber = (birthDate: string): { number: number; compound: number | null; breakdown: string[] } => {
   const { year, month, day } = parseDateString(birthDate);
   const totalSum = month + day + year;
   const breakdown = [`Month: ${month}`, `Day: ${day}`, `Year: ${year}`, `Total: ${month} + ${day} + ${year} = ${totalSum}`];
   const reduction = reduceWithMasterNumbers(totalSum);
   breakdown.push(...reduction.steps);
-  return { number: reduction.final, breakdown };
+  return { number: reduction.final, compound: reduction.compound, breakdown };
 };
 
 /** Expression Number: sum of all letter values in full name */
-export const calculateExpressionNumber = (fullName: string): { number: number; breakdown: string[] } => {
+export const calculateExpressionNumber = (fullName: string): { number: number; compound: number | null; breakdown: string[] } => {
   const nameCalc = calculateNameValue(fullName);
   const breakdown = [`Letters: ${nameCalc.breakdown.join(', ')}`, `Sum: ${nameCalc.sum}`];
   const reduction = reduceWithMasterNumbers(nameCalc.sum);
   breakdown.push(...reduction.steps);
-  return { number: reduction.final, breakdown };
+  return { number: reduction.final, compound: reduction.compound, breakdown };
 };
 
 /** Soul Urge (Heart's Desire) Number: sum of vowel values only */
-export const calculateSoulUrgeNumber = (fullName: string): { number: number; breakdown: string[] } => {
+export const calculateSoulUrgeNumber = (fullName: string): { number: number; compound: number | null; breakdown: string[] } => {
   const vowels = fullName.toUpperCase().replace(/[^AEIOU]/g, '');
   const nameCalc = calculateNameValue(vowels);
   const breakdown = [`Vowels: ${vowels}`, `Values: ${nameCalc.breakdown.join(', ')}`, `Sum: ${nameCalc.sum}`];
   const reduction = reduceWithMasterNumbers(nameCalc.sum);
   breakdown.push(...reduction.steps);
-  return { number: reduction.final, breakdown };
+  return { number: reduction.final, compound: reduction.compound, breakdown };
 };
 
 /** Personality Number: sum of consonant values only */
-export const calculatePersonalityNumber = (fullName: string): { number: number; breakdown: string[] } => {
+export const calculatePersonalityNumber = (fullName: string): { number: number; compound: number | null; breakdown: string[] } => {
   const consonants = fullName.toUpperCase().replace(/[AEIOU\s]/g, '');
   const nameCalc = calculateNameValue(consonants);
   const breakdown = [`Consonants: ${consonants}`, `Values: ${nameCalc.breakdown.join(', ')}`, `Sum: ${nameCalc.sum}`];
   const reduction = reduceWithMasterNumbers(nameCalc.sum);
   breakdown.push(...reduction.steps);
-  return { number: reduction.final, breakdown };
+  return { number: reduction.final, compound: reduction.compound, breakdown };
 };
 
 /** Birthday Number: the day of birth reduced */
-export const calculateBirthdayNumber = (birthDate: string): { number: number; breakdown: string[] } => {
+export const calculateBirthdayNumber = (birthDate: string): { number: number; compound: number | null; breakdown: string[] } => {
   const { day } = parseDateString(birthDate);
   const breakdown = [`Birth Day: ${day}`];
   const reduction = reduceWithMasterNumbers(day);
   breakdown.push(...reduction.steps);
-  return { number: reduction.final, breakdown };
+  return { number: reduction.final, compound: reduction.compound, breakdown };
 };
 
 /** Maturity Number: Life Path + Expression → reduce */
-export const calculateMaturityNumber = (lifePathNumber: number, expressionNumber: number): { number: number; breakdown: string[] } => {
+export const calculateMaturityNumber = (lifePathNumber: number, expressionNumber: number): { number: number; compound: number | null; breakdown: string[] } => {
   const sum = lifePathNumber + expressionNumber;
   const breakdown = [`Life Path (${lifePathNumber}) + Expression (${expressionNumber}) = ${sum}`];
   const reduction = reduceWithMasterNumbers(sum);
   breakdown.push(...reduction.steps);
-  return { number: reduction.final, breakdown };
+  return { number: reduction.final, compound: reduction.compound, breakdown };
 };
 
 /** Achievement Number: month + day → reduce */
-export const calculateAchievementNumber = (birthDate: string): { number: number; breakdown: string[] } => {
+export const calculateAchievementNumber = (birthDate: string): { number: number; compound: number | null; breakdown: string[] } => {
   const { month, day } = parseDateString(birthDate);
   const sum = month + day;
   const breakdown = [`Month (${month}) + Day (${day}) = ${sum}`];
   const reduction = reduceWithMasterNumbers(sum);
   breakdown.push(...reduction.steps);
-  return { number: reduction.final, breakdown };
+  return { number: reduction.final, compound: reduction.compound, breakdown };
 };
 
 /** Hidden Passion Number: most frequently occurring Chaldean value in the name */
@@ -392,18 +398,25 @@ export const generateNumerologyReport = (name: string, email: string, birthDate:
     email,
     birthDate,
     lifePathNumber: lifePathCalc.number,
+    lifePathCompound: lifePathCalc.compound,
     lifePathBreakdown: lifePathCalc.breakdown,
     expressionNumber: expressionCalc.number,
+    expressionCompound: expressionCalc.compound,
     expressionBreakdown: expressionCalc.breakdown,
     soulUrgeNumber: soulUrgeCalc.number,
+    soulUrgeCompound: soulUrgeCalc.compound,
     soulUrgeBreakdown: soulUrgeCalc.breakdown,
     personalityNumber: personalityCalc.number,
+    personalityCompound: personalityCalc.compound,
     personalityBreakdown: personalityCalc.breakdown,
     birthdayNumber: birthdayCalc.number,
+    birthdayCompound: birthdayCalc.compound,
     birthdayBreakdown: birthdayCalc.breakdown,
     maturityNumber: maturityCalc.number,
+    maturityCompound: maturityCalc.compound,
     maturityBreakdown: maturityCalc.breakdown,
     achievementNumber: achievementCalc.number,
+    achievementCompound: achievementCalc.compound,
     achievementBreakdown: achievementCalc.breakdown,
     hiddenPassionNumbers: hiddenPassionCalc.numbers,
     hiddenPassionBreakdown: hiddenPassionCalc.breakdown,

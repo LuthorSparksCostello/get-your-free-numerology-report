@@ -32,13 +32,13 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
   const birthYear = parseInt(data.birthDate.split('-')[0], 10);
 
   const chartNumbers = [
-    { label: 'Birthday', value: data.birthdayNumber, color: '#34d399' },
-    { label: 'Personality', value: data.personalityNumber, color: '#22d3ee' },
-    { label: "Heart's Desire", value: data.soulUrgeNumber, color: '#fb7185' },
-    { label: 'Expression', value: data.expressionNumber, color: '#a78bfa' },
-    { label: 'Life Path', value: data.lifePathNumber, color: '#fbbf24' },
-    { label: 'Maturity', value: data.maturityNumber, color: '#818cf8' },
-    { label: 'Achievement', value: data.achievementNumber, color: '#facc15' },
+    { label: 'Birthday', value: data.birthdayNumber, compound: data.birthdayCompound, color: '#34d399' },
+    { label: 'Personality', value: data.personalityNumber, compound: data.personalityCompound, color: '#22d3ee' },
+    { label: "Heart's Desire", value: data.soulUrgeNumber, compound: data.soulUrgeCompound, color: '#fb7185' },
+    { label: 'Expression', value: data.expressionNumber, compound: data.expressionCompound, color: '#a78bfa' },
+    { label: 'Life Path', value: data.lifePathNumber, compound: data.lifePathCompound, color: '#fbbf24' },
+    { label: 'Maturity', value: data.maturityNumber, compound: data.maturityCompound, color: '#818cf8' },
+    { label: 'Achievement', value: data.achievementNumber, compound: data.achievementCompound, color: '#facc15' },
   ];
 
   const handleChartClick = (index: number) => {
@@ -187,15 +187,15 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
       </section>
 
       {/* Individual Number Cards */}
-      <NumberCard number={data.birthdayNumber} label="Birthday" meaning={birthdayMeaning} breakdown={data.birthdayBreakdown} icon={<Calendar className="w-4 h-4" />} colorClass="emerald" description="Special talents and abilities you were born with." />
-      <NumberCard number={data.personalityNumber} label="Personality" meaning={personalityMeaning} breakdown={data.personalityBreakdown} icon={<User className="w-4 h-4" />} colorClass="cyan" description="How others perceive you and your outer personality." />
-      <NumberCard number={data.soulUrgeNumber} label="Heart's Desire" meaning={soulUrgeMeaning} breakdown={data.soulUrgeBreakdown} icon={<Heart className="w-4 h-4" />} colorClass="rose" description="What motivates you at the deepest level." />
+      <NumberCard number={data.birthdayNumber} compound={data.birthdayCompound} label="Birthday" meaning={birthdayMeaning} breakdown={data.birthdayBreakdown} icon={<Calendar className="w-4 h-4" />} colorClass="emerald" description="Special talents and abilities you were born with." />
+      <NumberCard number={data.personalityNumber} compound={data.personalityCompound} label="Personality" meaning={personalityMeaning} breakdown={data.personalityBreakdown} icon={<User className="w-4 h-4" />} colorClass="cyan" description="How others perceive you and your outer personality." />
+      <NumberCard number={data.soulUrgeNumber} compound={data.soulUrgeCompound} label="Heart's Desire" meaning={soulUrgeMeaning} breakdown={data.soulUrgeBreakdown} icon={<Heart className="w-4 h-4" />} colorClass="rose" description="What motivates you at the deepest level." />
 
       {/* Email capture after core numbers */}
       <EmailCapture onCapture={() => {}} variant="card" heading="Save Your Cosmic Blueprint" subtext="Enter your email to save this report and receive personalized cosmic insights." />
 
-      <NumberCard number={data.expressionNumber} label="Expression" meaning={expressionMeaning} breakdown={data.expressionBreakdown} icon={<Users className="w-4 h-4" />} colorClass="purple" description="Your life's work and the talents you're meant to develop." />
-      <NumberCard number={data.lifePathNumber} label="Life Path" meaning={lifePathMeaning} breakdown={data.lifePathBreakdown} icon={<Star className="w-4 h-4" />} colorClass="amber" description="Your most important number — your cosmic mission." />
+      <NumberCard number={data.expressionNumber} compound={data.expressionCompound} label="Expression" meaning={expressionMeaning} breakdown={data.expressionBreakdown} icon={<Users className="w-4 h-4" />} colorClass="purple" description="Your life's work and the talents you're meant to develop." />
+      <NumberCard number={data.lifePathNumber} compound={data.lifePathCompound} label="Life Path" meaning={lifePathMeaning} breakdown={data.lifePathBreakdown} icon={<Star className="w-4 h-4" />} colorClass="amber" description="Your most important number — your cosmic mission." />
 
       {/* Master Number significance */}
       {isMasterNumber(data.lifePathNumber) && (
@@ -207,8 +207,8 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
         </div>
       )}
 
-      <NumberCard number={data.maturityNumber} label="Maturity" meaning={maturityMeaning} breakdown={data.maturityBreakdown} icon={<Target className="w-4 h-4" />} colorClass="indigo" description="What you're growing toward in later life — your spiritual mission." />
-      <NumberCard number={data.achievementNumber} label="Achievement" meaning={achievementMeaning} breakdown={data.achievementBreakdown} icon={<Star className="w-4 h-4" />} colorClass="yellow" description="What you can accomplish by combining your month and day energies." />
+      <NumberCard number={data.maturityNumber} compound={data.maturityCompound} label="Maturity" meaning={maturityMeaning} breakdown={data.maturityBreakdown} icon={<Target className="w-4 h-4" />} colorClass="indigo" description="What you're growing toward in later life — your spiritual mission." />
+      <NumberCard number={data.achievementNumber} compound={data.achievementCompound} label="Achievement" meaning={achievementMeaning} breakdown={data.achievementBreakdown} icon={<Star className="w-4 h-4" />} colorClass="yellow" description="What you can accomplish by combining your month and day energies." />
 
       {/* Pinnacle Numbers */}
       <section className="report-card" aria-label="Pinnacle numbers">

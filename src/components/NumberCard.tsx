@@ -6,6 +6,7 @@ import type { NumberMeaning } from '@/utils/numerologyMeanings';
 
 interface NumberCardProps {
   number: number;
+  compound?: number | null;  // Chaldean double-digit inner influence
   label: string;
   meaning: NumberMeaning;
   breakdown: string[];
@@ -27,7 +28,7 @@ const colorMap: Record<string, { bg: string; border: string; text: string; badge
   teal:     { bg: 'from-teal-500/10 to-cyan-500/10',      border: 'border-teal-500/20',      text: 'text-teal-400',     badge: 'bg-teal-500/20 text-teal-300',    badgeBorder: 'border-teal-500/30',   glow: 'rgba(20,184,166,0.15)' },
 };
 
-const NumberCard = ({ number, label, meaning, breakdown, icon, colorClass, description }: NumberCardProps) => {
+const NumberCard = ({ number, compound, label, meaning, breakdown, icon, colorClass, description }: NumberCardProps) => {
   const [isVisible, setIsVisible] = useState(false);
   const [showBreakdown, setShowBreakdown] = useState(false);
   const [showCareers, setShowCareers] = useState(false);
@@ -92,6 +93,11 @@ const NumberCard = ({ number, label, meaning, breakdown, icon, colorClass, descr
           </div>
           <div className={`flex items-center gap-1.5 mt-1 ${c.text} opacity-70`}>
             {icon}
+            {compound && (
+              <span className="text-xs text-gray-400 ml-1">
+                Inner Influence: <span className={`${c.text} font-semibold`}>{compound}</span> → {number}
+              </span>
+            )}
           </div>
         </div>
       </div>
