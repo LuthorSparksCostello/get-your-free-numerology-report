@@ -1,9 +1,10 @@
 import { Link, useLocation } from 'react-router-dom';
-import { LogIn, LogOut, LayoutDashboard, Sparkles, Menu, X } from 'lucide-react';
+import { LogIn, LogOut, LayoutDashboard, Sparkles, Menu, X, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import UserAvatar from './UserAvatar';
 import { isAuth0Configured } from '@/auth/auth0-config';
 import { useOptionalAuth0 } from '@/auth/useOptionalAuth0';
+import { usePWAInstall } from '@/hooks/usePWAInstall';
 import { useState } from 'react';
 
 /**
@@ -16,6 +17,7 @@ const AuthNavbar = () => {
 
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { canInstall, promptInstall } = usePWAInstall();
 
   const handleLogin = () => {
     if (auth0Available) {
@@ -91,6 +93,20 @@ const AuthNavbar = () => {
                 >
                   <LogOut className="w-4 h-4" />
                 </Button>
+
+                {canInstall && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={promptInstall}
+                    className="text-amber-400 hover:text-amber-300 hover:bg-amber-500/10"
+                    id="nav-install"
+                    aria-label="Install app"
+                  >
+                    <Download className="w-4 h-4 mr-1.5" />
+                    Install
+                  </Button>
+                )}
               </>
             ) : auth0Available ? (
               <Button
@@ -141,6 +157,15 @@ const AuthNavbar = () => {
                   <LogOut className="w-4 h-4" />
                   Sign Out
                 </button>
+                {canInstall && (
+                  <button
+                    onClick={() => { promptInstall(); setMobileMenuOpen(false); }}
+                    className="flex items-center gap-2 px-2 py-2.5 text-sm text-amber-400 hover:text-amber-300 rounded-lg hover:bg-amber-500/10 transition-colors w-full"
+                  >
+                    <Download className="w-4 h-4" />
+                    Install App
+                  </button>
+                )}
               </>
             ) : auth0Available ? (
               <button
