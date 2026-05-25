@@ -6,19 +6,16 @@ import AuthNavbar from '@/components/AuthNavbar';
 import UpsellBanner from '@/components/UpsellBanner';
 import { generateNumerologyReport } from '@/utils/numerology';
 import { saveReport } from '@/utils/reportStorage';
-import { isAuth0Configured } from '@/auth/auth0-config';
 import { useOptionalAuth0 } from '@/auth/useOptionalAuth0';
 import {
   Heart, Sparkles, Star, Zap, Shield, ChevronDown, Calculator,
   BookOpen, Target, ArrowRight, Save,
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
 import type { ReportData } from '@/hooks/useReportStore';
 
 const Index = () => {
-  const auth0Available = isAuth0Configured();
-  const { isAuthenticated, user, loginWithRedirect } = useOptionalAuth0();
+  const { user } = useOptionalAuth0();
 
   const [reportData, setReportData] = useState<ReportData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -67,29 +64,9 @@ const Index = () => {
     setIsLoading(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // Auto-save if authenticated
-    if (isAuthenticated && user?.sub) {
-      saveReport(user.sub, reportAsData);
-      setReportSaved(true);
-      toast({
-        title: '✨ Report saved!',
-        description: 'Your cosmic blueprint has been saved to your dashboard.',
-      });
-    }
-  };
-
-  const handleSaveReport = () => {
-    if (!reportData) return;
-
-    if (!isAuthenticated) {
-      if (auth0Available) {
-        loginWithRedirect();
-      }
-      return;
-    }
-
+    // Auto-save — user is always authenticated at this point
     if (user?.sub) {
-      saveReport(user.sub, reportData);
+      saveReport(user.sub, reportAsData);
       setReportSaved(true);
       toast({
         title: '✨ Report saved!',
@@ -121,7 +98,7 @@ const Index = () => {
   const steps = [
     { step: '01', title: 'Enter Your Name', desc: 'Your full name at birth — each letter has a Chaldean value.' },
     { step: '02', title: 'Add Your Birthdate', desc: 'The cosmic moment that set your life path in motion.' },
-    { step: '03', title: 'Receive Your Blueprint', desc: 'An instant, comprehensive numerology report you can download.' },
+    { step: '03', title: 'Receive Your Blueprint', desc: 'An instant, comprehensive numerology report auto-saved to your dashboard.' },
   ];
 
   return (
@@ -142,7 +119,7 @@ const Index = () => {
               <div className="max-w-5xl mx-auto">
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-medium mb-8">
                   <Sparkles className="w-3.5 h-3.5" />
-                  Ancient Chaldean System • 100% Free
+                  Ancient Chaldean System • Welcome, {user?.given_name || user?.name?.split(' ')[0] || 'Explorer'}
                 </div>
 
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 font-heading leading-tight">
@@ -241,7 +218,7 @@ const Index = () => {
                     Get Your <span className="gold-text">Free</span> Cosmic Blueprint
                   </h2>
                   <p className="text-gray-400 text-sm max-w-lg mx-auto">
-                    Unlock your personalized Chaldean numerology report and discover the cosmic forces shaping your entrepreneurial journey.
+                    Your report is auto-saved to your dashboard. Generate as many as you'd like.
                   </p>
                 </div>
 
@@ -251,7 +228,7 @@ const Index = () => {
                 <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-8 text-xs text-gray-500">
                   <span className="trust-badge">🔮 Ancient Chaldean System</span>
                   <span className="trust-badge">✨ 100% Personalized</span>
-                  <span className="trust-badge">🛡️ Privacy Protected</span>
+                  <span className="trust-badge">🛡️ Auto-Saved to Dashboard</span>
                 </div>
               </div>
             </section>
@@ -279,24 +256,11 @@ const Index = () => {
           /* REPORT VIEW */
           <main className="py-10 px-4">
             <div className="max-w-7xl mx-auto">
-              {/* Save to Dashboard button */}
-              {reportData && !reportSaved && (
-                <div className="max-w-4xl mx-auto mb-6">
-                  <Button
-                    onClick={handleSaveReport}
-                    className="cosmic-button-secondary w-full sm:w-auto"
-                    id="save-to-dashboard"
-                  >
-                    <Save className="w-4 h-4 mr-2" />
-                    {isAuthenticated ? 'Save to Dashboard' : 'Sign In to Save Report'}
-                  </Button>
-                </div>
-              )}
               {reportData && reportSaved && (
                 <div className="max-w-4xl mx-auto mb-6">
                   <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm">
                     <Save className="w-4 h-4" />
-                    Saved to your dashboard
+                    Auto-saved to your dashboard
                   </div>
                 </div>
               )}

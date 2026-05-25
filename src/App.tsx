@@ -5,30 +5,27 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Auth0Provider } from "@auth0/auth0-react";
 import { auth0Config, isAuth0Configured } from "@/auth/auth0-config";
+import AuthGate from "./components/AuthGate";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-import LoginPage from "./pages/LoginPage";
 import Dashboard from "./pages/Dashboard";
-import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
 /**
- * App shell wrapping everything in Auth0Provider (when configured)
- * and the router with protected routes.
+ * All routes are inside AuthGate — nothing is accessible
+ * without a valid authentication session.
  */
-const AppContent = () => (
+const AppRoutes = () => (
   <BrowserRouter basename={import.meta.env.BASE_URL}>
-    <Routes>
-      <Route path="/" element={<Index />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route
-        path="/dashboard"
-        element={<ProtectedRoute component={Dashboard} />}
-      />
-      {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-      <Route path="*" element={<NotFound />} />
-    </Routes>
+    <AuthGate>
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </AuthGate>
   </BrowserRouter>
 );
 
@@ -49,10 +46,10 @@ const App = () => {
             }}
             cacheLocation="localstorage"
           >
-            <AppContent />
+            <AppRoutes />
           </Auth0Provider>
         ) : (
-          <AppContent />
+          <AppRoutes />
         )}
       </TooltipProvider>
     </QueryClientProvider>
