@@ -29,10 +29,10 @@ const CosmicChart = ({ numbers, onSegmentClick }: CosmicChartProps) => {
     return () => observer.disconnect();
   }, []);
 
-  const size = 320;
+  const size = 400;
   const center = size / 2;
-  const outerRadius = 140;
-  const innerRadius = 80;
+  const outerRadius = 130;
+  const innerRadius = 75;
   const segmentAngle = (2 * Math.PI) / numbers.length;
   const gap = 0.03; // gap between segments in radians
 
@@ -63,7 +63,7 @@ const CosmicChart = ({ numbers, onSegmentClick }: CosmicChartProps) => {
 
   const getLabelPosition = (index: number) => {
     const midAngle = (index + 0.5) * segmentAngle;
-    const labelRadius = outerRadius + 22;
+    const labelRadius = outerRadius + 30;
     return polarToCartesian(center, center, labelRadius, midAngle);
   };
 
@@ -77,7 +77,7 @@ const CosmicChart = ({ numbers, onSegmentClick }: CosmicChartProps) => {
     <div ref={containerRef} className="flex justify-center" role="img" aria-label="Radial chart showing your 7 core numerology numbers">
       <svg
         viewBox={`0 0 ${size} ${size}`}
-        className={`w-full max-w-[320px] h-auto transition-all duration-1000 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}
+        className={`w-full max-w-[400px] h-auto transition-all duration-1000 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}
       >
         {/* Background glow */}
         <defs>
@@ -204,7 +204,7 @@ const CosmicChart = ({ numbers, onSegmentClick }: CosmicChartProps) => {
                 className={`transition-all duration-300 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
                 style={{
                   fill: isHovered ? n.color : 'rgba(255,255,255,0.5)',
-                  fontSize: '8px',
+                  fontSize: '10px',
                   fontWeight: isHovered ? 600 : 400,
                   transitionDelay: `${i * 100 + 500}ms`,
                   fontFamily: "'Space Grotesk', sans-serif",
