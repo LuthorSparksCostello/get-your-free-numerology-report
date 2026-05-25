@@ -1,0 +1,26 @@
+{
+  "name": "Free Chaldean Numerology Report — Cosmic Blueprint",
+  "short_name": "Numerology",
+  "description": "Get your personalized Chaldean numerology report with 9 core numbers, career paths, and spiritual insights.",
+  "start_url": "/get-your-free-numerology-report/",
+  "scope": "/get-your-free-numerology-report/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#0e0e24",
+  "background_color": "#0e0e24",
+  "categories": ["lifestyle", "entertainment", "education"],
+  "icons": [
+    {
+      "src": "favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
