@@ -137,7 +137,7 @@ const NumberCard = ({ number, label, meaning, breakdown, icon, colorClass, descr
       </button>
       <div
         id={`breakdown-${label}`}
-        className={`overflow-hidden transition-all duration-400 ease-out ${showBreakdown ? 'max-h-96 opacity-100 mb-2' : 'max-h-0 opacity-0'}`}
+        className={`overflow-hidden transition-all duration-300 ease-out ${showBreakdown ? 'max-h-96 opacity-100 mb-2' : 'max-h-0 opacity-0'}`}
       >
         <div className={`p-4 rounded-xl bg-gradient-to-r ${c.bg} ${c.border} border`}>
           <div className="space-y-1 text-gray-300 font-mono text-sm">
@@ -161,7 +161,7 @@ const NumberCard = ({ number, label, meaning, breakdown, icon, colorClass, descr
       </button>
       <div
         id={`careers-${label}`}
-        className={`overflow-hidden transition-all duration-400 ease-out ${showCareers ? 'max-h-[500px] opacity-100 mt-2' : 'max-h-0 opacity-0'}`}
+        className={`overflow-hidden transition-all duration-300 ease-out ${showCareers ? 'max-h-[500px] opacity-100 mt-2' : 'max-h-0 opacity-0'}`}
       >
         <div className={`p-4 rounded-xl bg-gradient-to-r ${c.bg} ${c.border} border`}>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-2">

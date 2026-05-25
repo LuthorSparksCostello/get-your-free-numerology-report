@@ -1,19 +1,32 @@
 import { useState, useEffect } from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
 import CosmicBackground from '@/components/CosmicBackground';
 import NumerologyForm from '@/components/NumerologyForm';
 import NumerologyReport from '@/components/NumerologyReport';
+import AuthNavbar from '@/components/AuthNavbar';
+import UpsellBanner from '@/components/UpsellBanner';
 import { generateNumerologyReport } from '@/utils/numerology';
+import { saveReport } from '@/utils/reportStorage';
+import { isAuth0Configured } from '@/auth/auth0-config';
 import {
   Heart, Sparkles, Star, Zap, Shield, ChevronDown, Calculator,
-  BookOpen, Target, ArrowRight,
+  BookOpen, Target, ArrowRight, Save,
 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { toast } from '@/hooks/use-toast';
 import type { ReportData } from '@/hooks/useReportStore';
 
 const Index = () => {
+  const auth0Available = isAuth0Configured();
+  const { isAuthenticated, user, loginWithRedirect } = auth0Available
+    ? useAuth0()
+    : { isAuthenticated: false, user: undefined, loginWithRedirect: () => {} };
+
   const [reportData, setReportData] = useState<ReportData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showForm, setShowForm] = useState(true);
   const [counter, setCounter] = useState(0);
+  const [reportSaved, setReportSaved] = useState(false);
 
   // Animated counter for social proof
   useEffect(() => {
@@ -29,19 +42,68 @@ const Index = () => {
     requestAnimationFrame(tick);
   }, []);
 
+  // Check for saved report view from dashboard
+  useEffect(() => {
+    const savedReportData = sessionStorage.getItem('view_report');
+    if (savedReportData) {
+      try {
+        const data = JSON.parse(savedReportData);
+        setReportData(data as ReportData);
+        setShowForm(false);
+        setReportSaved(true);
+        sessionStorage.removeItem('view_report');
+      } catch {
+        sessionStorage.removeItem('view_report');
+      }
+    }
+  }, []);
+
   const handleFormSubmit = async (data: { fullName: string; birthDate: string; email?: string }) => {
     setIsLoading(true);
+    setReportSaved(false);
     await new Promise((r) => setTimeout(r, 2200));
     const report = generateNumerologyReport(data.fullName, data.email || '', data.birthDate);
-    setReportData(report as unknown as ReportData);
+    const reportAsData = report as unknown as ReportData;
+    setReportData(reportAsData);
     setShowForm(false);
     setIsLoading(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Auto-save if authenticated
+    if (isAuthenticated && user?.sub) {
+      saveReport(user.sub, reportAsData);
+      setReportSaved(true);
+      toast({
+        title: '✨ Report saved!',
+        description: 'Your cosmic blueprint has been saved to your dashboard.',
+      });
+    }
+  };
+
+  const handleSaveReport = () => {
+    if (!reportData) return;
+
+    if (!isAuthenticated) {
+      if (auth0Available) {
+        loginWithRedirect();
+      }
+      return;
+    }
+
+    if (user?.sub) {
+      saveReport(user.sub, reportData);
+      setReportSaved(true);
+      toast({
+        title: '✨ Report saved!',
+        description: 'Your cosmic blueprint has been saved to your dashboard.',
+      });
+    }
   };
 
   const handleBack = () => {
     setShowForm(true);
     setReportData(null);
+    setReportSaved(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -67,17 +129,18 @@ const Index = () => {
   return (
     <div className="min-h-screen relative overflow-hidden">
       <CosmicBackground />
+      <AuthNavbar />
 
       {/* Floating orbs */}
       <div className="floating-orb w-40 h-40 bg-amber-500/15 top-20 -left-10" style={{ animationDelay: '0s' }} aria-hidden="true" />
       <div className="floating-orb w-28 h-28 bg-purple-500/15 top-40 right-10" style={{ animationDelay: '3s' }} aria-hidden="true" />
       <div className="floating-orb w-20 h-20 bg-teal-500/15 bottom-40 left-1/4" style={{ animationDelay: '6s' }} aria-hidden="true" />
 
-      <div className="relative z-10">
+      <div className="relative z-10 pt-16">
         {showForm ? (
           <>
             {/* HERO */}
-            <header className="pt-16 sm:pt-24 pb-12 text-center px-4">
+            <header className="pt-12 sm:pt-20 pb-12 text-center px-4">
               <div className="max-w-5xl mx-auto">
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-medium mb-8">
                   <Sparkles className="w-3.5 h-3.5" />
@@ -218,10 +281,34 @@ const Index = () => {
           /* REPORT VIEW */
           <main className="py-10 px-4">
             <div className="max-w-7xl mx-auto">
+              {/* Save to Dashboard button */}
+              {reportData && !reportSaved && (
+                <div className="max-w-4xl mx-auto mb-6">
+                  <Button
+                    onClick={handleSaveReport}
+                    className="cosmic-button-secondary w-full sm:w-auto"
+                    id="save-to-dashboard"
+                  >
+                    <Save className="w-4 h-4 mr-2" />
+                    {isAuthenticated ? 'Save to Dashboard' : 'Sign In to Save Report'}
+                  </Button>
+                </div>
+              )}
+              {reportData && reportSaved && (
+                <div className="max-w-4xl mx-auto mb-6">
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm">
+                    <Save className="w-4 h-4" />
+                    Saved to your dashboard
+                  </div>
+                </div>
+              )}
               {reportData && <NumerologyReport data={reportData} onBack={handleBack} />}
             </div>
           </main>
         )}
+
+        {/* Upsell Banner */}
+        {!showForm && <UpsellBanner bookingUrl="https://cal.com/luthor-sparks-costello" />}
 
         {/* Footer */}
         <footer className="py-8 text-center text-gray-600 text-xs border-t border-white/5 px-4">
@@ -245,7 +332,7 @@ const FaqItem = ({ question, answer }: { question: string; answer: string }) => 
         <span className="text-white font-medium text-sm sm:text-base pr-4">{question}</span>
         <ChevronDown className={`w-4 h-4 text-amber-400 transition-transform duration-300 flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`} />
       </button>
-      <div className={`overflow-hidden transition-all duration-400 ease-out ${isOpen ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'}`}>
+      <div className={`overflow-hidden transition-all duration-300 ease-out ${isOpen ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'}`}>
         <p className="px-4 sm:px-5 pb-4 sm:pb-5 text-gray-400 text-sm leading-relaxed">{answer}</p>
       </div>
     </div>
