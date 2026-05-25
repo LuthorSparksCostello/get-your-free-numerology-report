@@ -18,7 +18,7 @@ const queryClient = new QueryClient();
  * and the router with protected routes.
  */
 const AppContent = () => (
-  <BrowserRouter>
+  <BrowserRouter basename={import.meta.env.BASE_URL}>
     <Routes>
       <Route path="/" element={<Index />} />
       <Route path="/login" element={<LoginPage />} />
