@@ -1,17 +1,14 @@
-import { useAuth0 } from '@auth0/auth0-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Sparkles, Shield, Save, Calendar, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import CosmicBackground from '@/components/CosmicBackground';
 import { isAuth0Configured } from '@/auth/auth0-config';
+import { useOptionalAuth0 } from '@/auth/useOptionalAuth0';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
   const auth0Available = isAuth0Configured();
-  const { loginWithRedirect, isAuthenticated } = auth0Available
-    ? useAuth0()
-    : { loginWithRedirect: () => {}, isAuthenticated: false };
+  const { loginWithRedirect, isAuthenticated } = useOptionalAuth0();
 
   const navigate = useNavigate();
 

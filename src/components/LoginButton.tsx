@@ -1,6 +1,6 @@
-import { useAuth0 } from '@auth0/auth0-react';
 import { Sparkles } from 'lucide-react';
 import { isAuth0Configured } from '@/auth/auth0-config';
+import { useOptionalAuth0 } from '@/auth/useOptionalAuth0';
 
 interface LoginButtonProps {
   className?: string;
@@ -13,9 +13,7 @@ interface LoginButtonProps {
  */
 const LoginButton = ({ className = '', label = 'Sign In to Save' }: LoginButtonProps) => {
   const auth0Available = isAuth0Configured();
-  const { loginWithRedirect } = auth0Available
-    ? useAuth0()
-    : { loginWithRedirect: () => {} };
+  const { loginWithRedirect } = useOptionalAuth0();
 
   const handleLogin = () => {
     if (auth0Available) {

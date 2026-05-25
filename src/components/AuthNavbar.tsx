@@ -1,9 +1,9 @@
-import { useAuth0 } from '@auth0/auth0-react';
 import { Link, useLocation } from 'react-router-dom';
 import { LogIn, LogOut, LayoutDashboard, Sparkles, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import UserAvatar from './UserAvatar';
 import { isAuth0Configured } from '@/auth/auth0-config';
+import { useOptionalAuth0 } from '@/auth/useOptionalAuth0';
 import { useState } from 'react';
 
 /**
@@ -12,9 +12,7 @@ import { useState } from 'react';
  */
 const AuthNavbar = () => {
   const auth0Available = isAuth0Configured();
-  const { isAuthenticated, user, loginWithRedirect, logout, isLoading } = auth0Available
-    ? useAuth0()
-    : { isAuthenticated: false, user: undefined, loginWithRedirect: () => {}, logout: () => {}, isLoading: false };
+  const { isAuthenticated, user, loginWithRedirect, logout, isLoading } = useOptionalAuth0();
 
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
 import CosmicBackground from '@/components/CosmicBackground';
 import NumerologyForm from '@/components/NumerologyForm';
 import NumerologyReport from '@/components/NumerologyReport';
@@ -8,6 +7,7 @@ import UpsellBanner from '@/components/UpsellBanner';
 import { generateNumerologyReport } from '@/utils/numerology';
 import { saveReport } from '@/utils/reportStorage';
 import { isAuth0Configured } from '@/auth/auth0-config';
+import { useOptionalAuth0 } from '@/auth/useOptionalAuth0';
 import {
   Heart, Sparkles, Star, Zap, Shield, ChevronDown, Calculator,
   BookOpen, Target, ArrowRight, Save,
@@ -18,9 +18,7 @@ import type { ReportData } from '@/hooks/useReportStore';
 
 const Index = () => {
   const auth0Available = isAuth0Configured();
-  const { isAuthenticated, user, loginWithRedirect } = auth0Available
-    ? useAuth0()
-    : { isAuthenticated: false, user: undefined, loginWithRedirect: () => {} };
+  const { isAuthenticated, user, loginWithRedirect } = useOptionalAuth0();
 
   const [reportData, setReportData] = useState<ReportData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
