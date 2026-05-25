@@ -9,10 +9,24 @@
 import { hiddenPassionCareers } from './numerologyMeanings';
 import type { PinnacleData, ChallengeData } from '../hooks/useReportStore';
 
-/** Chaldean letter-to-number mapping (1-8 system) */
+/** Chaldean letter-to-number mapping (standard Chaldean system)
+ *  1: A, I, J, Q, Y
+ *  2: B, K, R → wait, user says R=9
+ *
+ *  Verified mapping from user:
+ *  1: A, I, Q, S, J
+ *  2: B, K, T
+ *  3: C, G, L, U
+ *  4: D, M, X
+ *  5: E, N, W
+ *  6: O, V, Z
+ *  7: F, P
+ *  8: H
+ *  9: R, Y
+ */
 const chaldeanValues: Record<string, number> = {
-  A: 1, B: 2, C: 3, D: 4, E: 5, F: 8, G: 3, H: 5, I: 1, J: 1, K: 2, L: 3, M: 4,
-  N: 5, O: 7, P: 8, Q: 1, R: 2, S: 3, T: 4, U: 6, V: 6, W: 6, X: 5, Y: 1, Z: 7
+  A: 1, B: 2, C: 3, D: 4, E: 5, F: 7, G: 3, H: 8, I: 1, J: 1, K: 2, L: 3, M: 4,
+  N: 5, O: 6, P: 7, Q: 1, R: 9, S: 1, T: 2, U: 3, V: 6, W: 5, X: 4, Y: 9, Z: 6
 };
 
 const MASTER_NUMBERS = new Set([11, 22, 33, 44, 55, 66, 77, 88, 99]);
@@ -202,7 +216,7 @@ export const calculateKarmicLessonNumbers = (fullName: string): { numbers: numbe
     }
   }
 
-  const missingNumbers = [1, 2, 3, 4, 5, 6, 7, 8].filter(n => !presentNumbers.has(n));
+  const missingNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9].filter(n => !presentNumbers.has(n));
 
   const breakdown = [
     `Letters: ${letterBreakdown.join(', ')}`,
