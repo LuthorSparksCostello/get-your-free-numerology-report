@@ -203,32 +203,6 @@ const NumerologyForm = ({ onSubmit, isLoading = false }: NumerologyFormProps) =>
           )}
         </div>
 
-        {/* Email (optional) */}
-        <div className="space-y-2">
-          <Label htmlFor="email" className="flex items-center gap-2 text-gray-400 font-semibold text-sm uppercase tracking-wider">
-            <span className="text-gray-500">✉</span>
-            Email <span className="text-gray-600 font-normal normal-case">(optional — to save your report)</span>
-          </Label>
-          <Input
-            id="email"
-            type="email"
-            placeholder="your@email.com"
-            value={formData.email}
-            onChange={(e) => handleChange('email', e.target.value)}
-            className={`bg-white/5 border-white/15 text-white placeholder:text-gray-500 focus:border-amber-400 focus:ring-amber-400/20 h-13 text-base transition-all duration-300 ${
-              errors.email ? 'border-red-400 bg-red-500/5' : ''
-            }`}
-            autoComplete="email"
-            aria-describedby={errors.email ? 'email-error' : undefined}
-          />
-          {errors.email && (
-            <p id="email-error" className="text-red-400 text-xs flex items-center gap-1.5" role="alert">
-              <AlertCircle className="w-3 h-3" />
-              {errors.email}
-            </p>
-          )}
-        </div>
-
         {/* Submit */}
         <Button
           type="submit"
