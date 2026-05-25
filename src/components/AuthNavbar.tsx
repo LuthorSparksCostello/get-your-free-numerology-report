@@ -25,7 +25,7 @@ const AuthNavbar = () => {
 
   const handleLogout = () => {
     if (auth0Available) {
-      logout({ logoutParams: { returnTo: window.location.origin } });
+      logout({ logoutParams: { returnTo: window.location.origin + import.meta.env.BASE_URL } });
     }
   };
 

@@ -38,7 +38,7 @@ const Dashboard = () => {
   };
 
   const handleLogout = () => {
-    logout({ logoutParams: { returnTo: window.location.origin } });
+    logout({ logoutParams: { returnTo: window.location.origin + import.meta.env.BASE_URL } });
   };
 
   const formatDate = (dateStr: string) => {
