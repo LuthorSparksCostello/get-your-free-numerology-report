@@ -13,7 +13,6 @@ import NumberCard from './NumberCard';
 import CosmicChart from './CosmicChart';
 import PinnacleTimeline from './PinnacleTimeline';
 import PersonalCyclePanel from './PersonalCyclePanel';
-import EmailCapture from './EmailCapture';
 
 interface NumerologyReportProps {
   data: ReportData;
@@ -191,8 +190,6 @@ const NumerologyReport = ({ data, onBack }: NumerologyReportProps) => {
       <NumberCard number={data.personalityNumber} compound={data.personalityCompound} label="Personality" meaning={personalityMeaning} breakdown={data.personalityBreakdown} icon={<User className="w-4 h-4" />} colorClass="cyan" description="How others perceive you and your outer personality." />
       <NumberCard number={data.soulUrgeNumber} compound={data.soulUrgeCompound} label="Heart's Desire" meaning={soulUrgeMeaning} breakdown={data.soulUrgeBreakdown} icon={<Heart className="w-4 h-4" />} colorClass="rose" description="What motivates you at the deepest level." />
 
-      {/* Email capture after core numbers */}
-      <EmailCapture onCapture={() => {}} variant="card" heading="Save Your Cosmic Blueprint" subtext="Enter your email to save this report and receive personalized cosmic insights." />
 
       <NumberCard number={data.expressionNumber} compound={data.expressionCompound} label="Expression" meaning={expressionMeaning} breakdown={data.expressionBreakdown} icon={<Users className="w-4 h-4" />} colorClass="purple" description="Your life's work and the talents you're meant to develop." />
       <NumberCard number={data.lifePathNumber} compound={data.lifePathCompound} label="Life Path" meaning={lifePathMeaning} breakdown={data.lifePathBreakdown} icon={<Star className="w-4 h-4" />} colorClass="amber" description="Your most important number — your cosmic mission." />
