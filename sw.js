@@ -1,5 +1,5 @@
 // Service Worker for PWA — Cosmic Blueprint Numerology
-const CACHE_NAME = 'numerology-v5';
+const CACHE_NAME = 'numerology-v6';
 const BASE = '/get-your-free-numerology-report/';
 
 const PRECACHE_URLS = [
