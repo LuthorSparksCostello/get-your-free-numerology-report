@@ -5,12 +5,22 @@ interface BeforeInstallPromptEvent extends Event {
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
 }
 
+// Augment window to include our early-captured prompt
+declare global {
+  interface Window {
+    __pwaInstallPrompt: BeforeInstallPromptEvent | null;
+  }
+}
+
 /**
- * Hook for PWA install. The install button is ALWAYS visible
- * (unless already installed). Click behavior adapts to the platform.
+ * Hook for PWA install. Picks up the beforeinstallprompt event
+ * that was captured in index.html (before React mounted).
  */
 export function usePWAInstall() {
-  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(
+    // Check if prompt was already captured before React mounted
+    () => window.__pwaInstallPrompt || null
+  );
   const [isInstalled, setIsInstalled] = useState(false);
 
   const isIOS =
@@ -29,27 +39,44 @@ export function usePWAInstall() {
       return;
     }
 
-    const handler = (e: Event) => {
-      e.preventDefault();
-      setDeferredPrompt(e as BeforeInstallPromptEvent);
+    // Listen for the custom event dispatched by index.html
+    const onAvailable = () => {
+      if (window.__pwaInstallPrompt) {
+        setDeferredPrompt(window.__pwaInstallPrompt);
+      }
     };
 
-    window.addEventListener('beforeinstallprompt', handler);
+    // Also listen for native event (in case it fires after mount)
+    const onNative = (e: Event) => {
+      e.preventDefault();
+      const prompt = e as BeforeInstallPromptEvent;
+      window.__pwaInstallPrompt = prompt;
+      setDeferredPrompt(prompt);
+    };
+
+    window.addEventListener('pwa-install-available', onAvailable);
+    window.addEventListener('beforeinstallprompt', onNative);
     window.addEventListener('appinstalled', () => {
       setIsInstalled(true);
       setDeferredPrompt(null);
+      window.__pwaInstallPrompt = null;
     });
 
-    return () => window.removeEventListener('beforeinstallprompt', handler);
+    return () => {
+      window.removeEventListener('pwa-install-available', onAvailable);
+      window.removeEventListener('beforeinstallprompt', onNative);
+    };
   }, []);
 
   const promptInstall = useCallback(async () => {
-    // Native prompt available (Chrome/Edge Android & desktop)
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
+    // Use the captured native prompt
+    const prompt = deferredPrompt || window.__pwaInstallPrompt;
+    if (prompt) {
+      prompt.prompt();
+      const { outcome } = await prompt.userChoice;
       if (outcome === 'accepted') setIsInstalled(true);
       setDeferredPrompt(null);
+      window.__pwaInstallPrompt = null;
       return outcome === 'accepted';
     }
 
@@ -64,7 +91,7 @@ export function usePWAInstall() {
       return false;
     }
 
-    // Desktop fallback (Chrome/Edge/Firefox)
+    // Desktop fallback
     alert(
       'To install this app:\n\n' +
       '• Chrome/Edge: Click the install icon (⊕) in the address bar\n' +
@@ -74,8 +101,8 @@ export function usePWAInstall() {
   }, [deferredPrompt, isIOS]);
 
   return {
-    // Always show unless already installed as standalone
     canInstall: !isInstalled,
+    hasNativePrompt: !!deferredPrompt || !!window.__pwaInstallPrompt,
     isInstalled,
     promptInstall,
   };
