@@ -1,21 +1,23 @@
-// Service Worker for PWA - Cosmic Blueprint Numerology
-const CACHE_NAME = 'numerology-v4';
+// Service Worker for PWA — Cosmic Blueprint Numerology
+const CACHE_NAME = 'numerology-v5';
 const BASE = '/get-your-free-numerology-report/';
 
-// Install: cache the app shell
+const PRECACHE_URLS = [
+  BASE,
+  BASE + 'index.html',
+  BASE + 'icon-192.png',
+  BASE + 'icon-512.png',
+];
+
+// Install: precache essential assets
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll([
-        BASE,
-        BASE + 'index.html',
-      ]);
-    })
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(PRECACHE_URLS))
   );
   self.skipWaiting();
 });
 
-// Activate: clean old caches
+// Activate: clean old caches and take control
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
@@ -25,26 +27,37 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch: network-first strategy, fall back to cache
+// Fetch: network-first for navigation, cache-first for assets
 self.addEventListener('fetch', (event) => {
-  // Only handle same-origin GET requests
-  if (event.request.method !== 'GET') return;
+  const { request } = event;
 
+  // Only handle GET requests
+  if (request.method !== 'GET') return;
+
+  // Navigation requests (HTML pages) — network first, fallback to cached index.html
+  if (request.mode === 'navigate') {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+          return response;
+        })
+        .catch(() => caches.match(BASE + 'index.html'))
+    );
+    return;
+  }
+
+  // Static assets — network first with cache fallback
   event.respondWith(
-    fetch(event.request)
+    fetch(request)
       .then((response) => {
-        // Cache successful responses
         if (response.ok) {
           const clone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+          caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
         }
         return response;
       })
-      .catch(() => {
-        // Offline: serve from cache
-        return caches.match(event.request).then((cached) => {
-          return cached || caches.match(BASE + 'index.html');
-        });
-      })
+      .catch(() => caches.match(request))
   );
 });
