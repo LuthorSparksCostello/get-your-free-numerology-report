@@ -1,5 +1,5 @@
 // Service Worker for PWA - Cosmic Blueprint Numerology
-const CACHE_NAME = 'numerology-v1';
+const CACHE_NAME = 'numerology-v2';
 const BASE = '/get-your-free-numerology-report/';
 
 // Install: cache the app shell
