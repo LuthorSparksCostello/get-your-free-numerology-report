@@ -6,17 +6,20 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 /**
- * Hook that captures the browser's beforeinstallprompt event
- * and provides a trigger to show the native install dialog.
- * Also detects iOS Safari for manual install instructions.
+ * Hook for PWA install. The install button is ALWAYS visible
+ * (unless already installed). Click behavior adapts to the platform.
  */
 export function usePWAInstall() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstalled, setIsInstalled] = useState(false);
-  const [isIOS, setIsIOS] = useState(false);
+
+  const isIOS =
+    typeof navigator !== 'undefined' &&
+    (/iPad|iPhone|iPod/.test(navigator.userAgent) ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
 
   useEffect(() => {
-    // Check if already in standalone mode
+    // Already running as installed PWA
     const isStandalone =
       window.matchMedia('(display-mode: standalone)').matches ||
       (navigator as unknown as { standalone?: boolean }).standalone === true;
@@ -26,53 +29,54 @@ export function usePWAInstall() {
       return;
     }
 
-    // Detect iOS Safari (no beforeinstallprompt support)
-    const ua = navigator.userAgent;
-    const isiOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-    setIsIOS(isiOS);
-
     const handler = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
     };
 
     window.addEventListener('beforeinstallprompt', handler);
-
     window.addEventListener('appinstalled', () => {
       setIsInstalled(true);
       setDeferredPrompt(null);
     });
 
-    return () => {
-      window.removeEventListener('beforeinstallprompt', handler);
-    };
+    return () => window.removeEventListener('beforeinstallprompt', handler);
   }, []);
 
   const promptInstall = useCallback(async () => {
+    // Native prompt available (Chrome/Edge Android & desktop)
     if (deferredPrompt) {
       deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
-      if (outcome === 'accepted') {
-        setIsInstalled(true);
-      }
+      if (outcome === 'accepted') setIsInstalled(true);
       setDeferredPrompt(null);
       return outcome === 'accepted';
     }
 
-    // iOS fallback: show instructions
+    // iOS Safari fallback
     if (isIOS) {
-      alert('To install this app:\n\n1. Tap the Share button (square with arrow)\n2. Scroll down and tap "Add to Home Screen"\n3. Tap "Add"');
+      alert(
+        'To install this app on your device:\n\n' +
+        '1. Tap the Share button (□↑) at the bottom\n' +
+        '2. Scroll down and tap "Add to Home Screen"\n' +
+        '3. Tap "Add" to confirm'
+      );
       return false;
     }
 
+    // Desktop fallback (Chrome/Edge/Firefox)
+    alert(
+      'To install this app:\n\n' +
+      '• Chrome/Edge: Click the install icon (⊕) in the address bar\n' +
+      '• Or open browser menu (⋮) → "Install app" or "Add to Home Screen"'
+    );
     return false;
   }, [deferredPrompt, isIOS]);
 
   return {
-    // Show install button if: native prompt available OR iOS (manual instructions)
-    canInstall: (!isInstalled && !!deferredPrompt) || (!isInstalled && isIOS),
+    // Always show unless already installed as standalone
+    canInstall: !isInstalled,
     isInstalled,
-    isIOS,
     promptInstall,
   };
 }

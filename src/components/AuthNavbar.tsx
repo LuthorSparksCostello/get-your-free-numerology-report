@@ -93,20 +93,6 @@ const AuthNavbar = () => {
                 >
                   <LogOut className="w-4 h-4" />
                 </Button>
-
-                {canInstall && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={promptInstall}
-                    className="text-amber-400 hover:text-amber-300 hover:bg-amber-500/10"
-                    id="nav-install"
-                    aria-label="Install app"
-                  >
-                    <Download className="w-4 h-4 mr-1.5" />
-                    Install
-                  </Button>
-                )}
               </>
             ) : auth0Available ? (
               <Button
@@ -118,6 +104,21 @@ const AuthNavbar = () => {
                 Sign In
               </Button>
             ) : null}
+
+            {/* Install button — always visible */}
+            {canInstall && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={promptInstall}
+                className="text-amber-400 hover:text-amber-300 hover:bg-amber-500/10 border border-amber-500/30"
+                id="nav-install"
+                aria-label="Install app"
+              >
+                <Download className="w-4 h-4 mr-1.5" />
+                Install
+              </Button>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -157,15 +158,6 @@ const AuthNavbar = () => {
                   <LogOut className="w-4 h-4" />
                   Sign Out
                 </button>
-                {canInstall && (
-                  <button
-                    onClick={() => { promptInstall(); setMobileMenuOpen(false); }}
-                    className="flex items-center gap-2 px-2 py-2.5 text-sm text-amber-400 hover:text-amber-300 rounded-lg hover:bg-amber-500/10 transition-colors w-full"
-                  >
-                    <Download className="w-4 h-4" />
-                    Install App
-                  </button>
-                )}
               </>
             ) : auth0Available ? (
               <button
@@ -176,6 +168,17 @@ const AuthNavbar = () => {
                 Sign In
               </button>
             ) : null}
+
+            {/* Install button — always visible in mobile menu */}
+            {canInstall && (
+              <button
+                onClick={() => { promptInstall(); setMobileMenuOpen(false); }}
+                className="flex items-center gap-2 px-2 py-2.5 text-sm text-amber-400 hover:text-amber-300 rounded-lg hover:bg-amber-500/10 border border-amber-500/30 transition-colors w-full"
+              >
+                <Download className="w-4 h-4" />
+                Install App
+              </button>
+            )}
           </div>
         )}
       </div>
