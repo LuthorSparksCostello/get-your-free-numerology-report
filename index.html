@@ -54,19 +54,26 @@
       }
     }
     </script>
-    <script type="module" crossorigin src="/get-your-free-numerology-report/assets/index-0PIwBbzi.js"></script>
+    <script type="module" crossorigin src="/get-your-free-numerology-report/assets/index-8gmLXHwj.js"></script>
     <link rel="stylesheet" crossorigin href="/get-your-free-numerology-report/assets/index-DoeeHFxm.css">
   </head>
 
   <body>
     <div id="root"></div>
     <script>
+      // Capture PWA install prompt EARLY — before React mounts
+      window.__pwaInstallPrompt = null;
+      window.addEventListener('beforeinstallprompt', function(e) {
+        e.preventDefault();
+        window.__pwaInstallPrompt = e;
+        // Dispatch custom event so React hook can pick it up
+        window.dispatchEvent(new Event('pwa-install-available'));
+      });
+
       // Register service worker for PWA
       if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/get-your-free-numerology-report/sw.js')
-            .catch(() => {});
-        });
+        navigator.serviceWorker.register('/get-your-free-numerology-report/sw.js')
+          .catch(function() {});
       }
     </script>
   </body>
