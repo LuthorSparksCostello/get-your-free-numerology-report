@@ -5,6 +5,7 @@ import UserAvatar from './UserAvatar';
 import { isAuth0Configured } from '@/auth/auth0-config';
 import { useOptionalAuth0 } from '@/auth/useOptionalAuth0';
 import { usePWAInstall } from '@/hooks/usePWAInstall';
+import InstallInstructionsDialog from './InstallInstructionsDialog';
 import { useState } from 'react';
 
 /**
@@ -17,7 +18,13 @@ const AuthNavbar = () => {
 
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { canInstall, promptInstall } = usePWAInstall();
+  const {
+    canInstall,
+    promptInstall,
+    platform,
+    showInstructions,
+    setShowInstructions,
+  } = usePWAInstall();
 
   const handleLogin = () => {
     if (auth0Available) {
@@ -182,6 +189,12 @@ const AuthNavbar = () => {
           </div>
         )}
       </div>
+
+      <InstallInstructionsDialog
+        open={showInstructions}
+        onOpenChange={setShowInstructions}
+        platform={platform}
+      />
     </nav>
   );
 };

@@ -5,31 +5,34 @@ interface BeforeInstallPromptEvent extends Event {
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
 }
 
-// Augment window to include our early-captured prompt
 declare global {
   interface Window {
     __pwaInstallPrompt: BeforeInstallPromptEvent | null;
   }
 }
 
-/**
- * Hook for PWA install. Picks up the beforeinstallprompt event
- * that was captured in index.html (before React mounted).
- */
+export type InstallPlatform = 'ios' | 'android' | 'desktop';
+
+function detectPlatform(): InstallPlatform {
+  if (typeof navigator === 'undefined') return 'desktop';
+  const ua = navigator.userAgent;
+  const isIOS =
+    /iPad|iPhone|iPod/.test(ua) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  if (isIOS) return 'ios';
+  if (/Android/i.test(ua)) return 'android';
+  return 'desktop';
+}
+
 export function usePWAInstall() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(
-    // Check if prompt was already captured before React mounted
-    () => window.__pwaInstallPrompt || null
+    () => (typeof window !== 'undefined' ? window.__pwaInstallPrompt || null : null)
   );
   const [isInstalled, setIsInstalled] = useState(false);
-
-  const isIOS =
-    typeof navigator !== 'undefined' &&
-    (/iPad|iPhone|iPod/.test(navigator.userAgent) ||
-      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
+  const [showInstructions, setShowInstructions] = useState(false);
+  const platform = detectPlatform();
 
   useEffect(() => {
-    // Already running as installed PWA
     const isStandalone =
       window.matchMedia('(display-mode: standalone)').matches ||
       (navigator as unknown as { standalone?: boolean }).standalone === true;
@@ -39,14 +42,12 @@ export function usePWAInstall() {
       return;
     }
 
-    // Listen for the custom event dispatched by index.html
     const onAvailable = () => {
       if (window.__pwaInstallPrompt) {
         setDeferredPrompt(window.__pwaInstallPrompt);
       }
     };
 
-    // Also listen for native event (in case it fires after mount)
     const onNative = (e: Event) => {
       e.preventDefault();
       const prompt = e as BeforeInstallPromptEvent;
@@ -54,56 +55,50 @@ export function usePWAInstall() {
       setDeferredPrompt(prompt);
     };
 
-    window.addEventListener('pwa-install-available', onAvailable);
-    window.addEventListener('beforeinstallprompt', onNative);
-    window.addEventListener('appinstalled', () => {
+    const onInstalled = () => {
       setIsInstalled(true);
       setDeferredPrompt(null);
       window.__pwaInstallPrompt = null;
-    });
+    };
+
+    window.addEventListener('pwa-install-available', onAvailable);
+    window.addEventListener('beforeinstallprompt', onNative);
+    window.addEventListener('appinstalled', onInstalled);
 
     return () => {
       window.removeEventListener('pwa-install-available', onAvailable);
       window.removeEventListener('beforeinstallprompt', onNative);
+      window.removeEventListener('appinstalled', onInstalled);
     };
   }, []);
 
   const promptInstall = useCallback(async () => {
-    // Use the captured native prompt
     const prompt = deferredPrompt || window.__pwaInstallPrompt;
     if (prompt) {
-      prompt.prompt();
-      const { outcome } = await prompt.userChoice;
-      if (outcome === 'accepted') setIsInstalled(true);
-      setDeferredPrompt(null);
-      window.__pwaInstallPrompt = null;
-      return outcome === 'accepted';
+      try {
+        await prompt.prompt();
+        const { outcome } = await prompt.userChoice;
+        if (outcome === 'accepted') setIsInstalled(true);
+        setDeferredPrompt(null);
+        window.__pwaInstallPrompt = null;
+        return outcome === 'accepted';
+      } catch {
+        setShowInstructions(true);
+        return false;
+      }
     }
 
-    // iOS Safari fallback
-    if (isIOS) {
-      alert(
-        'To install this app on your device:\n\n' +
-        '1. Tap the Share button (□↑) at the bottom\n' +
-        '2. Scroll down and tap "Add to Home Screen"\n' +
-        '3. Tap "Add" to confirm'
-      );
-      return false;
-    }
-
-    // Desktop fallback
-    alert(
-      'To install this app:\n\n' +
-      '• Chrome/Edge: Click the install icon (⊕) in the address bar\n' +
-      '• Or open browser menu (⋮) → "Install app" or "Add to Home Screen"'
-    );
+    setShowInstructions(true);
     return false;
-  }, [deferredPrompt, isIOS]);
+  }, [deferredPrompt]);
 
   return {
     canInstall: !isInstalled,
-    hasNativePrompt: !!deferredPrompt || !!window.__pwaInstallPrompt,
+    hasNativePrompt: !!deferredPrompt,
     isInstalled,
+    platform,
+    showInstructions,
+    setShowInstructions,
     promptInstall,
   };
 }
