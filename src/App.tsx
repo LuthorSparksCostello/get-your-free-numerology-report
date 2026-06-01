@@ -45,6 +45,8 @@ const App = () => {
             clientId={auth0Config.clientId}
             authorizationParams={{
               redirect_uri: auth0Config.callbackUrl,
+              audience: auth0Config.audience || undefined,
+              scope: 'openid profile email',
             }}
             cacheLocation="localstorage"
           >
