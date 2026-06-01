@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import {
   Sparkles, Trash2, Eye, Plus, Star,
   Calendar, Hash, LogOut, Crown,
+  CalendarCheck, CalendarPlus, Link2Off,
 } from 'lucide-react';
 import UserAvatar from '@/components/UserAvatar';
 import AuthNavbar from '@/components/AuthNavbar';
@@ -12,11 +13,16 @@ import { getReports, deleteReport } from '@/utils/reportStorage';
 import { numberMeanings } from '@/utils/numerologyMeanings';
 import { useState, useEffect } from 'react';
 import type { SavedReport } from '@/utils/reportStorage';
+import { useGoogleCalendar } from '@/hooks/useGoogleCalendar';
+import { toast } from 'sonner';
 
 const Dashboard = () => {
   const { user, logout } = useAuth0();
   const navigate = useNavigate();
   const [reports, setReports] = useState<SavedReport[]>([]);
+  const calendar = useGoogleCalendar();
+  const [calConnected, setCalConnected] = useState(false);
+  const [syncingId, setSyncingId] = useState<string | null>(null);
 
   const userId = user?.sub || '';
 
@@ -25,6 +31,56 @@ const Dashboard = () => {
       setReports(getReports(userId));
     }
   }, [userId]);
+
+  useEffect(() => {
+    if (!userId) return;
+    calendar.status().then(setCalConnected).catch(() => setCalConnected(false));
+    // Reflect the post-OAuth redirect (?calendar=connected|error).
+    const params = new URLSearchParams(window.location.search);
+    const cal = params.get('calendar');
+    if (cal === 'connected') {
+      setCalConnected(true);
+      toast.success('Google Calendar connected');
+    } else if (cal === 'error') {
+      toast.error('Could not connect Google Calendar');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId]);
+
+  const handleConnect = async () => {
+    try {
+      await calendar.connect();
+    } catch {
+      toast.error('Could not start Google connection');
+    }
+  };
+
+  const handleDisconnect = async () => {
+    try {
+      await calendar.disconnect();
+      setCalConnected(false);
+      toast.success('Google Calendar disconnected');
+    } catch {
+      toast.error('Could not disconnect');
+    }
+  };
+
+  const handleSync = async (report: SavedReport) => {
+    setSyncingId(report.id);
+    try {
+      const { created } = await calendar.sync(report.birthDate);
+      toast.success(`Synced ${created} day${created !== 1 ? 's' : ''} to your calendar`);
+    } catch (err) {
+      if ((err as { code?: string }).code === 'NOT_CONNECTED') {
+        setCalConnected(false);
+        toast.error('Reconnect Google Calendar and try again');
+      } else {
+        toast.error('Calendar sync failed');
+      }
+    } finally {
+      setSyncingId(null);
+    }
+  };
 
   const handleDelete = (reportId: string) => {
     deleteReport(userId, reportId);
@@ -196,6 +252,18 @@ const Dashboard = () => {
                         <Eye className="w-4 h-4 mr-1.5" />
                         View Full Report
                       </Button>
+
+                      {calConnected && (
+                        <Button
+                          onClick={() => handleSync(report)}
+                          disabled={syncingId === report.id}
+                          variant="ghost"
+                          className="w-full text-teal-400 hover:text-teal-300 hover:bg-teal-500/10 text-sm mt-1"
+                        >
+                          <CalendarPlus className="w-4 h-4 mr-1.5" />
+                          {syncingId === report.id ? 'Syncing…' : 'Sync this month to Calendar'}
+                        </Button>
+                      )}
                     </div>
                   );
                 })}
@@ -226,6 +294,41 @@ const Dashboard = () => {
                     {user?.email_verified ? '✓ Verified' : '✗ Not verified'}
                   </span>
                 </div>
+              </div>
+            </div>
+
+            <div className="glass-morphism p-5 mt-4">
+              <div className="flex items-center justify-between gap-4 flex-wrap">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
+                    {calConnected
+                      ? <CalendarCheck className="w-5 h-5 text-emerald-400" />
+                      : <Calendar className="w-5 h-5 text-amber-400" />}
+                  </div>
+                  <div>
+                    <div className="text-white text-sm font-semibold">Google Calendar</div>
+                    <div className="text-xs text-gray-400">
+                      {calConnected
+                        ? 'Connected — sync any report below to your "Numerology Cycles" calendar.'
+                        : 'Connect to sync your monthly Personal Day cycles.'}
+                    </div>
+                  </div>
+                </div>
+                {calConnected ? (
+                  <Button
+                    variant="ghost"
+                    onClick={handleDisconnect}
+                    className="text-gray-400 hover:text-red-400 hover:bg-red-500/10"
+                  >
+                    <Link2Off className="w-4 h-4 mr-2" />
+                    Disconnect
+                  </Button>
+                ) : (
+                  <Button onClick={handleConnect} className="cosmic-button">
+                    <CalendarPlus className="w-4 h-4 mr-2" />
+                    Connect Google Calendar
+                  </Button>
+                )}
               </div>
             </div>
           </section>
