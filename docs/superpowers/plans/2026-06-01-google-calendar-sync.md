@@ -784,6 +784,21 @@ git commit -m "feat(server): add Supabase calendar token store"
 
 ```ts
 import { describe, it, expect, vi } from 'vitest';
+
+// google.config.ts calls process.exit(1) at import when Google env vars are
+// unset. Mock it so the module under test imports cleanly without real env.
+// (vi.mock is hoisted above the imports below.)
+vi.mock('../config/google.config.js', () => ({
+  googleConfig: {
+    clientId: 'test-client-id',
+    clientSecret: 'test-client-secret',
+    redirectUri: 'http://localhost:3001/api/calendar/callback',
+    stateSecret: 'test-state-secret-1234567890',
+    tokenKey: 'a'.repeat(64),
+    appUrl: 'http://localhost:8080',
+  },
+}));
+
 import { ensureNumerologyCalendar, replaceMonthEvents } from '../lib/google-calendar.js';
 import type { CycleDay } from '../lib/calendar-events.js';
 
