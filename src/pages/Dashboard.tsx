@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import {
   Sparkles, Trash2, Eye, Plus, Star,
-  Calendar, Hash, LogOut,
+  Calendar, Hash, LogOut, Crown,
 } from 'lucide-react';
 import UserAvatar from '@/components/UserAvatar';
 import AuthNavbar from '@/components/AuthNavbar';
@@ -80,6 +80,12 @@ const Dashboard = () => {
                 <Button className="cosmic-button" id="new-report-btn">
                   <Plus className="w-4 h-4 mr-2" />
                   Generate New Report
+                </Button>
+              </Link>
+              <Link to="/upgrade">
+                <Button variant="outline" className="border-amber-500/30 text-amber-400 hover:bg-amber-500/10 hover:text-amber-300">
+                  <Crown className="w-4 h-4 mr-2" />
+                  Upgrade to Premium
                 </Button>
               </Link>
               <Button
