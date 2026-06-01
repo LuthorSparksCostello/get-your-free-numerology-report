@@ -2,9 +2,9 @@
   "name": "Free Chaldean Numerology Report — Discover Your Cosmic Blueprint",
   "short_name": "Cosmic Blueprint",
   "description": "Get your personalized Chaldean numerology report with 9 core numbers, career paths, and spiritual insights.",
-  "start_url": "/get-your-free-numerology-report/",
-  "scope": "/get-your-free-numerology-report/",
-  "id": "/get-your-free-numerology-report/",
+  "start_url": "/",
+  "scope": "/",
+  "id": "/",
   "display": "standalone",
   "orientation": "any",
   "theme_color": "#0e0e24",
@@ -13,19 +13,19 @@
   "categories": ["lifestyle", "entertainment", "education"],
   "icons": [
     {
-      "src": "/get-your-free-numerology-report/icon-192.png",
+      "src": "/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/get-your-free-numerology-report/icon-512.png",
+      "src": "/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/get-your-free-numerology-report/icon-512.png",
+      "src": "/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
@@ -33,7 +33,7 @@
   ],
   "screenshots": [
     {
-      "src": "/get-your-free-numerology-report/icon-512.png",
+      "src": "/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "form_factor": "wide",
