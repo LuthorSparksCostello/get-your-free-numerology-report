@@ -5,6 +5,7 @@ import { randomUUID } from 'node:crypto';
 import { squareConfig } from '../config/square.config.js';
 import { supabase } from '../config/supabase.config.js';
 import { mapSquareError } from '../lib/square-errors.js';
+import { isPremiumEmail } from '../lib/premium-allowlist.js';
 
 const router = Router();
 
@@ -271,6 +272,27 @@ router.post('/cancel', async (req: Request, res: Response) => {
 // Returns the current user's subscription status.
 
 router.get('/subscription-status', async (req: Request, res: Response) => {
+  const email = req.query.email as string | undefined;
+
+  // Allowlisted accounts are always premium, regardless of payment.
+  if (isPremiumEmail(email)) {
+    res.json({
+      success: true,
+      hasActiveSubscription: true,
+      subscription: {
+        id: 'allowlist',
+        status: 'ACTIVE',
+        planName: 'premium_monthly',
+        amountCents: 0,
+        last4: null,
+        cardBrand: null,
+        currentPeriodEnd: null,
+        canceledAt: null,
+      },
+    });
+    return;
+  }
+
   const userId = req.query.userId as string;
   if (!userId) {
     res.status(400).json({ success: false, error: 'userId query param required' });
