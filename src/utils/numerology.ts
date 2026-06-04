@@ -67,7 +67,7 @@ const reduceWithMasterNumbers = (num: number): { final: number; compound: number
 };
 
 /** Standard reduction to single digit (no master number preservation) */
-const reduceToSingleDigit = (num: number): { final: number; steps: string[] } => {
+export const reduceToSingleDigit = (num: number): { final: number; steps: string[] } => {
   const steps: string[] = [];
   while (num > 9) {
     const digits = num.toString().split('');

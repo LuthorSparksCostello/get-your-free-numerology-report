@@ -4,6 +4,7 @@ import 'dotenv/config';
 import { logger, requestLogger } from './middleware/request-logger.js';
 import paymentsRouter from './routes/payments.js';
 import webhooksRouter from './routes/webhooks.js';
+import calendarRouter from './routes/calendar.js';
 
 const app = express();
 const PORT = parseInt(process.env.PORT || '3001', 10);
@@ -38,6 +39,7 @@ app.use(requestLogger);
 // ── Routes ──
 app.use('/api/payments', paymentsRouter);
 app.use('/api/payments/webhooks', webhooksRouter);
+app.use('/api/calendar', calendarRouter);
 
 // ── Health check ──
 app.get('/health', (_req, res) => {
